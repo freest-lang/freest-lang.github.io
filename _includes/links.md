@@ -1,4 +1,4 @@
-- [Home](/)
-- [Tools](/tools)
-- [Publications, talks, posters](/publications)
-- [About](/about)
+- [Home](./)
+- [Tools](./tools.html)
+- [Publications, talks, posters](./publications.html)
+- [About](./about.html)
