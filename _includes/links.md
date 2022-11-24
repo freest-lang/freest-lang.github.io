@@ -1,4 +1,4 @@
-- [Home](./my-first-page.github.io)
-- [Tools](./my-first-page.github.io/tools.html)
-- [Publications, talks, posters](./my-first-page.github.io/publications.html)
-- [About](./my-first-page.github.io/about.html)
+- [Home](../my-first-page.github.io)
+- [Tools](../my-first-page.github.io/tools.html)
+- [Publications, talks, posters](../my-first-page.github.io/publications.html)
+- [About](../my-first-page.github.io/about.html)
