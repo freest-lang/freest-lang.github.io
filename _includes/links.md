@@ -1,4 +1,4 @@
-- [Home](~/)
-- [Tools](~/tools.html)
-- [Publications, talks, posters](~/publications.html)
-- [About](~/about.html)
+- [Home](../)
+- [Tools](../tools.html)
+- [Publications, talks, posters](../publications.html)
+- [About](../about.html)
