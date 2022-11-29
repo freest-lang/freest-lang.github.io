@@ -3,7 +3,8 @@
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
 title: Home
-layout: base
+layout: default
+nav_order: 1
 ---
 
 # First Title

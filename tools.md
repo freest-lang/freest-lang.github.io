@@ -3,7 +3,8 @@
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
 title: Tools
-layout: base
+layout: default
+nav_order: 2
 ---
 
 TODO
