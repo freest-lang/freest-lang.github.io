@@ -30,7 +30,8 @@ title: My First Page!
 # github_username: diogo-mustachio-barros
 
 # Build settings
-theme: just-the-docs
+# theme: just-the-docs
+remote_theme: just-the-docs
 plugins:
   - jekyll-feed
 
