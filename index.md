@@ -7,15 +7,12 @@ layout: default
 nav_order: 1
 ---
 
-# First Title
+# FreeST: session types for mortals
 
-This content is written in a Markdown file!
+FreeST is a typed concurrent programming language where processes communicate via message-passing.
 
-# Other Themes
-
-Some themes to have in mind:
-- [jekyll-rtd-theme](http://jekyllthemes.org/themes/jekyll-rtd-theme/) - good for documentation and tutorials
-- [Documentation](https://jekyllthemes.io/theme/documentation) - for documentation but not as good as jekyll-rtd-theme
-- [Just the Docs](https://jekyllthemes.io/theme/just-the-docs) - cool for project websites
-- [Hyde](https://jekyllthemes.io/theme/hyde) - minimalistic project theme
-- [Minimal Mistakes](https://jekyllthemes.io/theme/minimal-mistakes)
+Messages are exchanged on bidirectional channels. Communication on channels is governed by a 
+powerful type system based on polymorphic context-free session types. Based on a core linear 
+functional programming language, FreeST features primitives for forking new threads and for 
+creating and communicating on channels. The compiler builds on a novel algorithm for deciding the 
+equivalence of context-free session types.
