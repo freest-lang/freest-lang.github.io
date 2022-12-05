@@ -25,17 +25,28 @@ title: FreeST
 #   line in _config.yml. It will appear in your document head meta (for
 #   Google search results) and in your feed.xml site description.
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://freest-language.github.io" # leaving the default link
+url: "https://freest-lang.github.io" # leaving the default link
 # twitter_username: 
 # github_username: 
 
-# Build settings
-# theme: just-the-docs # use this if running locally
-remote_theme: pmarsceill/just-the-docs
-plugins:
-  - jekyll-feed
+permalink: pretty
 
-markdown: kramdown
+# Build settings
+remote_theme: pmarsceill/just-the-docs
+
+# Adds a new sidenav option to an external link
+# -> https://just-the-docs.github.io/just-the-docs/docs/navigation-structure/#external-navigation-links
+nav_external_links:
+  - title: Try it online!
+    url: http://rss.di.fc.ul.pt/tryit/FreeST
+    hide_icon: false # set to true to hide the external link icon - defaults to false
+
+# Back to top link
+back_to_top: true
+back_to_top_text: "Back to top"
+
+footer_content: ""
+
 
 # Exclude from processing.
 # The following items will not be processed, by default.
@@ -44,15 +55,24 @@ markdown: kramdown
 #
 # Excluded items can be processed by explicitly listing the directories or
 # their entries' file path in the `include:` list.
-#
-# exclude:
-#   - .sass-cache/
-#   - .jekyll-cache/
-#   - gemfiles/
-#   - Gemfile
-#   - Gemfile.lock
-#   - node_modules/
-#   - vendor/bundle/
-#   - vendor/cache/
-#   - vendor/gems/
-#   - vendor/ruby/
+exclude:
+  - .sass-cache/
+  - .jekyll-cache/
+  - gemfiles/
+  - Gemfile
+  - Gemfile.lock
+  - node_modules/
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+
+# plugins:
+  # - jekyll-feed
+  # - jekyll-seo-tag
+
+markdown: kramdown
+# kramdown:
+#   syntax_highlighter_opts:
+#     block:
+#       line_numbers: false
