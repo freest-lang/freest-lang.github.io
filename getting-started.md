@@ -59,7 +59,7 @@ All functions must have a **signature** (a type), that describes both its input 
 <!-- how to define a function -->
 To define functions, simply state the function's name and signature and then its body. Let's create
     our own `plus` function based on the `(+)` operator:
-```freest
+```
 plus : Int -> Int -> Int    -- signature
 plus x y = x + y            -- body
 ```
@@ -115,7 +115,7 @@ We want to write a function `sumFirstN` that calculates the sum of the first `n`
 
 Trivially, the recursive definition of `sumFirstN` is: `sumFirstN 0 == 0` and 
     `sumFirstN n == n + sumFirstN (n-1)`. In FreeST it translates to:
-```freest
+```
 sumFirstN : Int -> Int
 sumFirstN n =
     if n <= 0
@@ -142,7 +142,7 @@ However, every time we can, we prefer to write `sumFirstN` instead of `sumFirstN
 ## User-defined types
 
 You're a novice programmer into this fictitious new project and you cross upon this function:
-```freest
+```
 f : (Int -> Int) -> Int -> (Int, Int)
 f fun x = (x, fun x)
 ```
@@ -153,20 +153,20 @@ What is this? What are its parameters? What is the purpose of function `f`? Mayb
 
 Preventing confusing signatures can be done if we create higher-level types that stand in for those
     we use, but that bare a clearer meaning. A better signature for `calcFunY` looks like: 
-```freest
+```
 calcFunY : Function -> Int -> Point
 calcFunY fun x = (x, fun x)
 ```
 
 Using these *abbreviations* (`Function` and `Point`) is done by creating two new types:
-```freest
+```
 type Function = Int -> Int
 type Point = (Int, Int)
 ```
 
 User-defined types can be used in any place a normal type can, so you can write a type
     that uses another of your types:
-```freest
+```
 type Circle = (Point, Radius)
 ```
 
@@ -176,13 +176,13 @@ Source code becomes more readable and provides more context to functions when we
 ## User-defined data types
 User-defined types do a lot to improve readability and code organization, but it sometimes is not 
     enough. Remember type `Circle`:
-```freest
+```
 type Radius = Int
 type Circle = (Point, Radius)
 ```
 
 We want to add other shapes such as `Rectangle` and `Triangle`. With just types we write:
-```freest
+```
 type Rectangle = (Point, Point)
 type Triangle = (Point, Point, Point)
 ```
@@ -193,7 +193,7 @@ For now there are no issues. Next we want to write a function `calcArea` that ta
     functions. Good programming practices teach us that it is best to use a super type from which
     all shapes derive from. We create a new *data type* `Shape` where all different shapes are 
     represented by different constructors each with their set of parameters.
-```freest
+```
 data Shape = Circle Point Radius
            | Rectangle Point Point
            | Triangle Point Point Point
@@ -213,7 +213,7 @@ calcArea shape =
 
 Data structures can also be recursive (in the same way as types). A binary tree of integers is 
     defined as:
-```freest
+```
 data IntBinaryTree = Leaf | Node Int IntBinaryTree IntBinaryTree
 ```
 
@@ -227,7 +227,7 @@ Most programming languages treat all values the same way, but FreeST is very dif
     the program will **not type check**, and therefore, will **not run**.
 
 All constants are by default unrestricted values, so the following code is valid:
-```freest
+```
 f : Int -> Int
 f x = x + 1
 
@@ -245,14 +245,14 @@ Functions are the first construct new programmers face that can also be linear. 
     **linear function** is simply a function that has to be used exactly once (following the
     linear constraint). Let us write a linear function `linIncrement` that increments an integer 
     by 1:
-```freest
+```
 linIncrement : Int 1-> Int
 linIncrement x = x + 1
 ```
 
 If this function is part of your code, then you are obliged by linearity to use it. The following
     would not run:
-```freest
+```
 linIncrement : Int 1-> Int
 linIncrement x = x + 1
 
@@ -263,7 +263,7 @@ main = 1
 <!-- TODO: insert what error is thrown by freest in the above example -->
 
 Fixing the above code is simple, just make sure you use `linIncrement` exactly once, for example:
-```freest 
+``` 
 linIncrement : Int 1-> Int
 linIncrement x = x + 1
 
@@ -279,7 +279,7 @@ Linear functions seem simple, however there is more to this than meets the eye. 
     but what about type `Int 1-> Int -> Int`? This type also describes a linear function, but with
     a twist: only the first part is linear (instead of the whole as before). If you partially apply
     a function of this type with a single integer, it will become an unrestricted function.
-```freest
+```
 f : Int 1-> Int -> Int
 f x y = x + y
 
