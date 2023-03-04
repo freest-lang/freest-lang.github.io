@@ -7,7 +7,7 @@ layout: default
 nav_order: 5
 ---
 
-# Getting started
+# Getting started (WIP)
 
 <!-- small introduction -->
 <!-- similar languages to freest -->
@@ -70,6 +70,8 @@ The function's body consists of the name of the function, the variables describe
     followed by the logic itself. Note that there is **no return** statement, this is because the 
     entire expression is the return itself.
 
+<!-- TODO: wild argument `_` -->
+
 <!-- same signature functions -->
 For functions that share signatures, we can define them together separating their names with a 
     comma. For a function `minus` based on the `(-)` operator, we have the exact same signature
@@ -94,13 +96,51 @@ plus x y = x + y
 <!-- for multiple returns, use tuples -->
 At first glance, functions can't have more than one return type. However, functions might need to 
     return two or more values. How do we do this? We take advantage of **tuples** to encapsulate
-    multiple return values inside a single one. To exemplify, Function `makeTwins` takes an integer and returns it and its twin (a copy!) within a tuple.
-```freest
+    multiple return values inside a single one. To exemplify, Function `makeTwins` takes an integer 
+    and returns it and its twin (a copy!) within a tuple.
+```
 makeTwins : Int -> (Int, Int)
 makeTwins x = (x, x) 
 ```
 
-<!-- let expressions -->
+<!-- `let` expressions -->
+Not all functions can (or should) be described using a single expression. To prevent this from 
+    becoming a limitation, we use `let` expressions which lets (pun intended) us store values in
+    variables for later use. 
+```
+betterDivision : Int -> Int -> (Int, Int)
+betterDivision n div =
+    let quotient = n / div in
+    let rest = mod n div in
+    (quotient, rest)
+```
+
+Function `betterDivision` simply divides a number by another and returns both the quotient and the
+    rest. We could write a single expression `(n / div, mod n div)`, but this way it is made clear
+    what is what. It might not be the best case to show this concept but it gives you an idea.
+
+<!-- pair pattern matching with `let` -->
+Furthermore, it's through `let` expressions that we can 'open' pairs to access their elements 
+    (instead of relying in `fst` and `snd`).
+```
+main : ()
+main = 
+    let (quotient, rest) = betterDivision 3 2 in
+    ()
+```
+
+<!-- if statements -->
+For conditional branching, `if` statements are provided. Note that both the `then` and `else` 
+    branches must be present, so you can't write just the `then` branch.
+```
+-- Returns the absolute value of an integer
+abs' : Int -> Int
+abs' x = 
+    if x > 0
+    then x
+    else -x
+```
+
 <!-- ($) operator -->
 <!-- ; 'operator' -->
 <!-- functions can be used as parameters -->
@@ -136,8 +176,6 @@ sumFirstN' n curr =
 
 However, every time we can, we prefer to write `sumFirstN` instead of `sumFirstN'` because of 
     simplicity and readability.
-
-<!-- TODO: wild argument `_` -->
 
 ## User-defined types
 
@@ -217,6 +255,8 @@ Data structures can also be recursive (in the same way as types). A binary tree 
 data IntBinaryTree = Leaf | Node Int IntBinaryTree IntBinaryTree
 ```
 
+<!-- TODO -->
+<!-- how to document code using `-- |` and `-- #` -->
 
 # Handling linearity
 Most programming languages treat all values the same way, but FreeST is very different from them.
