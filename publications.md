@@ -9,9 +9,9 @@ nav_order: 6
 
 # Publications, talks, posters
 
-- [**Sharing the Stateful World**](https://inforum.org.pt/sites/default/files/2022-09/Actas_INForum.pdf#Sharing%20the%20Stateful%20World)
+- [**Sharing the Stateful World**](https://inforum.org.pt/2022/sites/default/files/2022-09/Actas_INForum.pdf#Sharing%20the%20Stateful%20World)
     - **Barros, D., Mordido A., Vasconcelos V.T. and Almeida, B.**
-    - [INForum 2022 (SOFT-PT)](https://inforum.org.pt/en)
+    - [INForum 2022 (SOFT-PT)](https://inforum.org.pt/2022/index.html)
 {: .mb-5 }
 
 - [**Higher-order Context-free Session Types in System F**](https://www.di.fc.ul.pt/~vv/papers/costa.mordido.etal_hocfst.pdf)
