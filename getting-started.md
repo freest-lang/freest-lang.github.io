@@ -19,6 +19,17 @@ nav_order: 5
 <!-- - builtin features are simpler to use -->
 <!-- - context-free session types -->
 
+<!-- collapsible TOC (check https://just-the-docs.github.io/just-the-docs/docs/navigation-structure/#top) -->
+<details open markdown="block">
+  <summary>
+    Table of contents
+  </summary>
+  {: .text-delta }
+- TOC
+{:toc}
+</details>
+
+
 <!-- # Getting everything ready -->
 <!-- where to download -->
 <!-- pre-requisites to install -->
