@@ -9,8 +9,22 @@ parent: Getting started
 ---
 
 # Functional FreeST
+{: .no_toc }
+
 <!-- freest is a functional language -->
 <!-- everything is a function -->
+
+
+<!-- collapsible TOC (check https://just-the-docs.github.io/just-the-docs/docs/navigation-structure/#top) -->
+<details open markdown="block">
+  <summary>
+    Table of contents
+  </summary>
+  {: .no_toc .text-delta }
+- TOC
+{:toc}
+</details>
+
 
 ## Types
 

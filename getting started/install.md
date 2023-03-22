@@ -10,6 +10,20 @@ parent: Getting started
 
 # Ready, set, install!
 
+<!-- TODO -->
+<!-- some intro text here -->
+
+<!-- collapsible TOC (check https://just-the-docs.github.io/just-the-docs/docs/navigation-structure/#top) -->
+<details open markdown="block">
+  <summary>
+    Table of contents
+  </summary>
+  {: .text-delta }
+- TOC
+{:toc}
+</details>
+
+
 <!-- pre-requisites to install -->
 ## Pre-requisites
 

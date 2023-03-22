@@ -8,7 +8,25 @@ nav_order: 3
 parent: Getting started
 ---
 
-# Handling linearity
+# Linearity
+{: .no_toc }
+
+<!-- TODO -->
+<!-- some intro text here -->
+
+<!-- collapsible TOC (check https://just-the-docs.github.io/just-the-docs/docs/navigation-structure/#top) -->
+<details open markdown="block">
+  <summary>
+    Table of contents
+  </summary>
+  {: .no_toc .text-delta }
+- TOC
+{:toc}
+</details>
+
+
+
+## Handling linearity
 Most programming languages treat all values the same way, but FreeST is very different from them.
     FreeST has a `linear system` which differentiates **linear** from **unrestricted** values and 
     types. An unrestricted value is one that may be used **0 or more times** during the program's 
