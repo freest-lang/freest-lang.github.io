@@ -9,6 +9,7 @@ parent: Getting started
 ---
 
 # Ready, set, install!
+{: .no_toc }
 
 <!-- TODO -->
 <!-- some intro text here -->
