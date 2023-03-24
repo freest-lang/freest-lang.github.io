@@ -5,7 +5,7 @@
 title: A guide to errors
 layout: default
 nav_order: 8
-parent: Getting started
+# parent: Getting started
 ---
 
 # A guide to errors
