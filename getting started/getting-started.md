@@ -4,7 +4,7 @@
 
 title: Getting started
 layout: default
-nav_order: 5
+nav_order: 4
 has_children: true
 has_toc: false # avoid table of contents in the end of the page
 ---
