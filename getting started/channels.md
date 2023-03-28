@@ -37,7 +37,7 @@ Imagine you want to create a situation of a client and a server of a `MathServic
   is zero. Textually, we'll describe it as:
 ```
 MathService =  Negate: send an Int, receive its negation
-            OR IsZero: send an Int, receive True if its zero, False otherwise
+            OR IsZero: send an Int, receive True if it's zero, False otherwise
 ```
 
 Before writing a proper protocol with session types, let's look at what tools we have to do so:
@@ -89,17 +89,80 @@ We've talked about session types for structured communication through channels, 
 End         - close
 ``` 
 
-And to instantiate new channels we use `new`.
+And to instantiate new channels we use `new`. For function types and comprehensive documentation,
+  check out the [Prelude]({{ site.url }}{{ site.baseurl }}/documentation/prelude) documentation
+  page.
 
-<!-- Before we go on with our  -->
+To implement a client of our `MathServer` is to follow the protocol (specified in the session 
+  type). A very effective tip on programming with channels in FreeST is to **always program around
+  the session type**. If you first focus on your protocols, you give priority to designing how you
+  structure your processes and what each will do, and then the implementation will come naturally
+  by following said protocols.
 
+Let us begin implementing a simple `MathServer` client that wants the negation of `5`. Looking at 
+  the session type, our first step is to select an option (between `Negate` and `IsZero`):
+```
+mathClient : MathServer -> Int
+mathClient c0 =
+  let c1 = select Negate c0 in
+  ...
+```
 
-<!-- linear channels -->
+Now channel `c1` has type `!Int;?Int;End`, therefore we must send an `Int`, and in this case it's 
+  the number we want to negate:
+```
+mathClient : MathServer -> Int
+mathClient c0 =
+  ...
+  let c2 = send 5 c1 in
+  ...
+```
+
+Then for `c2` with type `?Int;End` we receive an `Int` (our negated number):
+```
+mathClient : MathServer -> Int
+mathClient c0 =
+  ...
+  let (i, c3) = receive c2 in
+  ...
+```
+
+And finally we are left with `End` and simply `close` it:
+```
+mathClient : MathServer -> Int
+mathClient c0 =
+  ...
+  close c3
+  i
+```
+
+So our full `mathClient` looks like this:
+```
+mathClient : MathServer -> Int
+mathClient c0 =
+  let c1 = select Negate c0 in
+  let c2 = send 5 c1 in
+  let (i, c3) = receive c2 in
+  close c3;
+  i
+```
+
+To avoid the first two `let` expressions, we can use the `|>` operator to streamline operations 
+  into a single expression, and `close` the channel together with the `receive` using 
+  `receiveAndClose`. Our final client is:
+```
+mathClient : MathServer -> Int
+mathClient c =
+  c |> select Negate |> send 5 |> receiveAndClose
+```
+
+Our client is done, we are only missing a **server**. 
 
 
 
 
 <!-- TODO: -->
+<!-- linear channels -->
 <!-- polymorphic recursion -->
 <!-- avoiding deadlocks (initiative) -->
 <!-- limitations with linear channels -->
