@@ -156,13 +156,39 @@ mathClient c =
   c |> select Negate |> send 5 |> receiveAndClose
 ```
 
-Our client is done, we are only missing a **server**. 
+Our client is done, we are only missing a **server**. Here the main difference is that instead of
+  a single select like the client, the server has to provide for every option through a `match` 
+  expression (very similar to a `case` expression).
+```
+mathServer : dualof MathService -> ()
+mathServer c0 = 
+  match c0 with {
+    Negate c1 -> ...,
+    IsZero c1 -> ...
+  }
+  ...
+```
+
+For each branch of the `match` expression, we must handle the corresponding type. For example,
+  in the `Negate` branch, channel `c1` has type `?Int;!Int`. After the `match` expression, we
+  are left with `End`, to which we can pipe into a close. The full implementation is as follows:
+```
+mathServer : dualof MathService -> ()
+mathServer c0 = 
+  match c0 with {
+    Negate c1 -> 
+      let (i, c2) = receive c1 in
+      send (-i) c2,
+    IsZero c1 -> 
+      let (i, c2) = receive c1 in
+      send (i == 0) c2,
+  } |> close
+```
 
 
 
 
 <!-- TODO: -->
-<!-- linear channels -->
 <!-- polymorphic recursion -->
 <!-- avoiding deadlocks (initiative) -->
 <!-- limitations with linear channels -->
