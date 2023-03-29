@@ -6,6 +6,7 @@ title: IO
 layout: default
 nav_order: 6
 parent: Getting started
+nav_exclude: true
 ---
 
 # IO
