@@ -6,6 +6,7 @@ title: Pattern matching
 layout: default
 nav_order: 7
 parent: Getting started
+nav_exclude: true
 ---
 
 # Pattern matching
