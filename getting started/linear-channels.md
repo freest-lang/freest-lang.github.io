@@ -2,13 +2,13 @@
 # Feel free to add content and custom Front Matter to this file.
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
-title: Channels and session types
+title: Linear channels and session types
 layout: default
 nav_order: 4
 parent: Getting started
 ---
 
-# Channels and session types
+# Linear channels and session types
 {: .no_toc }
 
 <!-- TODO -->
@@ -185,16 +185,87 @@ mathServer c0 =
   } |> close
 ```
 
+# By the power of context-free session types!
+<!-- context-free session types -->
+Regular session types are good, but context-free session types are plain **better**. With 
+  context-free session types you can correcty serialize a binary tree of integers with a single 
+  channel.
+```
+data Tree = Node Tree Int Tree | Leaf
+
+type TreeChannel : 1S = +{ Node: TreeChannel; !Int; TreeChannel
+                         , Leaf: Skip
+                         }
+```
+
+<!-- combining session types with Skip -->
+Notice how instead of using `End`, we instead use `Skip`. If we used `End` we would not be able to
+  compose a singleton `Node` as it would amount to `End; !Int; End`, which doesn't get past the 
+  first `End`.
+
+The `TreeChannel` is then able to describe binary tree serialization without allowing for any 
+  missing or unnecessary subtrees, because it specifically describes the sending of a left and 
+  right subtrees.
 
 
-
-<!-- TODO: -->
 <!-- polymorphic recursion -->
-<!-- avoiding deadlocks (initiative) -->
-<!-- limitations with linear channels -->
-<!-- shared channels -->
+Instead of a full client, we'll write a function `sendTree` that sends any `Tree` through a 
+  `TreeChannel`. Naively we write this:
+```
+sendTree : Tree -> TreeChannel -> Skip
+sendTree t c =
+  case t of {
+    Leaf -> c |> select Leaf,
+    Node lt i rt ->
+      c
+      |> select Node
+      |> sendTree lt
+      |> send i
+      |> sendTree rt
+  }
+```
 
-<!-- TODO: -->
-<!-- ## Useful constructs with shared channels -->
-<!-- synchronization process -->
-<!-- shared data structures -->
+And we are greeted by a plethra of errors. The fact is we where supposed to return the 
+  continuation channel, and not `Skip`. But what is this mistery continuation, and how do we type
+  it? The answer is through **polymorphism**.
+```
+sendTree : forall a:1S . Tree -> TreeChannel;a -> a
+sendTree t c =
+  case t of {
+    Leaf -> c |> select Leaf,
+    Node lt i rt ->
+      c
+      |> select Node
+      |> sendTree @T lt
+      |> send i
+      |> sendTree @U rt
+  }
+```
+
+Using polymorphism we can type a generic channel that begins with `TreeChannel` and continues off
+  to some other type `a`. The next challenge is: which types do we pass to recursive calls of 
+  `sendTree` (marked as `T` and `U`)? To solve these types, we look at the type of the channel at
+  the point of each recursive call. In the case of `T`, after we did `select Node` we are left with
+  `TreeChannel; !Int; TreeChannel`. Because `T` is the type of the channel continuation type, we 
+  give it `!Int; TreeChannel`. In the case of `U`, after the `send i` call, we are left with just 
+  `TreeChannel`! Where is the continuation channel? Remember that in context-free session types
+  `Skip` is the neutral element, therefore, after we consume `TreeChannel` we are left with
+  `Skip`.
+
+The full implementation of `sendTree` is:
+```
+sendTree : forall a:1S . Tree -> TreeChannel;a -> a
+sendTree t c =
+  case t of {
+    Leaf -> c |> select Leaf,
+    Node lt i rt ->
+      c
+      |> select Node
+      |> sendTree @(!Int;TreeChannel) lt
+      |> send i
+      |> sendTree @Skip rt
+  }
+```
+
+We'll leave the `receiveTree` function up to you to try. Use `sendTree` as a template and remember
+  to use the dual channel operations.
