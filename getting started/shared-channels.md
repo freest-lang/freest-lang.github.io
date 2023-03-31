@@ -48,6 +48,12 @@ There are four shared session types at your disposal (one for each linear sessio
   is a type, therefore, there is no need for a continuation in a type where you can only `select`
   or `match`.
 
+
+<!-- TODO: -->
+<!-- receive_ -->
+<!-- send_ -->
+<!-- channels can be discarded -->
+
 ## Session initiation
 If shared channels are more practical than linear ones, why bother with linear channels? You can't
   serialize a tree directly in a shared channel for example. Shared channels lack the capacity of
@@ -110,6 +116,9 @@ cellServer c =
         ...
     } ...
 ```
+
+<!-- TODO: -->
+<!-- runServer -->
 
 <!-- TODO: -->
 <!-- ## Useful constructs with shared channels -->
