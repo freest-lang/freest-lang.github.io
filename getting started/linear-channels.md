@@ -24,7 +24,7 @@ parent: Getting started
 {:toc}
 </details>
 
-# Channels, Protocols and Session types
+## Channels, Protocols and Session types
 <!-- channels as a way of connecting threads (and sharing data) -->
 Channels are how FreeST threads communicate with each other. A channel is made of 
   **two endpoints**.
@@ -42,13 +42,13 @@ MathService =  Negate: send an Int, receive its negation
 
 Before writing a proper protocol with session types, let's look at what tools we have to do so:
 ```
-!T          - send type T
-?T          - receive type T
-+{l:T, ..}  - select a choice with a continuation T 
-&{l:T, ..}  - provide choices with continuation T
+!T          - send value of type T
+?T          - receive value of type T
++{l:T, ..}  - select a choice 
+&{l:T, ..}  - provide choices
+T;U         - sequential composition
 End         - close channel (terminate communication)
-Skip        - neutral element of session types
-T;U         - session type combinator
+Skip        - neutral element of ;
 ```
 
 Now we can translate our textual representation of `MathService`. It is common practice in FreeST
@@ -185,7 +185,7 @@ mathServer c0 =
   } |> close
 ```
 
-# By the power of context-free session types!
+## By the power of context-free session types!
 <!-- context-free session types -->
 Regular session types are good, but context-free session types are plain **better**. With 
   context-free session types you can correcty serialize a binary tree of integers with a single 
