@@ -25,6 +25,7 @@ For installation details please refer to the README file in the corresponding zi
 
 | Version | Release date | Changelog                                                             | Download link                                                                            |
 | ------- | ------------ | --------------------------------------------------------------------- | :--------------------------------------------------------------------------------------: |
+| 3.0.0   | Apr 12, 2021 | [Changelog]({{ site.url }}{{ site.baseurl }}/downloads/#version-300)  | [Download](http://rss.di.fc.ul.pt/wp-content/uploads/2023/04/FreeST-3.0.0.zip){: .btn }  |
 | 2.2.0   | Nov 16, 2021 | [Changelog]({{ site.url }}{{ site.baseurl }}/downloads/#version-220)  | [Download](http://rss.di.fc.ul.pt/wp-content/uploads/2021/11/FreeST-2.2.0.zip){: .btn }  |
 | 2.1.0   | Mar 30, 2021 | [Changelog]({{ site.url }}{{ site.baseurl }}/downloads/#version-210)  | [Download](http://rss.di.fc.ul.pt/wp-content/uploads/2021/03/FreeST-2.1.0.zip){: .btn }  |
 | 2.0.0   | Feb 15, 2021 | [Changelog]({{ site.url }}{{ site.baseurl }}/downloads/#version-200)  | [Download](http://rss.di.fc.ul.pt/wp-content/uploads/2021/02/FreeST-2.0.0.zip){: .btn }  |
@@ -34,6 +35,24 @@ For installation details please refer to the README file in the corresponding zi
 | 1.0.1   | Jul 22, 2020 | [Changelog]({{ site.url }}{{ site.baseurl }}/downloads/#version-101)  | [Download](http://rss.di.fc.ul.pt/wp-content/uploads/2020/07/FreeST-1.0.1.zip){: .btn }  |
 
 ### Changelog
+
+#### Version 3.0.0
+- REPL (freesti)
+- New syntax for kinds: 1S and *S for linear and unrestricted session types, 1T and *T for linear and unrestricted functional types
+- Higher-order session types (removed kinds ML and MU)
+- New syntax for functions: 1-> and *-> (or simply ->) for linear and unrestricted functions
+- Pattern matching on function arguments (datatype constructors and internal choices)
+- 'End' type and 'close' function for closing channels
+- Simple module system
+- Shared channels
+- Library functions to work with shared channels
+- Library functions to work with concurrency
+- Primitives for file handling
+- Primitives for handling Standard Input/Output (stdout, stdin and stderr)
+- 'hPut' functions to interact with a shared printing system
+- Builtin support for lists of integers: [], [1,2,3] and (1::2::[])
+- Library functions over lists ('import List')
+- Bug fixes
 
 #### Version 2.2.0
 - Fork can be used with and without type parameters
