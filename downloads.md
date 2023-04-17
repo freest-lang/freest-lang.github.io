@@ -52,6 +52,11 @@ For installation details please refer to the README file in the corresponding zi
 - 'hPut' functions to interact with a shared printing system
 - Builtin support for lists of integers: [], [1,2,3] and (1::2::[])
 - Library functions over lists ('import List')
+- New syntax for type application: id @Int instead of id [Int]
+- New type for 'fork' function: forall a:1T. (() 1-> a) -> ()
+- 'new' is now a function of type forall a:1S. () -> (a, dualof a)
+- Channels created through the 'new' function must be ended (reach an 'End')
+- Multiple function signatures in a row: x, y, z : Int
 - Bug fixes
 
 #### Version 2.2.0
