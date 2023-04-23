@@ -11,26 +11,27 @@ nav_exclude: true
 # Changelog
 
 ## Version 3.0.0
-- REPL (freesti)
-- New syntax for kinds: 1S and *S for linear and unrestricted session types, 1T and *T for linear and unrestricted functional types
-- Higher-order session types (removed kinds ML and MU)
-- New syntax for functions: 1-> and *-> (or simply ->) for linear and unrestricted functions
+- REPL (`freesti`)
+- New syntax for kinds: `1S` and `*S` for linear and unrestricted session types, `1T` and `*T` 
+  for linear and unrestricted functional types
+- Higher-order session types (removed kinds `ML` and `MU`)
+- New syntax for functions: `1->` and `*->` (or simply `->`) for linear and unrestricted functions
 - Pattern matching on function arguments (datatype constructors and internal choices)
-- 'End' type and 'close' function for closing channels
+- `End` type and `close` function for closing channels
 - Simple module system
 - Shared channels
 - Library functions to work with shared channels
 - Library functions to work with concurrency
 - Primitives for file handling
-- Primitives for handling Standard Input/Output (stdout, stdin and stderr)
-- 'hPut' functions to interact with a shared printing system
-- Builtin support for lists of integers: [], [1,2,3] and (1::2::[])
-- Library functions over lists ('import List')
-- New syntax for type application: id @Int instead of id [Int]
-- New type for 'fork' function: forall a:1T. (() 1-> a) -> ()
-- 'new' is now a function of type forall a:1S. () -> (a, dualof a)
-- Channels created through the 'new' function must be ended (reach an 'End')
-- Multiple function signatures in a row: x, y, z : Int
+- Primitives for handling Standard Input/Output (`stdout`, `stdin` and `stderr`)
+- '`hPut`' functions to interact with a shared printing system
+- Builtin support for lists of integers: `[]`, `[1,2,3]` and `(1::2::[])`
+- Library functions over lists (`import List`)
+- New syntax for type application: `id @Int` instead of `id [Int]`
+- New type for `fork` function: `forall a:1T. (() 1-> a) -> ()`
+- `new` is now a function of type `forall a:1S. () -> (a, dualof a)`
+- Channels created through the `new` function must be ended (reach an `End`)
+- Multiple function signatures in a row: `x, y, z : Int`
 - Bug fixes
 
 
