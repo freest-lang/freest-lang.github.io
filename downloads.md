@@ -20,6 +20,10 @@ nav_order: 2
 {:toc}
 </details>
 
+## Tools
+- [**Language support for Visual Studio Code**](https://marketplace.visualstudio.com/items?itemName=diogofpbarros.freest-language) (Visual Studio Marketplace)
+- [**Syntax Highlighting for Visual Studio Code**](https://marketplace.visualstudio.com/items?itemName=diogofpbarros.freest-lsp) (Visual Studio Marketplace)
+
 ## FreeST
 For installation details please refer to the README file in the corresponding zip folder.
 
@@ -114,9 +118,3 @@ For installation details please refer to the README file in the corresponding zi
 - Adding Ln print versions for basic types, namely, `printIntLn`, `printBoolLn`, `printCharLn`, and `printUnitLn`
 - Adding a simple mode for emacs and atom
 - Small bug fixes
-
-
-
-## Tools
-- [**Syntax Highlighting for Visual Studio Code**](https://github.com/freest-lang/freest-lsp) (available on Visual Studio Marketplace)
-- [**Language support for Visual Studio Code**](https://github.com/freest-lang/freest-language) (available on Visual Studio Marketplace)
