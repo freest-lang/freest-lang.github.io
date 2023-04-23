@@ -7,10 +7,23 @@ layout: default
 nav_order: 6
 ---
 
+<!-- for LateX support -->
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
 # Publications, talks, posters
 
+- [**Kind Inference for the FreeST Programming Language**](https://arxiv.org/abs/2304.06396v1)
+    - **Almeida, B., Mordido, A. and Vasconcelos, V.T.**
+    - [PLACES 2023](https://arxiv.org/html/2304.05439)
+{: .mb-5 }
+
+- [**System $$F^\mu _\omega$$ with Context-free Session Types**](https://link.springer.com/chapter/10.1007/978-3-031-30044-8_15)
+    - **Poças, D., Costa, D., Mordido, A. and Vasconcelos, V.T.**
+    - [Programming Languages and Systems, ESOP 2023](https://link.springer.com/book/10.1007/978-3-031-30044-8)
+{: .mb-5 }
+
 - [**Sharing the Stateful World**](https://inforum.org.pt/2022/sites/default/files/2022-09/Actas_INForum.pdf#Sharing%20the%20Stateful%20World)
-    - **Barros, D., Mordido A., Vasconcelos V.T. and Almeida, B.**
+    - **Barros, D., Mordido, A., Vasconcelos, V.T. and Almeida, B.**
     - [INForum 2022 (SOFT-PT)](https://inforum.org.pt/2022/index.html)
 {: .mb-5 }
 
@@ -20,12 +33,12 @@ nav_order: 6
 {: .mb-5 }
 
 - [**Polymorphic lambda calculus with context-free session types**](https://reader.elsevier.com/reader/sd/pii/S0890540122001031?token=8FB2E1625DE6D5D457F58512677EDD1782E7616F9BBA62ABFC16CA1116EC4EBD2645153A15A8A01605AFD914E5F3B899&originRegion=eu-west-1&originCreation=20221204185730)
-    - **Almeida, B., Mordido A., Thiemann, P. and Vasconcelos V.T.**
+    - **Almeida, B., Mordido, A., Thiemann, P. and Vasconcelos V.T.**
     - [Information and Computation](https://www.sciencedirect.com/journal/information-and-computation), 2022
 {: .mb-5 }
 
 - [**Deciding the bisimilarity of context-free session types**](http://www.di.fc.ul.pt/~vv/papers/almeida.mordido_bisimilarity-context-free-session-types.pdf)
-    - **Almeida, B., Mordido A. and Vasconcelos V.T.**
+    - **Almeida, B., Mordido, A. and Vasconcelos, V.T.**
     - [TACAS 2020](https://etaps.org/2020/tacas)
 {: .mb-5 }
 
