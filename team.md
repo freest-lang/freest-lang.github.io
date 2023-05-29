@@ -9,6 +9,7 @@ nav_order: 7
 
 # Team 
 <!-- # Investigators -->
+- Alcides Fonseca, LASIGE, University of Lisbon, [website](https://wiki.alcidesfonseca.com/)
 - Andreia Mordido, LASIGE, University of Lisbon, [website](http://www.di.fc.ul.pt/~amordido/)
 - Diana Costa, LASIGE, University of Lisbon
 - Diogo Poças, LASIGE, University of Lisbon, [website](https://diogopocas1991.gitlab.io/)
@@ -24,4 +25,5 @@ nav_order: 7
 - Gil Silva, LASIGE, University of Lisbon
 - Guilherme Lopes, LASIGE, University of Lisbon
 - João Roque, LASIGE, University of Lisbon
+- Paula Lopes, LASIGE, University of Lisbon
 <!-- # Undergraduate Students -->
