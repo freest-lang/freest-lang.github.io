@@ -9,17 +9,15 @@ has_children: true
 has_toc: false # avoid table of contents in the end of the page
 ---
 
-# Getting started (WIP)
-
 <!-- collapsible TOC (check https://just-the-docs.github.io/just-the-docs/docs/navigation-structure/#top) -->
-<details open markdown="block">
+<!-- <details open markdown="block">
   <summary>
     Table of contents
   </summary>
   {: .text-delta }
 - TOC
 {:toc}
-</details>
+</details> -->
 
 <!-- small introduction -->
 <!-- similar languages to freest -->
