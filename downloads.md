@@ -21,8 +21,45 @@ nav_order: 2
 </details>
 
 ## Tools
-- [**Language support for Visual Studio Code**](https://marketplace.visualstudio.com/items?itemName=diogofpbarros.freest-language) (Visual Studio Marketplace)
-- [**Syntax Highlighting for Visual Studio Code**](https://marketplace.visualstudio.com/items?itemName=diogofpbarros.freest-lsp) (Visual Studio Marketplace)
+### FreeST Syntax Highlighting for Visual Studio Code 
+
+[Get it Here!](https://marketplace.visualstudio.com/items?itemName=diogofpbarros.freest-language){: .btn }
+
+This extension provides basic syntax highlighting for the FreeST programming
+  language.
+
+![demo-highlighting](/resources/demo-highlighting.png)
+
+### FreeST Language Server for Visual Studio Code
+
+[Get it Here!](https://marketplace.visualstudio.com/items?itemName=diogofpbarros.freest-lsp){: .btn }
+
+#### Error highlighting
+Long gone are the days of switching back and forth between editor and console to locate errors.
+	Errors are now highlighted directly on the editor, just hover the highlighted code to 
+	see the error message (as given by the compiler).
+
+The extensions verifies files after every file save (not every file change as other extensions
+	do).
+
+![error-highlighting](/resources/demo-error-highlight.gif)
+
+<!-- Uncomment for cuteness overload -->
+<!-- ![Alt Text](https://media.giphy.com/media/vFKqnCdLPNOKc/giphy.gif) -->
+
+
+#### Run in terminal
+Run a FreeST file directly from the editor in VSCode's integrated terminal by right clicking
+	it and selecting `FreeST: Run`.
+
+![run-in-terminal](/resources/demo-run.gif)
+
+
+#### Load into interpreter
+Load a FreeST file directly into FreeST's interpreter (`freesti`) in VSCode's integrated terminal
+	by right clicking it and selecting `FreeST: Load into interpreter`.
+
+![load-into-interpreter](/resources/demo-load.gif)
 
 ## FreeST
 For installation details please refer to the README file in the corresponding zip folder.

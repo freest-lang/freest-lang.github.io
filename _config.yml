@@ -66,6 +66,7 @@ exclude:
   - vendor/cache/
   - vendor/gems/
   - vendor/ruby/
+  - resources/
 
 # plugins:
   # - jekyll-feed
