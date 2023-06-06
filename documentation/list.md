@@ -8,11 +8,11 @@ nav_order: 2
 parent: Documentation
 ---
 
-# Table of contents
+# List
 {: .no_toc}
 
 <!-- collapsible TOC (check https://just-the-docs.github.io/just-the-docs/docs/navigation-structure/#top) -->
-<details open markdown="block">
+<details markdown="block">
   <summary>
     Table of contents
   </summary>
