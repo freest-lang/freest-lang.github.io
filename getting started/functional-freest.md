@@ -26,26 +26,28 @@ parent: Getting started
 </details>
 
 
-## Types
+## Primitive types and tuples
 
-FreeST has as primitive types:
+FreeST has the following primitive types:
 - `()`, the unit type, with a single value `()`
 - `Bool`, can be `True` or `False`
 - `Int`, for integers
 - `Char`, for single characters
 - `String`, for sequences of characters
 
-Furthermore, we can also join these types into **tuples**. A tuple can have two elements 
-    `(Int, String)` or as many you want `(Bool, Int, Int, Char, String)`.
+From primitive types, other types can be built. **Tuple** is the first type
+    constructor we study. A tuple can have two elements `(Int, String)` or as
+    many you want `(Bool, Int, (Int, Char), String)`.
 
 ## Functions, functions everywhere
+
 In FreeST, much like in every other functional language, everything is a function (or a composition 
     of functions). To sum numbers is to apply function `(+)` to two numbers. To sum 1 and 2 is to 
     write `(+) 1 2`. However, because function `(+)` is considered an **operator**, we can also 
     write `1 + 2`. 
 
 <!-- function signatures -->
-All functions must have a **signature** (a type), that describes both its input parameters and 
+All functions must have a **signature** (a type), that describes both its parameters and 
     return value. A function's signature has the syntax 
     `<Parameter#1> -> ... -> <Parameter#n> -> <Return>`. For example, the type of `(+)` is 
     `Int -> Int -> Int`, a function that takes two integers and returns an integer.
