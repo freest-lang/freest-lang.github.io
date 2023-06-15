@@ -29,11 +29,11 @@ parent: Getting started
 ## Types
 
 FreeST has as primitive types:
-- `()` (Unit), the simplest type possible, it contains no information
+- `()`, the unit type, with a single value `()`
 - `Bool`, can be `True` or `False`
 - `Int`, for integers
 - `Char`, for single characters
-- `String`, for strings of text
+- `String`, for sequences of characters
 
 Furthermore, we can also join these types into **tuples**. A tuple can have two elements 
     `(Int, String)` or as many you want `(Bool, Int, Int, Char, String)`.
