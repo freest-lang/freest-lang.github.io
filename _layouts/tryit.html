@@ -1,0 +1,102 @@
+---
+layout: default
+---
+
+<h1>FreeST Online</h1>
+
+<br>
+
+<div id="editor"></div>
+<div id="button-container">
+    <button id="run" class="btn btn-outline" onclick="executeCode()">Run</button>
+</div>
+<div id="terminal" class="scroll-area">
+    <pre id="terminal-content" style="margin-top: 0;">$</pre>
+</div>
+
+
+
+<!-- Ace editor -->
+<style type="text/css" media="screen">
+    #editor { 
+        height: 40em;
+        font-size: 120%;
+    }
+</style>
+
+<script src="/ace/src/ace.js"></script>
+<script src="/ace/src/mode-freest.js"></script>
+<script src="/require.js"></script>
+<script>
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/chrome");
+
+    var FreestMode = ace.require("ace/mode/freest").Mode;
+    editor.session.setMode(new FreestMode());
+
+    /* Hello world sample, div formats multiline into a single line
+         so we set it manually here and put the cursor in the start*/
+    editor.setValue('main : ()\nmain = putStrLn "Hello, World!"', -1);
+</script>
+
+
+
+<!-- Code execution -->
+<style>
+    #button-container {
+        width: 100%;
+        float: left;
+    }
+
+    #run {
+        float: right;
+    }
+
+    #terminal {
+        border-top: 1px solid #ddd;
+        padding: 10px;
+        background: #212a2f;
+        color: #6b8898;
+        font-family: monospace;
+    }
+
+    #terminal-content {
+        font-size: 90%;
+    }
+
+    .scroll-area {
+        min-height: 0;
+        -webkit-flex: 1;
+        flex: 1;
+        overflow: auto;
+    }
+</style>
+
+<script>
+    async function executeCode() {
+        /* HTML ELEMENTS */
+        /*const editor = document.getElementById("editor").value;*/
+        var terminal = document.getElementById("terminal-content");
+
+        /* WAITING */
+        terminal.innerHTML = "Running...";
+
+        /* INPUT */
+        const code = editor.getValue(); 
+
+        /* EXECUTION REQUEST */
+        const options = {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({code: code}),
+        };
+
+        const response = await fetch("http://194.117.20.245:5011/run.json", options);
+        const result = (await response.json()).result;
+
+        /* OUTPUT */
+        terminal.innerHTML = result;
+    }
+</script>
