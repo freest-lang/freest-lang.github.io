@@ -20,7 +20,7 @@ nav_order: 7
 <!-- # MSc Students -->
 - Afonso Rafael, LASIGE, University of Lisbon
 - António Silvestre, LASIGE, University of Lisbon
-- Diogo Barros, LASIGE, University of Lisbon
+- Diogo Barros, LASIGE, University of Lisbon, [website](https://diogo-mustachio-barros.github.io/)
 - Diogo Ferreira, LASIGE, University of Lisbon
 - Gil Silva, LASIGE, University of Lisbon
 - Guilherme Lopes, LASIGE, University of Lisbon

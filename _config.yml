@@ -20,6 +20,7 @@
 
 title: FreeST
 favicon_ico: "/resources/FreeST.png"
+logo-img: "/resources/FreeST.png"
 # email: 
 # description: >- # this means to ignore newlines until "baseurl:"
 #   Write an awesome description for your new site here. You can edit this
