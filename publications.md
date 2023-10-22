@@ -12,6 +12,11 @@ nav_order: 6
 
 # Publications, talks, posters
 
+- [**Subtyping Context-Free Session Types**](https://drops.dagstuhl.de/opus/volltexte/2023/19005/pdf/LIPIcs-CONCUR-2023-11.pdf)
+    - **Silva, Gil; Mordido, Andreia; Vasconcelos, Vasco T.**
+    - [CONCUR 2023](https://www.uantwerpen.be/en/conferences/confest-2023/concur/)
+{: .mb-5 }
+
 - [**Kind Inference for the FreeST Programming Language**](https://arxiv.org/abs/2304.06396v1)
     - **Almeida, B., Mordido, A. and Vasconcelos, V.T.**
     - [PLACES 2023](https://arxiv.org/html/2304.05439)
