@@ -12,7 +12,7 @@ nav_order: 1
 FreeST is a typed concurrent programming language where processes communicate via message-passing.
 
 Messages are exchanged on bidirectional channels. Communication on channels is governed by a 
-powerful type system based on polymorphic context-free session types. Based on a core linear 
-functional programming language, FreeST features primitives for forking new threads and for 
-creating and communicating on channels. The compiler builds on a novel algorithm for deciding the 
+powerful type system based on polymorphic context-free session types. Built on a core linear 
+functional programming language, FreeST features primitives for forking new threads, for 
+creating channesl and for communicating on these. The compiler builds on a novel algorithm for deciding the 
 equivalence of context-free types.
