@@ -38,8 +38,7 @@ We have also seen a function to consume the other end of the channel, namely
 ```freest
 mathServer : dualof MathService -> ()
 ```
-
-Now we would like to put the client in contact with the server. For this we need a *communication channel*. The channel shall have two endpoints, one obeys the `MathService` , the other the `dualof MathService` protocol. The former is passed to `mathClient`, the latter to `mathServer`.
+Now we would like to put the client in contact with the server. For this we need a *communication channel*. The channel shall have two endpoints, one obeys type `MathService`, the other `dualof MathService`. The former is passed to `mathClient`, the latter to `mathServer`.
 Client and server must run in different threads; we fork a new thread to run the server while running the client on the main thread.
 ```freest
 main : Int
@@ -48,7 +47,7 @@ main =
   |>
   mathClient
 ```
-Function `forkWith` receives the type of a channel end (`MathService` in this case), the return type of the function to fork (`()`) and the function to fork (`mathServer`). It creates a new channel, passes one end to function `mathServer` and forks a new thread to run the function. The return value of the newly forked function is discarded. Finally, function `forkWith` returns the other end of the channel. In function `main`, this end is then passed to function `mathClient` via the inverse function application operator `|>`. We could have written function `main` as
+Function `forkWith` receives the type of a channel end (`MathService` in this case), the return type of the function to fork (`()`) and the function to fork (`mathServer`). It creates a new channel, passes one end to function `mathServer` and forks a new thread to run the function. The return value of the newly forked thread is discarded. Finally, function `forkWith` returns the other end of the channel. In function `main`, this end is then passed to function `mathClient` via the inverse function application operator `|>`. We could have written function `main` as
 ```freest
 main : Int
 main =
@@ -93,7 +92,7 @@ main =
   mathClient c
 ```
 
-Equipped with functions `new` and `fork` we can easily write `forkWith`. Nevertheless, `forkWith` stands at an higher level of abstraction and is prone to less concurrency errors.
+Equipped with functions `new` and `fork` we can easily write `forkWith`. Nevertheless, `forkWith` stands at an higher level of abstraction and is prone to less concurrency errors, hence it remains our favourite choice.
 
 ```
 forkWith : forall a:1A b . (dualof a 1-> b) -> a
