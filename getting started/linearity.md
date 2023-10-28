@@ -42,14 +42,14 @@ f x = x + 1
 main : ()
 main = 
     let i = 5 in
-    f i; -- i is used once
-    f i; -- i is used twice
+    f i; -- both g and i are used once
+    f i; -- both f and i are used twice
     let j = 2 in
     -- j is never used
     ()
 ```
 
-Functions are the first construct new programmers face that can also be linear. A 
+Functions are the first construct programmers face that can also be linear. A 
     **linear function** is simply a function that has to be used exactly once (following the
     linear constraint). Let us write a linear function `linIncrement` that increments an integer 
     by 1:
@@ -82,7 +82,7 @@ main = linIncrement 1
 <!-- TODO: unrestricted can replace linear -->
 
 ## Treading carefully with linear functions
-Linear functions seem simple, however there is more to this than meets the eye. The type
+Linear functions seem simple, however there is more to it than meets the eye. The type
     `Int 1-> Int` describes a linear function that takes an integer and returns an integer,
     but what about type `Int 1-> Int -> Int`? This type also describes a linear function, but with
     a twist: only the first part is linear (instead of the whole as before). If you partially apply
@@ -91,20 +91,17 @@ Linear functions seem simple, however there is more to this than meets the eye. 
 f : Int 1-> Int -> Int
 f x y = x + y
 
-main : ()
+main : Int
 main = 
     let f' = f 1 in
-    f' 3;
-    f' 1;
-    f' 2;
-    ()
+    f' 3 + f' 1 + f' 2
 ```
 
 In the above case, after partially applying `f` we get an unrestricted function `f'` which we then 
     use multiple times. A truly linear version of function `f` would need to have type 
     `Int 1-> Int 1-> Int`.
 
-Another case that can happen is something similar to `Int -> Int 1-> Int`. This is more tricky than 
+Let us now analyse a similar in form, but quite different in behaviour, type `Int -> Int 1-> Int`. This is more tricky than 
     what we've seen until now. Let's analyze it step by step, look at it as `Int -> (Int 1-> Int)`.
     Now it's clearer that it represents an **unrestricted** function that takes an integer and 
     returns another **linear** function that takes an integer and returns an integer.
@@ -112,19 +109,16 @@ Another case that can happen is something similar to `Int -> Int 1-> Int`. This 
 g : Int -> Int 1-> Int
 g x y = x + y
 
-main : ()
+main : Int
 main =
     let g1 = g 1 in
     let g2 = g 2 in
-    g1 3;
-    g2 4;
-    ()
+    g1 3 + g2 4
 ```
 
-This time, function `g` is used multiple times to create linear functions `g1` and `g2`, that then
-    are used exactly once.
+This time, function `g` is used multiple times to create linear functions `g1` and `g2`, each of which is then used exactly once.
 
-Functions `f` and `g` are the fundamental to understand how functions deal with linearity and how 
+Functions `f` and `g` are fundamental to understand how functions deal with linearity and how 
     us programmers should both write and use them. From here on out, there are many possible cases
     that combine both cases of `f` and `g`, but by breaking it down type by type as we did for `g`,
     we can quickly understand any combination of linear and unrestricted functions.
