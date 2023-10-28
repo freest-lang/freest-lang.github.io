@@ -95,12 +95,11 @@ To instantiate new channels we use `new`. For function types and comprehensive d
   check out the [Prelude]({{ site.url }}{{ site.baseurl }}/documentation/prelude) documentation
   page.
 
-To implement a client of our `MathServer` is to follow the protocol (specified by the session type). A very effective tip on programming with channels in FreeST is to **always program around the session type**. If you focus on your protocols, you give priority to designing how you structure your processes, and then the implementation will come naturally by following said protocol.
+To implement a client of our `MathService` is to follow the protocol (specified by the session type). A very effective tip on programming with channels in FreeST is to **always program around the session type**. If you focus on your protocols, you give priority to designing how you structure your processes, and then the implementation will come naturally by following said protocol.
 
-Let us begin implementing a simple `MathServer` client that wants the negation of `5`. Looking at 
-  the session type, our first step is to select an option (between `Negate` and `IsZero`):
+Let us begin implementing a simple `MathService` client that wants the negation of `5`. Looking at the session type, our first step is to select an option (between `Negate` and `IsZero`):
 ```
-mathClient : MathServer -> Int
+mathClient : MathService -> Int
 mathClient c0 =
   let c1 = select Negate c0 in
   ...
@@ -109,7 +108,7 @@ mathClient c0 =
 Now channel `c1` has type `!Int;?Int;End`, therefore we must send an `Int`, and in this case it's 
   the number we want to negate:
 ```
-mathClient : MathServer -> Int
+mathClient : MathService -> Int
 mathClient c0 =
   ...
   let c2 = send 5 c1 in
@@ -118,7 +117,7 @@ mathClient c0 =
 
 Then for `c2` with type `?Int;End` we receive an `Int` (our negated number):
 ```
-mathClient : MathServer -> Int
+mathClient : MathService -> Int
 mathClient c0 =
   ...
   let (i, c3) = receive c2 in
@@ -127,7 +126,7 @@ mathClient c0 =
 
 And finally we are left with `End` and simply `close` it:
 ```
-mathClient : MathServer -> Int
+mathClient : MathService -> Int
 mathClient c0 =
   ...
   close c3;
@@ -136,7 +135,7 @@ mathClient c0 =
 
 So our full `mathClient` looks like this:
 ```
-mathClient : MathServer -> Int
+mathClient : MathService -> Int
 mathClient c0 =
   let c1 = select Negate c0 in
   let c2 = send 5 c1 in
@@ -147,7 +146,7 @@ mathClient c0 =
 
 To avoid the first two `let` expressions, we can use the `|>` operator to streamline session operations, and `close` the channel together with the `receive` using `receiveAndClose`. Our final client is:
 ```
-mathClient : MathServer -> Int
+mathClient : MathService -> Int
 mathClient c =
   c |> select Negate |> send 5 |> receiveAndClose
 ```
