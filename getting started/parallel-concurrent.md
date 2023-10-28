@@ -2,13 +2,13 @@
 # Feel free to add content and custom Front Matter to this file.
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
-title: Parallel and concurrent programming
+title: Concurrent programming
 layout: default
 nav_order: 5
 parent: Getting started
 ---
 
-# Parallel and concurrent programming
+# Concurrent programming
 {: .no_toc }
 
 <!-- TODO -->
@@ -30,10 +30,9 @@ parent: Getting started
 
 ## It's not a spoon, it's a `fork`
 As a language dedicated to communication and concurrency, FreeST provides the `fork` function to 
-    execute functions in parallel, i.e. in another thread.
+execute code in parallel, i.e. in another thread.
 ```freest
 fork : forall a:*T . (() 1-> a) -> ()
 ```
-
-A program always has one thread, the **main** thread. Program execution always ends when the main 
-    thread end, no matter how many running threads are there.
+A program has at least one thread, the **main** thread. Program execution always ends when the main 
+thread ends, no matter how many running threads are there.

@@ -145,16 +145,14 @@ mathClient c0 =
   i
 ```
 
-To avoid the first two `let` expressions, we can use the `|>` operator to streamline operations into a single expression, and `close` the channel together with the `receive` using `receiveAndClose`. Our final client is:
+To avoid the first two `let` expressions, we can use the `|>` operator to streamline session operations, and `close` the channel together with the `receive` using `receiveAndClose`. Our final client is:
 ```
 mathClient : MathServer -> Int
 mathClient c =
   c |> select Negate |> send 5 |> receiveAndClose
 ```
 
-Our client is done, we are only missing a **server**. Here the main difference is that instead of
-  a single select like the client, the server has to provide for every option through a `match` 
-  expression (very similar to a `case` expression).
+Our client is done, we are only missing a **server**. Here the main difference is that instead of a single select like the client, the server has to provide for every option through a `match` expression (very similar to a `case` expression).
 ```
 mathServer : dualof MathService -> ()
 mathServer c0 = 
@@ -165,9 +163,7 @@ mathServer c0 =
   ...
 ```
 
-For each branch of the `match` expression, we must handle the corresponding type. For example,
-  in the `Negate` branch, channel `c1` has type `?Int;!Int`. After the `match` expression, we
-  are left with `End`, to which we can pipe into a close. The full implementation is as follows:
+For each branch of the `match` expression, we must handle the corresponding type. For example, in the `Negate` branch, channel `c1` has type `?Int;!Int`. After the `match` expression, we are left with `End`, to which we can pipe into a close. The full implementation is as follows:
 ```
 mathServer : dualof MathService -> ()
 mathServer c0 = 
@@ -180,12 +176,20 @@ mathServer c0 =
       send (i == 0) c2
   } |> close
 ```
+FreeST offers pattern matching on the different cases of a `match` expression. Function `mathServer` may be written with two equations, one for `Negate`, the other for `IsZero`. In this case each individual equation must `close` the channel. The function then becomes as follows.
+```
+mathServer : dualof MathService -> ()
+mathServer (Negate c1) =
+      let (i, c2) = receive c1 in
+      c2 |> send (-i) |> close
+mathServer (IsZero c1) =
+      let (i, c2) = receive c1 in
+      c2 |> send (i == 0) |> close
+```
 
 ## By the power of context-free session types!
 <!-- context-free session types -->
-Regular session types are good, but context-free session types are plain **better**. With 
-  context-free session types you can correcty serialize a binary tree of integers with a single 
-  channel.
+Regular session types are good, but context-free session types are a lot **more powerful**. With context-free session types you can correcty serialize a binary tree of integers with a single channel.
 ```
 data Tree = Node Tree Int Tree | Leaf
 
@@ -195,9 +199,7 @@ type TreeChannel : 1S = +{ Node: TreeChannel; !Int; TreeChannel
 ```
 
 <!-- combining session types with Skip -->
-Notice how instead of using `End`, we instead use `Skip`. If we used `End` we would not be able to
-  compose a singleton `Node` as it would amount to `End; !Int; End`, which doesn't get past the 
-  first `End`.
+Notice how instead of using `End`, we instead use `Skip`. If we used `End` we would not be able to compose a singleton `Node` as it would amount to `End; !Int; End`, which doesn't get past the first `End`.
 
 The `TreeChannel` is then able to describe binary tree serialization without allowing for any 
   missing or unnecessary subtrees, because it specifically describes the sending of a left and 
