@@ -66,7 +66,7 @@ A program has at least one thread, the **main** thread. Program execution always
 
 Function `forkWith` should always be our plan A, but there may be situations when we need to create a channel and fork a thread as two separate operations. For such situations FreeST provides the `new` and the `fork` functions.
 
-Function `new` receives a type `T`, the type of one of the ends of the channel to create and becomes a suspended computation that, when activated, returns the two ends of the channel (a pair of type `(T, dualof T)`). The typical usage is as follows.
+Function `new` receives a type `T`, the type of one of the ends of the channel to create and becomes a suspended computation (usually called a *thunk*) that, when activated, returns the two ends of the channel (a pair of type `(T, dualof T)`). The typical usage is as follows.
 ```freest
 main : Int
 main =
@@ -74,7 +74,7 @@ main =
 ```
 where `c` is a channel end of type `MathService` and `s` of type `dualof MathService`.
 
-Function `fork` receives a type `T` and a suspended computation, usually called a *thunk*, of type `() 1-> T`, and returns `()`.  The `1` in the type of the function guarantees that `fork` will run the function exactly once.
+Function `fork` receives a type `T` and a suspended computation, of type `() 1-> T`, and returns `()`.  The `1` in the type of the function guarantees that `fork` will run the function exactly once.
 ```freest
 main : Int
 main =
