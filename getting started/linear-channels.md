@@ -30,10 +30,10 @@ Channels are how FreeST threads communicate with each other. A channel is made o
   **two endpoints**.
 
 <!-- structured communication in channels through protocols -->
-We create **protocols** for these channels as to structure communication, using **session types**. 
+We create **protocols** for channels to structure communication using **session types**. 
 
-Imagine you want to create a situation of a client and a server of a `MathService`. The 
-  `MathService` protocol gives the client two options: either negate a number, or check if a number
+Imagine a server offering basic mathematical operations, governed by a protocol (or type) named `MathService`. The 
+  `MathService` type gives clients two options: either negate a number or test whether a number
   is zero. Textually, we'll describe it as:
 ```
 MathService =  Negate: send an Int, receive its negation
@@ -45,42 +45,44 @@ Before writing a proper protocol with session types, let's look at what tools we
 !T          - send value of type T
 ?T          - receive value of type T
 +{l:T, ..}  - select a choice 
-&{l:T, ..}  - provide choices
-T;U         - sequential composition
+&{l:T, ..}  - offer a set of choices
+T;U         - do T, then U
 End         - close channel (terminate communication)
 Skip        - neutral element of ;
 ```
 
 Now we can translate our textual representation of `MathService`. It is common practice in FreeST
   to write our protocols from the point of view of the client because it is simpler. However, if 
-  your particular case is different, feel free to do the opposite.
+  your particular case is different, feel free to work from the point of view of the server.
 
 First, our options (`Negate` and `IsZero`) map directly to selecting choices, so we have
   `+{Negate:T, IsZero:U}`. We only need to describe types `T` and `U`. For `T`, we send an Int
-  and then receive an Int, which come as `!Int` and `?Int` respectively, that are then combined
-  into `!Int;?Int`. Now type `U` seems much more simple, we send an Int and then receive a Bool,
+  and then receive an Int, which comes as `!Int` and `?Int` respectively, that are then combined
+  into `!Int;?Int`. Now type `U` seems much simpler, we send an Int and then receive a Bool,
   so we write `!Int;?Bool`. The full session type in FreeST is:
 ```
-type MathService : 1S = +{ Negate: !Int;?Int
+type MathService : 1A = +{ Negate: !Int;?Int
                          , IsZero: !Int;?Bool
                          }; End
 ```
 
-At the end of each option's interaction the outcome is the same, we end the protocol, hence the
-  `End`. If we write it without the `End` type, it default to `Skip`, however, as a rule of FreeST
-  **you cannot instantiate a channel of a type which does not come to an `End`**. Thus, `Skip` is
-  useful when the intention is to combine the session type with others.
+At the end of each option we want to terminate the protocol, hence the
+  `End`. The type without the `End` (and the semiclon) would still be valid, however, **FreeST does not allow instantiating a channel of a type which does not come to an `End`**.
+   <!-- Thus, `Skip` is
+  useful when the intention is to combine the session type with others. -->
 
-To obtain the server's point of view of the `MathService` protocol, is to apply the **dualof** type
-  operator to it. Thus, instead of writing it by hand, we just write `dualof MathService`, and 
-  FreeST will do the work for us.
+To obtain the server's point of view of the `MathService` protocol, one can simply use the **dualof** type operator. Thus, instead of computing explicitly the dual, as in
+```
+type MathService : 1A = &{ Negate: !?Int;!Int
+                         , IsZero: ?Int;!Bool
+                         }; End
+```
+we just write `dualof MathService` and FreeST will do the work for us.
 
 
 ## Interacting with channels
 <!-- primitives on channels -->
-We've talked about session types for structured communication through channels, but how does it
-  translate into code? Each session type has a corresponding channel operation (with exceptions
-  to `Skip` and the session type combinator):
+We've discussed session types for structured communication on channels, but how does it translate into code? Each session type has a corresponding channel operation (with exceptions to `Skip` and the semicolon operator):
 ```
 !T          - send
 ?T          - receive
@@ -89,15 +91,11 @@ We've talked about session types for structured communication through channels, 
 End         - close
 ``` 
 
-And to instantiate new channels we use `new`. For function types and comprehensive documentation,
+To instantiate new channels we use `new`. For function types and comprehensive documentation,
   check out the [Prelude]({{ site.url }}{{ site.baseurl }}/documentation/prelude) documentation
   page.
 
-To implement a client of our `MathServer` is to follow the protocol (specified in the session 
-  type). A very effective tip on programming with channels in FreeST is to **always program around
-  the session type**. If you first focus on your protocols, you give priority to designing how you
-  structure your processes and what each will do, and then the implementation will come naturally
-  by following said protocols.
+To implement a client of our `MathServer` is to follow the protocol (specified by the session type). A very effective tip on programming with channels in FreeST is to **always program around the session type**. If you focus on your protocols, you give priority to designing how you structure your processes, and then the implementation will come naturally by following said protocol.
 
 Let us begin implementing a simple `MathServer` client that wants the negation of `5`. Looking at 
   the session type, our first step is to select an option (between `Negate` and `IsZero`):
@@ -132,7 +130,7 @@ And finally we are left with `End` and simply `close` it:
 mathClient : MathServer -> Int
 mathClient c0 =
   ...
-  close c3
+  close c3;
   i
 ```
 
@@ -147,9 +145,7 @@ mathClient c0 =
   i
 ```
 
-To avoid the first two `let` expressions, we can use the `|>` operator to streamline operations 
-  into a single expression, and `close` the channel together with the `receive` using 
-  `receiveAndClose`. Our final client is:
+To avoid the first two `let` expressions, we can use the `|>` operator to streamline operations into a single expression, and `close` the channel together with the `receive` using `receiveAndClose`. Our final client is:
 ```
 mathClient : MathServer -> Int
 mathClient c =
@@ -181,7 +177,7 @@ mathServer c0 =
       send (-i) c2,
     IsZero c1 -> 
       let (i, c2) = receive c1 in
-      send (i == 0) c2,
+      send (i == 0) c2
   } |> close
 ```
 
