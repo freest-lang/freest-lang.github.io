@@ -79,16 +79,16 @@ Function `fork` receives a type `T` and a suspended computation, of type `() 1->
 main : Int
 main =
   ...
-  fork @() (\_:() 1-> mathServer s) ;
+  fork @() (\_:() -> mathServer s) ;
   ...
 ```
 
-Note that expression `\_:() 1-> mathServer s` builds a suspended computation that, when run, executes `mathServer s`. Putting everything together we have
+Note that expression `\_:() -> mathServer s` builds a suspended computation that, when run, executes `mathServer s`. Putting everything together we have
 ```freest
 main : Int
 main =
   let (c, s) = new @MathService () in
-  fork @() (\_:() 1-> mathServer s) ;
+  fork @() (\_:() -> mathServer s) ;
   mathClient c
 ```
 
@@ -98,10 +98,10 @@ Equipped with functions `new` and `fork` we can easily write `forkWith`. Neverth
 forkWith : forall a:1A b . (dualof a 1-> b) -> a
 forkWith f =
     let (x, y) = new @a () in
-    fork (\_:() 1-> f y);
+    fork (\_:() -> f y);
     x
 ```
-
+<!-- TODO explain that fork accepts a linear thunk -->
 
 <!-- As a language dedicated to communication and concurrency, FreeST provides the `fork` function to execute code in parallel, i.e., in another thread.
 
