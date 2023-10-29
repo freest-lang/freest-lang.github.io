@@ -113,7 +113,7 @@ main : Int
 main =
   let (p, c) = new @IntStream () in
   fork (\_: () 1-> produce 1 p);
-  fork (\_: () 1-> produce 1 p);
+  fork (\_: () 1-> produce 2 p);
   consume' 5 c
 ```
 We have also rearranged the code in such a way that `consume'` runs on the main thread, so that the program may terminate once the five values are read. The program should print a number between `5` and `10`.
