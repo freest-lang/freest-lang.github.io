@@ -80,7 +80,7 @@ consume' c =
   c |> receive_ @Int |> print @Int ;
   consume' c
 ```
-When can then write a simple program that consumes and prints numbers from two producers:
+We can then write a simple program that consumes and prints numbers from two producers:
 ```freest
 main : Diverge
 main =
