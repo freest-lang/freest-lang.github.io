@@ -79,7 +79,7 @@ Function `fork` receives a type `T` and a suspended computation, of type `() 1->
 main : Int
 main =
   ...
-  fork @() (\_:() -> mathServer s) ;
+  fork @() (\_:() 1-> mathServer s) ;
   ...
 ```
 
@@ -88,7 +88,7 @@ Note that expression `\_:() -> mathServer s` builds a suspended computation that
 main : Int
 main =
   let (c, s) = new @MathService () in
-  fork @() (\_:() -> mathServer s) ;
+  fork @() (\_:() 1-> mathServer s) ;
   mathClient c
 ```
 
@@ -98,7 +98,7 @@ Equipped with functions `new` and `fork` we can easily write `forkWith`. Neverth
 forkWith : forall a:1A b . (dualof a 1-> b) -> a
 forkWith f =
     let (x, y) = new @a () in
-    fork (\_:() -> f y);
+    fork (\_:() 1-> f y);
     x
 ```
 <!-- TODO explain that fork accepts a linear thunk -->
