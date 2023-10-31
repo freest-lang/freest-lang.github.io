@@ -42,9 +42,9 @@ nav_order: 6
     - [Information and Computation](https://www.sciencedirect.com/journal/information-and-computation), 2022
 {: .mb-5 }
 
-- [**Polymorphic Context-free Session Types.**](TODO)
+- [**Polymorphic Context-free Session Types**](TODO)
     - **Vasconcelos, V.T.**
-    - Dagstuhl Seminar, Behavioural Types: Bridging Theory and Practice. September 2021.
+    - Talk @ Dagstuhl Seminar, Behavioural Types: Bridging Theory and Practice. September 2021.
 
 - [**Deciding the bisimilarity of context-free session types**](http://www.di.fc.ul.pt/~vv/papers/almeida.mordido_bisimilarity-context-free-session-types.pdf)
     - **Almeida, B., Mordido, A. and Vasconcelos, V.T.**
