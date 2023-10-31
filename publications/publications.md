@@ -42,7 +42,7 @@ nav_order: 6
     - [Information and Computation](https://www.sciencedirect.com/journal/information-and-computation), 2022
 {: .mb-5 }
 
-- [**Polymorphic Context-free Session Types**](TODO)
+- [**Polymorphic Context-free Session Types**]( {% link publications/talks/Dagstuhl Sep 2021.key.pdf %} )
     - **Vasconcelos, V.T.**
     - Talk @ Dagstuhl Seminar, Behavioural Types: Bridging Theory and Practice. September 2021.
 
