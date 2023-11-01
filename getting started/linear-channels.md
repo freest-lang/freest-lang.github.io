@@ -24,17 +24,14 @@ parent: Getting started
 {:toc}
 </details>
 
-## Channels, Protocols and Session types
+## Channels, protocols and session types
 <!-- channels as a way of connecting threads (and sharing data) -->
-Channels are how FreeST threads communicate with each other. A channel is made of 
-  **two endpoints**.
+Channels are how FreeST threads communicate with each other. A channel is made of **two endpoints**.
 
 <!-- structured communication in channels through protocols -->
 We create **protocols** for channels to structure communication using **session types**. 
 
-Imagine a server offering basic mathematical operations, governed by a protocol (or type) named `MathService`. The 
-  `MathService` type gives clients two options: either negate a number or test whether a number
-  is zero. Textually, we'll describe it as:
+Imagine a server offering basic mathematical operations, governed by a protocol (or type) named `MathService`. The  `MathService` type gives clients two options: either negate a number or test whether a number is zero. Textually, we'll describe it as:
 ```
 MathService =  Negate: send an Int, receive its negation
             OR IsZero: send an Int, receive True if it's zero, False otherwise
@@ -80,7 +77,7 @@ type MathService : 1A = &{ Negate: !?Int;!Int
 we just write `dualof MathService` and FreeST will do the work for us.
 
 
-## Interacting with channels
+## Thread interaction
 <!-- primitives on channels -->
 We've discussed session types for structured communication on channels, but how does it translate into code? Each session type has a corresponding channel operation (with exceptions to `Skip` and the semicolon operator):
 ```
@@ -188,7 +185,74 @@ mathServer (IsZero c1) =
 
 ## By the power of context-free session types!
 <!-- context-free session types -->
-Regular session types are good, but context-free session types are a lot **more powerful**. With context-free session types you can correcty serialize a binary tree of integers with a single channel.
+
+The sequential composition operator of session types - the semicolon - allows for a convenient protocol composition and decomposition.
+
+Imagine a simple protocol to conduct an integer predicate. Again, as seen from the side of the client, the protocol outputs an integer and then inputs the result in the form of a boolean value. The type can be written as follows.
+```freest
+type IntPred : 1S = !Int ; ?Bool
+```
+
+We can then write a function to consume such a protocol, a function that receives an `IntPred`. But the function must work on part of the protocol of some channel. At the very least, the channel must be closed. The function could then receive a channel end of type `IntPred ; End`. But we may want to proceed with some extra communications before closing the channel. Taking advantage of polymorphism, we let the function accept a channel end of type `IntPred ; a`, consume the `IntPred` part, and return the unused part of the channel end, at type `a`. For example a function that invokes the predicate on a given integer `n` and prints the result can be written as follows.
+```freest
+invokeIntPred : Int -> forall a : 1S . IntPred ; a -> a
+invokeIntPred n c =
+  let (x, c) = c |> send n |> receive in
+  print @Bool x;
+  c
+```
+
+Functions that accept a channel end of type `T ; a` and return the same channel end, this time at time `a` are quite common in FreeST. The channel may then be used in the continuation.
+
+Let us know look at a function that produces an `IntPred`, that is to say that consumes a channel end of type `dualof IntPred`. The function receives a predicate, a channel end of type `dualof IntPred ; a` and a returns the channel at type `a`, for `a` a linear session type.
+
+```freest
+serveIntPred : (Int -> Bool) -> forall a : 1S . dualof IntPred ; a -> a
+serveIntPred p c =
+  let (x, c) = receive c in
+  send (p x) c
+```
+
+We know play the same game, this time for binary integer operations. The type of the protocol is
+```freest
+type IntBinOp : 1S = !Int ; !Int ; ?Int
+```
+
+A consumer of this type invokes the operator with two given integer values, prints the result, and returns the unused part of the channel end.
+```freest
+invokeIntBinOp : Int -> Int -> forall a : 1S . IntBinOp ; a -> a
+invokeIntBinOp n m c =
+  let (x, c) = c |> send n |> send m |> receive in
+  print @Int x;
+  c
+```
+Similarly to `serveIntPred`, the server side for binary integer operators can be written as follows.
+```freest
+serveIntBinOp : (Int -> Int -> Int) -> forall a : 1S . dualof IntBinOp ; a -> a
+serveIntBinOp f c =
+  let (x, c) = receive c in
+  let (y, c) = receive c in
+  send (f x y) c
+```
+
+We can now compose these four protocols in many different ways. We can compose three `IntPred` in a row, or perhaps an `IntPred` followed by a `IntBinOp`, or even an `IntPred` followed by a `dualof IntBinOp`. In the end, channels must be closed, so that we propose as an example a consumer for type `IntPred ; IntBinOp ; End`.
+```freest
+invoke : IntPred ; IntBinOp ; End -> ()
+invoke c =
+  c |> invokeIntPred 3 @(IntBinOp ; End) |> invokeIntBinOp 4 5 @End |> close
+```
+For the other end of the channel we may write:
+```freest
+serve : dualof IntPred ; dualof IntBinOp ; End -> ()
+serve c =
+  c |>
+  serveIntPred (>=0) @(dualof IntBinOp ; End) |>
+  serveIntBinOp (+) @End |>
+  close
+```
+Functions `invoke` and `serve` can be run in different threads while communicating on a channel featuring type `IntPred ; IntBinOp ; End` on the `invoke` side.
+
+Regular session types are good, but context-free session types are a lot **more powerful**. With context-free session types you can correcty serialize a binary tree of integers with a single channel. We start by defining a conventional datatype for a binary tree and the corresponding type for a channel that consumes a tree channel.
 ```
 data Tree = Node Tree Int Tree | Leaf
 
@@ -198,7 +262,7 @@ type TreeChannel : 1S = +{ Node: TreeChannel; !Int; TreeChannel
 ```
 
 <!-- combining session types with Skip -->
-Notice how instead of using `End`, we instead use `Skip`. If we used `End` we would not be able to compose a singleton `Node` as it would amount to `End; !Int; End`, which doesn't get past the first `End`.
+Notice how instead of using `End`, we use `Skip`. If `End` was used we would not be able to compose a singleton `Node` as it would amount to `End; !Int; End`, which doesn't get past the first `End`.
 
 The `TreeChannel` is then able to describe binary tree serialization without allowing for any 
   missing or unnecessary subtrees, because it specifically describes the sending of a left and 
@@ -264,5 +328,4 @@ sendTree t c =
   }
 ```
 
-We'll leave the `receiveTree` function up to you to try. Use `sendTree` as a template and remember
-  to use the dual channel operations.
+We leave the `receiveTree` function up to you to try. Use `sendTree` as a template and remember to use the dual channel operations.
