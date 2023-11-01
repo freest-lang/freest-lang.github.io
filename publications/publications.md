@@ -27,6 +27,11 @@ nav_order: 6
     - [Programming Languages and Systems, ESOP 2023](https://link.springer.com/book/10.1007/978-3-031-30044-8)
 {: .mb-5 }
 
+- [**FreeST and the Higher-order Polymorphic Lambda Calculus**]({% link publications/talks/talk_porto_oct22.key.pdf %})
+    - **Vasconcelos, V.T.**
+    - Talk @ Universidade do Porto. October 2022.
+{: .mb-5 }
+
 - [**Sharing the Stateful World**](https://inforum.org.pt/2022/sites/default/files/2022-09/Actas_INForum.pdf#Sharing%20the%20Stateful%20World)
     - **Barros, D., Mordido, A., Vasconcelos, V.T. and Almeida, B.**
     - [INForum 2022 (SOFT-PT)](https://inforum.org.pt/2022/index.html)
@@ -42,9 +47,10 @@ nav_order: 6
     - [Information and Computation](https://www.sciencedirect.com/journal/information-and-computation), 2022
 {: .mb-5 }
 
-- [**Polymorphic Context-free Session Types**](TODO)
+- [**Polymorphic Context-free Session Types**]( {% link publications/talks/Dagstuhl Sep 2021.key.pdf %} )
     - **Vasconcelos, V.T.**
     - Talk @ Dagstuhl Seminar, Behavioural Types: Bridging Theory and Practice. September 2021.
+{: .mb-5 }
 
 - [**Deciding the bisimilarity of context-free session types**](http://www.di.fc.ul.pt/~vv/papers/almeida.mordido_bisimilarity-context-free-session-types.pdf)
     - **Almeida, B., Mordido, A. and Vasconcelos, V.T.**
