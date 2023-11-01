@@ -58,6 +58,7 @@ nav_order: 6
 {: .mb-5 }
 
 - [**Session Type Equivalence via Bisimulation**](http://rss.di.fc.ul.pt/wp-content/uploads/2020/07/cmu19_slides.pdf)
+    - **Mordido, A.**
     - Talk @ Carnegie Mellon University, 2019
 {: .mb-5 }
 
@@ -67,10 +68,12 @@ nav_order: 6
 {: .mb-5 }
 
 - [**FreeST: Context-free Session Types in a Concurrent Functional Language**](http://rss.di.fc.ul.pt/wp-content/uploads/2020/07/freest_shonan19_slides.pdf)
+    - **Vasconcelos, V.T.**
     - Talk @ Programming Languages for Distributed Systems, Shonan, 2019
 {: .mb-5 }
 
 - [**FreeST: Context-free Session Types in a Functional Language**](http://rss.di.fc.ul.pt/wp-content/uploads/2020/07/freest-poster-etaps19.pdf)
+    - **Almeida, B.**
     - Poster @ [ETAPS 2019](https://etaps.org/2019)
 {: .mb-5 }
 
