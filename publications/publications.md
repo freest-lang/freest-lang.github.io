@@ -27,6 +27,11 @@ nav_order: 6
     - [Programming Languages and Systems, ESOP 2023](https://link.springer.com/book/10.1007/978-3-031-30044-8)
 {: .mb-5 }
 
+- [**Shared Channels on Context-free Session Types**](https://repositorio.ul.pt/bitstream/10451/59094/1/TM_Diogo_Barros.pdf)
+    - **Barros, D.**
+    - Master Thesis @ Faculdade Ciências
+{: .mb-5 }
+
 - [**FreeST and the Higher-order Polymorphic Lambda Calculus**]({% link publications/talks/talk_porto_oct22.key.pdf %})
     - **Vasconcelos, V.T.**
     - Talk @ Universidade do Porto. October 2022.
@@ -75,6 +80,11 @@ nav_order: 6
 - [**FreeST: Context-free Session Types in a Functional Language**](http://rss.di.fc.ul.pt/wp-content/uploads/2020/07/freest-poster-etaps19.pdf)
     - **Almeida, B.**
     - Poster @ [ETAPS 2019](https://etaps.org/2019)
+{: .mb-5 }
+
+- [**Uma linguagem de programação com tipos de sessão independentes do contexto**](https://repositorio.ul.pt/bitstream/10451/36701/1/ulfc124854_tm_Bernardo_Almeida.pdf)
+    - **Almeida, B.**
+    - Master Thesis @ Faculdade Ciências
 {: .mb-5 }
 
 - [**Context-free Session Types**](http://www.di.fc.ul.pt/~vv/papers/thiemann.vasconcelos_context-free-session-types.pdf)
