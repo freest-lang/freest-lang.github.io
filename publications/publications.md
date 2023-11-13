@@ -12,8 +12,8 @@ nav_order: 6
 
 # Publications, talks, posters
 
-- [**Subtyping Context-Free Session Types**]({% link publications/talks/talk_porto_oct22.key.pdf %})
-    - **Silva, G.; Mordido, A.; Vasconcelos, V.T.**
+- [**Subtyping Context-Free Session Types**]({% link publications/talks/SubtypingContextFreeSessionTypes_INForum2023_Poster.pdf %})
+    - **Silva, G.**
     - Poster @ [INForum 2023](https://www.inforum2023.org/)
 {: .mb-5 }
 
