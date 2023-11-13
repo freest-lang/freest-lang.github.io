@@ -12,6 +12,11 @@ nav_order: 6
 
 # Publications, talks, posters
 
+- [**Subtyping Context-Free Session Types**]({% link publications/talks/talk_porto_oct22.key.pdf %})
+    - **Silva, G.; Mordido, A.; Vasconcelos, V.T.**
+    - Poster @ [INForum 2023](https://www.inforum2023.org/)
+{: .mb-5 }
+
 - [**Subtyping Context-Free Session Types**](https://drops.dagstuhl.de/opus/volltexte/2023/19005/pdf/LIPIcs-CONCUR-2023-11.pdf)
     - **Silva, G.; Mordido, A.; Vasconcelos, V.T.**
     - [CONCUR 2023](https://www.uantwerpen.be/en/conferences/confest-2023/concur/)
