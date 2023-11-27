@@ -1,26 +1,3 @@
----
-# Feel free to add content and custom Front Matter to this file.
-# To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
-
-title: Prelude
-layout: default
-nav_order: 1
-parent: Documentation
----
-
-# Prelude
-{: .no_toc}
-
-<!-- collapsible TOC (check https://just-the-docs.github.io/just-the-docs/docs/navigation-structure/#top) -->
-<details markdown="block">
-  <summary>
-    Table of contents
-  </summary>
-  {: .text-delta }
-- TOC
-{:toc}
-</details>
-
 
 # **Builtin**
 ## **(+)**
@@ -39,6 +16,10 @@ parent: Documentation
 **Type**: `Int -> Int -> Int`
 
 
+## **div**
+**Type**: `Int -> Int -> Int`
+
+
 ## **(^)**
 **Type**: `Int -> Int -> Int`
 
@@ -48,10 +29,6 @@ parent: Documentation
 
 
 ## **rem**
-**Type**: `Int -> Int -> Int`
-
-
-## **div**
 **Type**: `Int -> Int -> Int`
 
 
@@ -127,6 +104,154 @@ parent: Documentation
 **Type**: `Int -> Int -> Bool`
 
 
+## **(+.)**
+**Type**: `Float -> Float -> Float`
+
+
+## **(-.)**
+**Type**: `Float -> Float -> Float`
+
+
+## **(*.)**
+**Type**: `Float -> Float -> Float`
+
+
+## **(/.)**
+**Type**: `Float -> Float -> Float`
+
+
+## **(>.)**
+**Type**: `Float -> Float -> Float`
+
+
+## **(<.)**
+**Type**: `Float -> Float -> Float`
+
+
+## **(>=.)**
+**Type**: `Float -> Float -> Float`
+
+
+## **(<=.)**
+**Type**: `Float -> Float -> Float`
+
+
+## **absF**
+**Type**: `Float -> Float`
+
+
+## **negateF**
+**Type**: `Float -> Float`
+
+
+## **maxF**
+**Type**: `Float -> Float -> Float`
+
+
+## **minF**
+**Type**: `Float -> Float -> Float`
+
+
+## **truncate**
+**Type**: `Float -> Int`
+
+
+## **round**
+**Type**: `Float -> Int`
+
+
+## **ceiling**
+**Type**: `Float -> Int`
+
+
+## **floor**
+**Type**: `Float -> Int`
+
+
+## **recip**
+**Type**: `Float -> Float`
+
+
+## **pi**
+**Type**: `Float`
+
+
+## **exp**
+**Type**: `Float -> Float`
+
+
+## **log**
+**Type**: `Float -> Float`
+
+
+## **sqrt**
+**Type**: `Float -> Float`
+
+
+## **(**)**
+**Type**: `Float -> Float -> Float`
+
+
+## **logBase**
+**Type**: `Float -> Float -> Float`
+
+
+## **sin**
+**Type**: `Float -> Float`
+
+
+## **cos**
+**Type**: `Float -> Float`
+
+
+## **tan**
+**Type**: `Float -> Float`
+
+
+## **asin**
+**Type**: `Float -> Float`
+
+
+## **acos**
+**Type**: `Float -> Float`
+
+
+## **atan**
+**Type**: `Float -> Float`
+
+
+## **sinh**
+**Type**: `Float -> Float`
+
+
+## **cosh**
+**Type**: `Float -> Float`
+
+
+## **tanh**
+**Type**: `Float -> Float`
+
+
+## **log1p**
+**Type**: `Float -> Float`
+
+
+## **expm1**
+**Type**: `Float -> Float`
+
+
+## **log1pexp**
+**Type**: `Float -> Float`
+
+
+## **log1mexp**
+**Type**: `Float -> Float`
+
+
+## **fromInteger**
+**Type**: `Int -> Float`
+
+
 ## **(&&)**
 **Type**: `Bool -> Bool -> Bool`
 
@@ -181,19 +306,25 @@ parent: Documentation
 Creates two endpoints of a channels of the given type.
 
 ## **send**
-**Type**: `forall a:1T . a -> forall b:1S . !a;b 1-> b`
+**Type**: `forall a:1T . a -> forall b:1S . !a ; b 1-> b`
 
+Sends a value on a channel. Returns the continuation channel
 
 ## **receive**
-**Type**: `forall a:1T b:1S . ?a;b -> (a, b)`
+**Type**: `forall a:1T b:1S . ?a ; b -> (a, b)`
 
 Receives a value on a channel. Returns the received value and 
 the continuation channel.
 
 ## **close**
-**Type**: `End -> ()`
+**Type**: `Close -> ()`
 
 Closes a channel.
+
+## **wait**
+**Type**: `Wait -> ()`
+
+Waits for a channel to be closed.
 
 
 # **Base**
@@ -250,7 +381,7 @@ f $ g $ h x = f (g (h x))
 Reverse application operator. Provides notational convenience, especially
 when chaining channel operations. For example:
 ```
-f : !Int;!Bool;End -> () 
+f : !Int ; !Bool ; Close -> () 
 f c = c |> send 5 |> send True |> close
 ```
 Its binding precedence is higher than `$`.
@@ -352,8 +483,8 @@ Executes a thunk n times, sequentially
 ```
 main : ()
 main = 
-    -- print "Hello!" 5 times sequentially
-    repeat @() 5 (\_:() -> putStrLn "Hello!")
+  -- print "Hello!" 5 times sequentially
+  repeat @() 5 (\_:() -> putStrLn "Hello!")
 ```
 
 ## **parallel**
@@ -365,43 +496,57 @@ instead of sequentially.
 ```
 main : ()
 main = 
-    -- print "Hello!" 5 times in parallel
-    parallel @() 5 (\_:() -> putStrLn "Hello!")
+  -- print "Hello!" 5 times in parallel
+  parallel @() 5 (\_:() -> putStrLn "Hello!")
 ```
 
-## **consume**
-**Type**: `forall a:*T b:1S . (a -> ()) -> ?a;b 1-> b`
+## **receiveAndWait**
+**Type**: `forall a:1T . ?a ; Wait -> a`
 
 Receives a value from a linear channel and applies a function to it.
-Returns the continuation channel
+Discards the result and returns the continuation channel.
 
 ```
 main : ()
 main =
-    -- create channel endpoints
-    let (c, s) = new @(?String; End) () in
-    -- fork a thread that prints the received value (and closes the channel)
-    fork (\_:() 1-> c |> consume @String @End putStrLn |> close);
-    -- send a string through the channel (and close it)
-    s |> send "Hello!" |> close
+  -- create channel endpoints
+  let (c, s) = new @(?String ; Wait) () in
+  -- fork a thread that prints the received value (and closes the channel)
+  fork (\_:() 1-> c |> readApply @String @End putStrLn |> wait);
+  -- send a string through the channel (and close it)
+  s |> send "Hello!" |> close
 ```
-
-## **receiveAndClose**
-**Type**: `forall a:1T . ?a;End -> a`
-
-Receives a value from a channel that continues to `End`, closes the 
+Receives a value from a channel that continues to `Wait`, closes the 
 continuation and returns the value.
 
 ```
 main : ()
 main =
-    -- create channel endpoints
-    let (c, s) = new @(?String; End) () in
-    -- fork a thread that prints the received value (and closes the channel)
-    fork (\_:() 1-> c |> receiveAndClose @String |> putStrLn);
-    -- send a string through the channel (and close it)
-    s |> send "Hello!" |> close
+  -- create channel endpoints
+  let (c, s) = new @(?String ; Wait) () in
+  -- fork a thread that prints the received value (and closes the channel)
+  fork (\_:() 1-> c |> receiveAndWait @String |> putStrLn);
+  -- send a string through the channel (and close it)
+  s |> send "Hello!" |> close
 ```
+
+## **receiveAndClose**
+**Type**: `forall a:1T . ?a ; Close -> a`
+
+As in receiveAndWait only that the type is Wait and the function closes the
+channel rather the waiting for the channel to be closed.
+
+## **sendAndWait**
+**Type**: `forall a:1T . a -> !a ; Wait 1-> ()`
+
+Sends a value on a given channel and then waits for the channel to be
+closed. Returns ().
+
+## **sendAndClose**
+**Type**: `forall a:1T . a -> !a ; Close 1-> ()`
+
+Sends a value on a given channel and then closes the channel.
+Returns ().
 
 ## **receive_**
 **Type**: `forall a:1T . *?a -> a`
@@ -423,16 +568,16 @@ end.
 ## **forkWith**
 **Type**: `forall a:1A b . (dualof a 1-> b) -> a`
 
-Creates a new child process and a linear channel through which it can
+Creates a new child process and a channel through which it can
 communicate with its parent process. Returns the channel endpoint.
 
 ```
 main : ()
 main =
-    -- fork a thread that receives a string and prints
-    let c = forkWith @(!String;End) @() (\s:(?String;End) 1-> s |> receiveAndClose @String |> putStrLn) in
-    -- send the string to be printed
-    c |> send "Hello!" |> close
+  -- fork a thread that receives a string and prints
+  let c = forkWith @(!String ; Wait) @() (\s:(?String ; End) 1-> s |> receiveAndWait @String |> putStrLn) in
+  -- send the string to be printed
+  c |> send "Hello!" |> wait
 ```
 
 ## **runServer**
@@ -442,21 +587,21 @@ Runs an infinite shared server thread given a function to serve a client (a
 handle), the initial state, and the server's shared channel endpoint. It can
 be seen as an infinite sequential application of the handle function over a
 newly accepted session, while continuously updating the state.
-    
+  
 Note: this only works with session types that use session initiation.
 
 ```
 type SharedCounter : *S = *?Counter
-type Counter : 1S = +{ Inc: End
-                     , Dec: End
-                     , Get: ?Int; End
+type Counter : 1S = +{ Inc: Wait
+                     , Dec: Wait
+                     , Get: ?Int ; Wait
                      }
 
 -- | Handler for a counter
 counterService : Int -> dualof Counter 1-> Int
-counterService i (Inc ch) = close ch; i + 1 
-counterService i (Dec ch) = close ch; i - 1
-counterService i (Get ch) = ch |> send i |> close; i
+counterService i (Inc c) = close c ; i + 1 
+counterService i (Dec c) = close c ; i - 1
+counterService i (Get c) = c |> send i |> close ; i
 
 -- | Counter server
 runCounterServer : dualof SharedCounter -> Diverge
@@ -468,10 +613,10 @@ runCounterServer = runServer @Counter @Int counterService 0
 ## **OutStream**
 **Type**: 
 ```
-type OutStream : 1S = +{ PutChar : !Char; OutStream
-                       , PutStr  : !String; OutStream
-                       , PutStrLn: !String; OutStream
-                       , Close   : End
+type OutStream : 1S = +{ PutChar : !Char ; OutStream
+                       , PutStr  : !String ; OutStream
+                       , PutStrLn: !String ; OutStream
+                       , SClose  : Close
                        }
 ```
 
@@ -491,17 +636,17 @@ Unrestricted session type for the `OutStream` type.
 ## **InStream**
 **Type**: 
 ```
-type InStream : 1S = +{ GetChar     : ?Char  ; InStream
-                      , GetLine     : ?String; InStream
-                      , IsEOF       : ?Bool  ; InStream
-                      , Close       : End
+type InStream : 1S = +{ GetChar: ?Char   ; InStream
+                      , GetLine: ?String ; InStream
+                      , IsEOF  : ?Bool   ; InStream
+                      , SWait  : Wait
                       }
 ```
 
 The `InStream` type describes input streams (such as `stdin` and read
 files). `GetChar` reads a single character, `GetLine` reads a line, and
 `IsEOF` checks for the EOF (End-Of-File) token, i.e., if an input stream
-reached the end. Operations in this channel end with the `Close` option.
+reached the end. Operations in this channel end with the `SWait` option.
 
 ## **InStreamProvider**
 **Type**: 
