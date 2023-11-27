@@ -42,8 +42,8 @@ f x = x + 1
 main : ()
 main = 
     let i = 5 in
-    f i; -- both g and i are used once
-    f i; -- both f and i are used twice
+    f i ; -- both g and i are used once
+    f i ; -- both f and i are used twice
     let j = 2 in
     -- j is never used
     ()

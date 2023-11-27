@@ -98,7 +98,7 @@ Equipped with functions `new` and `fork` we can easily write `forkWith`. Neverth
 forkWith : forall a:1A b . (dualof a 1-> b) -> a
 forkWith f =
     let (x, y) = new @a () in
-    fork (\_:() 1-> f y);
+    fork (\_:() 1-> f y) ;
     x
 ```
 <!-- TODO explain that fork accepts a linear thunk -->
