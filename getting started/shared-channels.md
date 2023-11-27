@@ -128,12 +128,11 @@ If shared channels are more practical than linear ones, why bother with linear c
 
 The trick with shared channels is to use them not as a single communication point, but as a rendez-vous point to establish more complex communication in a linear channel by exchanging endpoints. We call this process **session initiation**.
 
-Let's think of a very useful case in programming, a shared data structure, in this case a single
-  memory cell.
+Let's think of a very useful case in programming, a shared data structure, in this case a single memory cell.
 ```
 type Cell : 1S = +{ Read: ?Int
                   , Write: !Int
-                  }; End
+                  }; Close
 ```
 
 The `Cell` session type describes our possible interaction with an `Int` memory cell.
@@ -145,11 +144,10 @@ The `SharedCell` type describes a channel on which a client can `receive` anothe
 ```
 cellClient : SharedCell -> ()
 cellClient c =
-  c 
-  |> receive      -- acquire a linear channel 
-  |> select Write -- interact on the linear channel
-  |> send 5
-  |> close
+  c |> receive      -- acquire a linear channel 
+    |> select Write -- interact on the linear channel
+    |> send 5
+    |> close
 ```
 
 However, it is the server that bears the important part of session initiation: to create the new channel and send one of its ends. 

@@ -60,7 +60,7 @@ main : Int
 main =
   mathClient $ forkWith @MathService @() mathServer
 ```
-but we prefer the first.
+but we prefer the first of the three.
 
 A program has at least one thread, the **main** thread. Program execution always ends when the main thread ends, no matter how many running threads  there are.
 
