@@ -105,7 +105,7 @@ mathClient c0 =
   ...
 ```
 
-Now channel `c1` has type `!Int ; ?Int ; End`, therefore we must send an `Int`, and in this case it's 
+Now channel `c1` has type `!Int ; ?Int ; Close`, therefore we must send an `Int`, and in this case it's 
   the number we want to negate:
 ```
 mathClient : MathService -> Int
@@ -162,7 +162,7 @@ mathServer c0 =
   ...
 ```
 
-For each branch of the `match` expression, we must handle the corresponding type. For example, in the `Negate` branch, channel `c1` has type `?Int ; !Int`. After the `match` expression, we are left with `End`, to which we can pipe into a close. The full implementation is as follows:
+For each branch of the `match` expression, we must handle the corresponding type. For example, in the `Negate` branch, channel `c1` has type `?Int ; !Int`. After the `match` expression, we are left with `Wait`, to which we can pipe into a close. The full implementation is as follows:
 ```
 mathServer : dualof MathService -> ()
 mathServer c0 = 
@@ -191,7 +191,7 @@ Finally, taking advantage of the Prelude's function `sendAndWait`, we can simply
 mathServer : dualof MathService -> ()
 mathServer (Negate c1) =
       let (i, c2) = receive c1 in
-      sendAndWait @Int (-i) c
+      sendAndWait @Int (-i) c2
 mathServer (IsZero c1) =
       let (i, c2) = receive c1 in
       sendAnwait @Bool (i == 0) c2
@@ -207,7 +207,7 @@ Imagine a simple protocol to conduct an integer predicate. Again, as seen from t
 type IntPred : 1S = !Int ; ?Bool
 ```
 
-We can then write a function to consume such a protocol, a function that receives an `IntPred`. But the function must work on part of the protocol of some channel. At the very least, the channel must be closed. The function could then receive a channel end of type `IntPred ; End`. But we may want to proceed with some extra communications before closing the channel. Taking advantage of polymorphism, we let the function accept a channel end of type `IntPred ; a`, consume the `IntPred` part, and return the unused part of the channel end, at type `a`. For example a function that invokes the predicate on a given integer `n` and prints the result can be written as follows.
+We can then write a function to consume such a protocol, a function that receives an `IntPred`. But the function must work on part of the protocol of some channel. At the very least, the channel must be closed. The function could then receive a channel end of type `IntPred ; Close`. But we may want to proceed with some extra communications before closing the channel. Taking advantage of polymorphism, we let the function accept a channel end of type `IntPred ; a`, consume the `IntPred` part, and return the unused part of the channel end, at type `a`. For example a function that invokes the predicate on a given integer `n` and prints the result can be written as follows.
 ```freest
 invokeIntPred : Int -> forall a : 1S . IntPred ; a -> a
 invokeIntPred n c =
