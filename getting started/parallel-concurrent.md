@@ -66,7 +66,7 @@ A program has at least one thread, the **main** thread. Program execution always
 
 Function `forkWith` should always be our plan A, but there may be situations when we need to create a channel and fork a thread as two separate operations. For such situations FreeST provides the `new` and the `fork` functions.
 
-Function `new` receives a type `T`, the type of one of the ends of the channel to create and becomes a suspended computation (usually called a *thunk*) that, when activated, returns the two ends of the channel (a pair of type `(T, dualof T)`). The typical usage is as follows.
+Function `new` receives a type `T`, the type of one of the ends of the channel to create, and becomes a suspended computation (usually called a *thunk*) that, when activated, returns the two ends of the channel (a pair of type `(T, dualof T)`). The typical usage is as follows.
 ```freest
 main : Int
 main =
@@ -92,8 +92,9 @@ main =
   mathClient c
 ```
 
-Equipped with functions `new` and `fork` we can easily write `forkWith`. Nevertheless, `forkWith` stands at an higher level of abstraction and is prone to less concurrency errors, hence it remains our favourite choice.
+Equipped with functions `new` and `fork` we can easily write `forkWith`. Nevertheless, `forkWith` stands at an higher level of abstraction and is prone to less concurrency errors, hence it remains our favourite choice. For function types, defintions and comprehensive documentation, check out the [Prelude]({{ site.url }}{{ site.baseurl }}/libraries/prelude) documentation page.
 
+<!-- 
 ```
 forkWith : forall a:1A b . (dualof a 1-> b) -> a
 forkWith f =
@@ -101,6 +102,7 @@ forkWith f =
     fork (\_:() 1-> f y) ;
     x
 ```
+-->
 <!-- TODO explain that fork accepts a linear thunk -->
 
 <!-- As a language dedicated to communication and concurrency, FreeST provides the `fork` function to execute code in parallel, i.e., in another thread.
