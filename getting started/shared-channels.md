@@ -52,46 +52,45 @@ type IntStream : *S = *!Int
 To produce an unbounded number of integers `n` on an `IntStream` channel end one may write:
 ```freest
 produce : Int -> IntStream -> Diverge
-produce n p =
-  p |> send n |> produce n
+produce n p = p |> send n |> produce n
 ```
 Type `Diverge` is a mark for functions that do not terminate; it is defined as `()`. 
 
 To consume a stream and print its values we may write:
 ```freest
-consume' : dualof IntStream -> Diverge
-consume' c =
+consume : dualof IntStream -> Diverge
+consume c =
   let (x, c') = receive c in
   print @Int x;
-  consume' c'
+  consume c'
 ```
-In all cases (linear or unrestricted) variables `c` and `c'` denote the *same* channel end. When `c` is of a linear type the type of `c'` differs from that of `c`. But unrestricted types offer an uniform behaviour, so that one may write instead:
+In all cases (linear or unrestricted) variables `c` and `c'` denote the *same* channel end. When `c` is of a linear type the type of `c'` may differ from that of `c`. But unrestricted types offer an uniform behaviour, so that one may write instead:
 ```freest
-consume' : dualof IntStream -> Diverge
-consume' c =
+consume : dualof IntStream -> Diverge
+consume c =
   let (x, _) = receive c in
   print @Int x;
-  consume' c
+  consume c
 ```
 In order to simplify reading from shared channels, FreeST offers function `receive_` that discards the channel from the pair and returns the value read. One can then write:
 ```freest
-consume' : dualof IntStream -> Diverge
-consume' c =
+consume : dualof IntStream -> Diverge
+consume c =
   c |> receive_ @Int |> print @Int ;
-  consume' c
+  consume c
 ```
 We can then write a simple program that consumes and prints numbers from two producers:
 ```freest
 main : Diverge
 main =
-  let c = forkWith @IntStream @() consume' in
+  let c = forkWith @IntStream @() consume in
   fork (\_: () -> produce 1 c);
   produce 2 c
 ```
 
 ## Discarding Shared Channels
 
-Linear channels cannot be discarded; they must be used to the `End` (if they terminate at all). Shared channels on the other hand may be discarded at any time. This program creates a channel that it never uses.
+Linear channels cannot be discarded; they must be used until the end, that is `Close` or `Wait` depending on the point of view (if they terminate at all). Shared channels on the other hand may be discarded at any time. This program creates a channel that it never uses.
 ```freest
 main : (IntStream, dualof IntStream)
 main =
@@ -101,11 +100,11 @@ Notice that shared channels can never be closed even if they are not used.
 
 A more interesting example consumes a finite number of values from an integer stream. The result is the sum of the numbers read.
 ```freest
-consume' : Int -> dualof IntStream -> Int
-consume' n c =
+consume : Int -> dualof IntStream -> Int
+consume n c =
   if n == 0
   then 0
-  else receive_ @Int c +  consume' (n - 1) c
+  else receive_ @Int c +  consume (n - 1) c
 ```
 The `main` function is now composed of two infinite producers and one finite consumer.
 ```freest
@@ -114,17 +113,15 @@ main =
   let (p, c) = new @IntStream () in
   fork (\_: () 1-> produce 1 p);
   fork (\_: () 1-> produce 2 p);
-  consume' 5 c
+  consume 5 c
 ```
-We have also rearranged the code in such a way that `consume'` runs on the main thread, so that the program may terminate once the five values are read. The program should print a number between `5` and `10`.
+We have also rearranged the code in such a way that `consume` runs on the main thread, so that the program may terminate once the five values are read. The program should print a number between `5` and `10`.
 
 <!-- TODO: -->
 <!-- send_ -->
 
 ## Session initiation
-If shared channels are more practical than linear ones, why bother with linear channels? You can't
-  serialize a tree directly in a shared channel for example. Shared channels lack the capacity of
-  expressing interesting protocols. 
+If shared channels are more practical than linear ones, why bother with linear channels? Well, you can't serialize a tree directly on a shared channel for example. Shared channels lack the capacity of expressing interesting protocols. 
 
 The trick with shared channels is to use them not as a single communication point, but as a rendez-vous point to establish more complex communication in a linear channel by exchanging endpoints. We call this process **session initiation**.
 
@@ -144,14 +141,24 @@ The `SharedCell` type describes a channel on which a client can `receive` anothe
 ```
 cellClient : SharedCell -> ()
 cellClient c =
-  c |> receive      -- acquire a linear channel 
-    |> select Write -- interact on the linear channel
+  c |> receive_ @Cell  -- acquire a linear channel 
+    |> select Write    -- interact on the linear channel
     |> send 5
     |> close
 ```
 
 However, it is the server that bears the important part of session initiation: to create the new channel and send one of its ends. 
-To aid session initiation, FreeST offers the `accept` function which creates the channel endpoints, sends one to the client and returns the other. We thus write:
+To aid session initiation, FreeST offers the `accept` function which creates the channel endpoints, sends one to the client and returns the other. Taking advantage of pattern-matching on external coide types, we may thus write:
+```
+cellServer : dualof SharedCell -> ()
+cellServer c = serve $ accept @Cell c
+
+serve : dualof Cell -> ()
+serve (Read s) = s |> send 0 |> wait 
+serve (Write s) = receiveAndWait @Int s ; ()
+```
+
+If one would rather write a single function, then we may use the `match-with` destructor for external choice types. The match returns the contination channel, so that we may  `wait` for the other side to close the channel.
 ```
 cellServer : dualof SharedCell -> ()
 cellServer c =
@@ -160,7 +167,7 @@ cellServer c =
       send 0 s,
     Write s ->
       let (i, c) = receive s in c
-  } |> close
+  } |> wait
 ```
 
 We usually initiate sessions at the server side for we usually have more clients that servers and hence spare all clients from the process of creating and distributing channels. Nevertheless sessions may easily be started at the client side if needed.
@@ -169,9 +176,9 @@ The `accept` function can be easily written with `new` and `send` as follows:
 ```
 accept : forall a:1A . *!a -> dualof a
 accept ch =
-    let (x, y) = new @a () in
-    send x ch;
-    y
+  let (x, y) = new @a () in
+  send x ch;
+  y
 ```
 
 <!-- The following is a one-shot server that only serves one client and then stops:
