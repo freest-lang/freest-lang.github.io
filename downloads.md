@@ -79,11 +79,11 @@ For installation details please refer to the README file in the corresponding zi
 ### Changelog
 
 #### Version 3.1.0
-- New kind A for channels that may be closed
+- New kind A for channels that may be created, that may be used with `new`
 - `new` function is restricted to types of kind A (`new : forall a:1A . () -> (a, dualof a)`)
-- New types: `Wait` and `Close` (for closing channels)
-- Function `close` (for channels of type `Close`)
-- Function `wait` (for channels of type `Wait`)
+- New types: `Close` and `Wait` (for closing channels and for waiting for channels to be closed)
+- Function `close`, non-blocking (for channels of type `Close`)
+- Function `wait`, blocking (for channels of type `Wait`)
 - Tuning error messages
 - Tuning show for runtime values
 - New `Float` type
