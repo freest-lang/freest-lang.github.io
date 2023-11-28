@@ -34,7 +34,7 @@ nav_order: 6
 
 - [**Shared Channels on Context-free Session Types**](https://repositorio.ul.pt/bitstream/10451/59094/1/TM_Diogo_Barros.pdf)
     - **Barros, D.**
-    - Master's Thesis @ University of Lisbon
+    - Master's Thesis @ University of Lisbon, 2022
 {: .mb-5 }
 
 - [**FreeST and the Higher-order Polymorphic Lambda Calculus**]({% link publications/talks/talk_porto_oct22.key.pdf %})
@@ -89,7 +89,7 @@ nav_order: 6
 
 - [**Uma linguagem de programação com tipos de sessão independentes do contexto**](https://repositorio.ul.pt/bitstream/10451/36701/1/ulfc124854_tm_Bernardo_Almeida.pdf)
     - **Almeida, B.**
-    - Master's Thesis @ University of Lisbon
+    - Master's Thesis @ University of Lisbon, 2018
 {: .mb-5 }
 
 - [**Context-free Session Types**](http://www.di.fc.ul.pt/~vv/papers/thiemann.vasconcelos_context-free-session-types.pdf)
