@@ -64,7 +64,7 @@ type MathService : 1A = +{ Negate: !Int ; ?Int
                          } ; Close
 ```
 
-At the end of each option we want to terminate the protocol, hence the `Close`. The type without the `Close` (and the semiclon) would still be valid, however, **FreeST does not allow instantiating a channel of a type which does not come to an `Close`-`Wait` type**.
+At the end of each option we want to terminate the protocol, hence the `Close`. The type without the `Close` (and the semiclon) would still be valid, however, **FreeST does not allow creating a channel of a type which does not come to an `Close` or `Wait` type**.
    <!-- Thus, `Skip` is
   useful when the intention is to combine the session type with others. -->
 
