@@ -92,7 +92,7 @@ Wait        - wait
 ``` 
 
 To instantiate new channels we use `new`. For function types and comprehensive documentation,
-  check out the [Prelude]({{ site.url }}{{ site.baseurl }}/documentation/prelude) documentation
+  check out the [Prelude]({{ site.url }}{{ site.baseurl }}/library/prelude) documentation
   page.
 
 To implement a client of our `MathService` we follow the protocol (specified by the session type). A very effective tip on programming with channels in FreeST is to **always program around the session type**. If you focus on your protocols, you give priority to designing how you structure your processes, and then the implementation will come naturally by following said protocol.
