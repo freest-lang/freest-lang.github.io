@@ -253,7 +253,7 @@ We can now compose these four protocols in many different ways. We can compose t
 ```freest
 invoke : IntPred ; IntBinOp ; Close -> ()
 invoke c =
-  c |> invokeIntPred 3 @(IntBinOp ; End) |> invokeIntBinOp 4 5 @End |> close
+  c |> invokeIntPred 3 @(IntBinOp ; Close) |> invokeIntBinOp 4 5 @Close |> close
 ```
 For the other end of the channel we may write:
 ```freest
@@ -276,7 +276,7 @@ type TreeChannel : 1S = +{ Node: TreeChannel ;  !Int ; TreeChannel
 ```
 
 <!-- combining session types with Skip -->
-Notice how instead of using `Close`, we use `Skip`. If `Close` was used we would not be able to compose a singleton `Node` as it would amount to `End ; !Int ; End`, which doesn't get past the first `Close`.
+Notice how instead of using `Close`, we use `Skip`. If `Close` was used we would not be able to compose a singleton `Node` as it would amount to `Close ; !Int ; Close`, which doesn't get past the first `Close`.
 
 The `TreeChannel` is then able to describe binary tree serialization without allowing for any 
   missing or unnecessary subtrees, because it specifically describes the sending of a left and 
