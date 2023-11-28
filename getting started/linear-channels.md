@@ -64,7 +64,7 @@ type MathService : 1A = +{ Negate: !Int ; ?Int
                          } ; Close
 ```
 
-At the end of each option we want to terminate the protocol, hence the `Close`. The type without the `Close` (and the semiclon) would still be valid, however, **FreeST does not allow creating a channel of a type which does not come to an `Close` or `Wait` type**.
+At the end of each option we want to terminate the protocol, hence the `Close`. The type without the `Close` (and the semiclon) would still be valid, however, **FreeST does not allow creating a channel of a type which does not come to a `Close` or `Wait` type**.
    <!-- Thus, `Skip` is
   useful when the intention is to combine the session type with others. -->
 
@@ -92,7 +92,7 @@ Wait        - wait
 ``` 
 
 To instantiate new channels we use `new`. For function types and comprehensive documentation,
-  check out the [Prelude]({{ site.url }}{{ site.baseurl }}/library/prelude) documentation
+  check out the [Prelude]({{ site.url }}{{ site.baseurl }}/libraries/prelude) documentation
   page.
 
 To implement a client of our `MathService` we follow the protocol (specified by the session type). A very effective tip on programming with channels in FreeST is to **always program around the session type**. If you focus on your protocols, you give priority to designing how you structure your processes, and then the implementation will come naturally by following said protocol.
