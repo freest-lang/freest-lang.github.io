@@ -148,10 +148,39 @@ To avoid the first two `let` expressions, we can use the `|>` operator to stream
 ```
 mathClient : MathService -> Int
 mathClient c =
-  c |> select Negate |> send 5 |> receiveAndClose
+  c |> select Negate |> send 5 |> receiveAndClose @Int
 ```
 
-Our client is done, we are only missing a **server**. Here the main difference is that instead of a single select like the client, the server has to provide for every option through a `match` expression (very similar to a `case` expression).
+Our client is done, we are only missing a **server**. Here the main difference is that instead of a single select like the client, the server has to provide for every option. Taking advantage of pattern-matching we start as
+```
+mathServer : dualof MathService -> ()
+mathServer (Negate c1) = ...,
+mathServer (IsZero c1) -> ...
+```
+In each equation we must handle the corresponding type. For example, in the `Negate` equation, channel `c1` has type `?Int ; !Int`. In either case we are left with type `Wait`, which calls for a call to the `wait` function. The full implementation is as follows:
+
+```
+mathServer : dualof MathService -> ()
+mathServer (Negate c1) =
+  let (i, c2) = receive c1 in
+  c2 |> send (-i) |> wait
+mathServer (IsZero c1) =
+  let (i, c2) = receive c1 in
+  c2 |> send (i == 0) |> wait
+```
+
+Finally, taking advantage of the Prelude's function `sendAndWait`, we can simply write:
+```
+mathServer : dualof MathService -> ()
+mathServer (Negate c1) =
+      let (i, c2) = receive c1 in
+      sendAndWait @Int (-i) c2
+mathServer (IsZero c1) =
+      let (i, c2) = receive c1 in
+      sendAndWait @Bool (i == 0) c2
+```
+<!-- The version with match - no need
+ through a `match` expression (very similar to a `case` expression).
 ```
 mathServer : dualof MathService -> ()
 mathServer c0 = 
@@ -176,26 +205,7 @@ mathServer c0 =
   } |> wait
 ```
 FreeST offers pattern matching on the different cases of a `match` expression. Function `mathServer` may be written with two equations, one for `Negate`, the other for `IsZero`. In this case each individual equation must `wait` for the channel to be closed. The function then becomes as follows.
-```
-mathServer : dualof MathService -> ()
-mathServer (Negate c1) =
-      let (i, c2) = receive c1 in
-      c2 |> send (-i) |> wait
-mathServer (IsZero c1) =
-      let (i, c2) = receive c1 in
-      c2 |> send (i == 0) |> wait
-```
-
-Finally, taking advantage of the Prelude's function `sendAndWait`, we can simply write:
-```
-mathServer : dualof MathService -> ()
-mathServer (Negate c1) =
-      let (i, c2) = receive c1 in
-      sendAndWait @Int (-i) c2
-mathServer (IsZero c1) =
-      let (i, c2) = receive c1 in
-      sendAnwait @Bool (i == 0) c2
-```
+-->
 
 ## By the power of context-free session types!
 <!-- context-free session types -->
@@ -266,7 +276,7 @@ serve c =
 ```
 Functions `invoke` and `serve` can be run in different threads while communicating on a channel featuring type `IntPred ; IntBinOp ; Close` on the `invoke` side.
 
-Regular session types are good, but context-free session types are a lot **more powerful**. With context-free session types you can correcty serialize a binary tree of integers with a single channel. We start by defining a conventional datatype for a binary tree and the corresponding type for a channel that consumes a tree channel.
+Regular session types are good, but context-free session types are a lot **more powerful**. With context-free session types you can correcty serialize a binary tree of integers using a single channel. We start by defining a conventional datatype for a binary tree of integer values and the corresponding type for a channel that consumes a tree channel.
 ```
 data Tree = Node Tree Int Tree | Leaf
 
@@ -276,16 +286,12 @@ type TreeChannel : 1S = +{ Node: TreeChannel ;  !Int ; TreeChannel
 ```
 
 <!-- combining session types with Skip -->
-Notice how instead of using `Close`, we use `Skip`. If `Close` was used we would not be able to compose a singleton `Node` as it would amount to `Close ; !Int ; Close`, which doesn't get past the first `Close`.
+Notice how instead of using `Close`, we use `Skip`. If `Close` was used we would not be able to compose a singleton tree (a tree with an integer only) as it would correspond to type `Close ; !Int ; Close`, which doesn't get past the first `Close` because not interaction is possible on a closed channel.
 
-The `TreeChannel` is then able to describe binary tree serialization without allowing for any 
-  missing or unnecessary subtrees, because it specifically describes the sending of a left and 
-  right subtrees.
-
+The `TreeChannel` is then able to describe binary tree serialization without allowing for missing or unnecessary subtrees, given that it specifically describes the sending of a left and a right subtree.
 
 <!-- polymorphic recursion -->
-Instead of a full client, we'll write a function `sendTree` that sends any `Tree` through a 
-  `TreeChannel`. Naively we write this:
+We write a function `sendTree` that sends any `Tree` through a `TreeChannel`. Naively we write this:
 ```
 sendTree : Tree -> TreeChannel -> Skip
 sendTree Leaf c =
@@ -297,7 +303,7 @@ sendTree (Node lt n rt) c =
     |> sendTree rt
 ```
 
-And we are greeted by a plethra of errors. The fact is we where supposed to return the continuation channel, and not `Skip`. But what is this mistery continuation, and how do we type it? The answer is through **polymorphism**.
+And we are greeted by a plethra of errors. The fact is that we where supposed to return the continuation channel, and not `Skip`. But what is this mistery continuation, and how do we type it? The answer is through **polymorphism**.
 ```
 sendTree : forall a:1S . Tree -> TreeChannel ; a -> a
 sendTree Leaf c =
@@ -309,7 +315,10 @@ sendTree (Node lt i rt) c =
     |> sendTree @U rt
 ```
 
-Using polymorphism we can type a generic channel that begins with `TreeChannel` and continues off to some other type `a`. The next challenge is: which types do we pass to recursive calls of `sendTree` (marked as `T` and `U`)? To solve these types, we look at the type of the channel at the point of each recursive call. In the case of `T`, after we did `select Node` we are left with `TreeChannel ; !Int ; TreeChannel`. Because `T` is the type of the channel continuation type, we give it `!Int ; TreeChannel`. In the case of `U`, after the `send i` call, we are left with just  `TreeChannel`! Where is the continuation channel? Remember that in context-free session types `Skip` is the neutral element, therefore, after we consume `TreeChannel` we are left with `Skip`.
+Using polymorphism we can type a generic channel that begins with `TreeChannel` and continues off to some other type `a`. The next challenge is: which types do we pass to the recursive calls of `sendTree` (marked as `T` and `U`)? To find these types, we look at the type of the channel at the point of each recursive call. In the case of `T`, after we did `select Node`, channel end `c` is of type `TreeChannel ; !Int ; TreeChannel ; a` and function `sendTree` consumes a `TreeChannel`. Because `T` is the type of the continuation channel, it must be equal to `!Int ; TreeChannel; a`. In the case of `U`, after the `send` call, `c` is of type `TreeChannel; a`, hence the continuation is `a` alone.
+<!--
+Where is the continuation channel? Remember that in context-free session types `Skip` is the neutral element, therefore, after we consume `TreeChannel` we are left with `Skip`.
+-->
 
 The full implementation of `sendTree` is:
 ```
@@ -318,9 +327,9 @@ sendTree Leaf c =
   c |> select Leaf
 sendTree (Node lt i rt) c =
   c |> select Node
-    |> sendTree @(!Int ; TreeChannel) lt
+    |> sendTree @(!Int ; TreeChannel ; a) lt
     |> send i
-    |> sendTree @Skip rt
+    |> sendTree @a rt
 ```
 
 We leave the `receiveTree` function up to you to try. Use `sendTree` as a template and remember to use the dual channel operations.
