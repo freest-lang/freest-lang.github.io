@@ -31,7 +31,8 @@ parent: Getting started
 FreeST has the following primitive types:
 - `()`, the unit type, with a single value `()`
 - `Bool`, can be `True` or `False`
-- `Int`, for integers
+- `Int`, for integer numbers
+- `Float`, for floating-pointer numbers
 - `Char`, for single characters
 - `String`, for sequences of characters
 

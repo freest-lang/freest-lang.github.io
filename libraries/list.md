@@ -5,7 +5,7 @@
 title: List
 layout: default
 nav_order: 2
-parent: Documentation
+parent: Libraries
 ---
 
 # List
@@ -20,11 +20,6 @@ parent: Documentation
 - TOC
 {:toc}
 </details>
-
-## **append**
-**Type**: `[Int] -> [Int] -> [Int]`
-
-
 
 ## **head**
 **Type**: `[Int] -> Int`
