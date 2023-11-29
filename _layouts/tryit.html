@@ -90,13 +90,15 @@ layout: default
             headers: {
             'Content-Type': 'application/json'
             },
-            body: JSON.stringify({code: code}),
+            body: code /* JSON.stringify({code: code}), */
         };
 
-        const response = await fetch("http://194.117.20.245:5011/run.json", options);
-        const result = (await response.json()).result;
+        /* const response = await fetch("http://194.117.20.245:5011/run.json", options); */
+        const response = await fetch("https://85.240.106.6:8080/freest/run", options);
+        /* const result = (await response.json()).result; */
+        const result = await response.text();
 
         /* OUTPUT */
         terminal.innerHTML = result;
-    }
+    }   
 </script>
