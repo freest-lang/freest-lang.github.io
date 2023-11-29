@@ -38,10 +38,10 @@ remote_theme: pmarsceill/just-the-docs
 
 # Adds a new sidenav option to an external link
 # -> https://just-the-docs.github.io/just-the-docs/docs/navigation-structure/#external-navigation-links
-# nav_external_links:
-#   - title: Try it online!
-#     url: http://rss.di.fc.ul.pt/tryit/FreeST
-#     hide_icon: false # set to true to hide the external link icon - defaults to false
+nav_external_links:
+  - title: Try it online!
+    url: http://rss.di.fc.ul.pt/tryit/FreeST
+    hide_icon: false # set to true to hide the external link icon - defaults to false
 
 # Back to top link
 back_to_top: true
