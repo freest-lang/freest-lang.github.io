@@ -64,7 +64,9 @@ Load a FreeST file directly into FreeST's interpreter (`freesti`) in VSCode's in
 
 ### FreeST Syntax Highlighting for Emacs
 
-For installation details please refer to the README file in the GitHub repository.
+This extension provides basic syntax highlighting for editing FreeST programs on
+Emacs. For installation details please refer to the README file in the GitHub
+repository.
 
 [Get it Here!](https://github.com/freest-lang/freest-mode){: .btn }
 
