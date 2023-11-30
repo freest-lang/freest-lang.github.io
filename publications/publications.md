@@ -12,6 +12,11 @@ nav_order: 6
 
 # Publications, talks, posters
 
+- [**FreeST and Polymorphic Higher-order Session Types**]({% link publications/talks/talk_nagoya_nov23.key.pdf %})
+    - **Vasconcelos, V.T.**
+    - Talk @ Nagoya University. [合同研究会 拡大](https://sites.google.com/sqlab.jp/231130-seminar/) workshop November 2023.
+{: .mb-5 }
+
 - [**Subtyping Context-Free Session Types**]({% link publications/talks/SubtypingContextFreeSessionTypes_INForum2023_Poster.pdf %})
     - **Silva, G.**
     - Poster @ [INForum 2023](https://www.inforum2023.org/)
