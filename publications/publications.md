@@ -12,7 +12,7 @@ nav_order: 6
 
 # Publications, talks, posters
 
-- [**FreeST and Polymorphic Higher-order Session Types**]({% link publications/talks/talk_nagoya_nov23.key.pdf %})
+- [**FreeST and Polymorphic Higher-order Session Types**]({% link publications/talks/talk_nagoya_nov23.pdf %})
     - **Vasconcelos, V.T.**
     - Talk @ Nagoya University. [合同研究会 拡大](https://sites.google.com/sqlab.jp/231130-seminar/) workshop November 2023.
 {: .mb-5 }
@@ -42,7 +42,7 @@ nav_order: 6
     - Master's Thesis @ University of Lisbon, 2022
 {: .mb-5 }
 
-- [**FreeST and the Higher-order Polymorphic Lambda Calculus**]({% link publications/talks/talk_porto_oct22.key.pdf %})
+- [**FreeST and the Higher-order Polymorphic Lambda Calculus**]({% link publications/talks/talk_porto_oct22.pdf %})
     - **Vasconcelos, V.T.**
     - Talk @ Universidade do Porto. October 2022.
 {: .mb-5 }
