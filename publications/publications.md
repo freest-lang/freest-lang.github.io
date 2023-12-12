@@ -14,7 +14,7 @@ nav_order: 6
 
 - [**FreeST and Polymorphic Higher-order Session Types**]({% link publications/talks/talk_nagoya_nov23.pdf %})
     - **Vasconcelos, V.T.**
-    - Talk @ Nagoya University. [合同研究会 拡大](https://sites.google.com/sqlab.jp/231130-seminar/) workshop November 2023.
+    - Talk @ Nagoya University. [合同研究会 拡大](https://sites.google.com/sqlab.jp/231130-seminar/) workshop. 2023.
 {: .mb-5 }
 
 - [**Subtyping Context-Free Session Types**]({% link publications/talks/SubtypingContextFreeSessionTypes_INForum2023_Poster.pdf %})
@@ -44,7 +44,7 @@ nav_order: 6
 
 - [**FreeST and the Higher-order Polymorphic Lambda Calculus**]({% link publications/talks/talk_porto_oct22.pdf %})
     - **Vasconcelos, V.T.**
-    - Talk @ Universidade do Porto. October 2022.
+    - Talk @ Universidade do Porto. 2022.
 {: .mb-5 }
 
 - [**Sharing the Stateful World**](https://inforum.org.pt/2022/sites/default/files/2022-09/Actas_INForum.pdf#Sharing%20the%20Stateful%20World)
