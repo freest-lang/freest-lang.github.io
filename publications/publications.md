@@ -27,7 +27,7 @@ nav_order: 6
     - [CONCUR 2023](https://www.uantwerpen.be/en/conferences/confest-2023/concur/)
 {: .mb-5 }
 
-- [**System $$F^\mu_\omega$$ with Context-free Session Types**](https://link.springer.com/chapter/10.1007/978-3-031-30044-8_15)
+- [**System $F^\mu_\omega$ with Context-free Session Types**](https://link.springer.com/chapter/10.1007/978-3-031-30044-8_15)
     - **Poças, D., Costa, D., Mordido, A. and Vasconcelos, V.T.**
     - [Programming Languages and Systems, ESOP 2023](https://link.springer.com/book/10.1007/978-3-031-30044-8)
 {: .mb-5 }
