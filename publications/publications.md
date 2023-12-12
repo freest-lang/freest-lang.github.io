@@ -27,14 +27,19 @@ nav_order: 6
     - [CONCUR 2023](https://www.uantwerpen.be/en/conferences/confest-2023/concur/)
 {: .mb-5 }
 
+- [**System $$F^\mu_\omega$$ with Context-free Session Types**](https://link.springer.com/chapter/10.1007/978-3-031-30044-8_15)
+    - **Poças, D., Costa, D., Mordido, A. and Vasconcelos, V.T.**
+    - [Programming Languages and Systems, ESOP 2023](https://link.springer.com/book/10.1007/978-3-031-30044-8)
+{: .mb-5 }
+
 - [**Kind Inference for the FreeST Programming Language**](https://arxiv.org/abs/2304.06396v1)
     - **Almeida, B., Mordido, A. and Vasconcelos, V.T.**
     - [PLACES 2023](https://arxiv.org/html/2304.05439)
 {: .mb-5 }
 
-- [**System $$F^\mu_\omega$$ with Context-free Session Types**](https://link.springer.com/chapter/10.1007/978-3-031-30044-8_15)
+- [**Polymorphic Sessions and Sequential Composition of Types**]({% link publications/talks/talk_PLACES23_Polymorphic.pdf %})
     - **Poças, D., Costa, D., Mordido, A. and Vasconcelos, V.T.**
-    - [Programming Languages and Systems, ESOP 2023](https://link.springer.com/book/10.1007/978-3-031-30044-8)
+    - Talk @ [PLACES 2023](https://places-workshop.github.io/2023/)
 {: .mb-5 }
 
 - [**Shared Channels on Context-free Session Types**](https://repositorio.ul.pt/bitstream/10451/59094/1/TM_Diogo_Barros.pdf)
