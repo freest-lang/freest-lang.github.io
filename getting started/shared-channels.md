@@ -158,7 +158,7 @@ serve (Read s) = s |> send 0 |> wait
 serve (Write s) = receiveAndWait @Int s ; ()
 ```
 
-If one would rather write a single function, then we may use the `match-with` destructor for external choice types. The match returns the contination channel, so that we may  `wait` for the other side to close the channel.
+If one would rather write a single function, then we may use the `match-with` destructor for external choice types. The match returns the continuation channel, so that we may  `wait` for the other side to close the channel.
 ```
 cellServer : dualof SharedCell -> ()
 cellServer c =
