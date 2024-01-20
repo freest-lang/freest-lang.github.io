@@ -62,7 +62,7 @@ nav_order: 6
     - [PLACES 2022](https://cgi.cse.unsw.edu.au/~eptcs/content.cgi?PLACES2022)
 {: .mb-5 }
 
-- [**Polymorphic lambda calculus with context-free session types**](https://reader.elsevier.com/reader/sd/pii/S0890540122001031?token=8FB2E1625DE6D5D457F58512677EDD1782E7616F9BBA62ABFC16CA1116EC4EBD2645153A15A8A01605AFD914E5F3B899&originRegion=eu-west-1&originCreation=20221204185730)
+- [**Polymorphic lambda calculus with context-free session types**](https://www.sciencedirect.com/science/article/pii/S0890540122001031)
     - **Almeida, B., Mordido, A., Thiemann, P. and Vasconcelos, V.T.**
     - [Information and Computation](https://www.sciencedirect.com/journal/information-and-computation), 2022
 {: .mb-5 }
