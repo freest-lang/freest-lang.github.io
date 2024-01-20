@@ -148,7 +148,7 @@ cellClient c =
 ```
 
 However, it is the server that bears the important part of session initiation: to create the new channel and send one of its ends. 
-To aid session initiation, FreeST offers the `accept` function which creates the channel endpoints, sends one to the client and returns the other. Taking advantage of pattern-matching on external coide types, we may thus write:
+To aid session initiation, FreeST offers the `accept` function which creates the channel endpoints, sends one to the client and returns the other. Taking advantage of pattern-matching on external coiche types, we may thus write:
 ```
 cellServer : dualof SharedCell -> ()
 cellServer c = serve $ accept @Cell c
