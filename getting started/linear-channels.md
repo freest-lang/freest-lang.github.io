@@ -59,9 +59,9 @@ and then receive an `Int`, which comes as `!Int` and `?Int` respectively, that a
 into `!Int ; ?Int`. Now type `U` seems much simpler, we send an `Int` and then receive a `Bool`,
 so we write `!Int ; ?Bool`. The full session type in FreeST is:
 ```
-type MathService : 1A = +{ Negate: !Int ; ?Int
-                         , IsZero: !Int ; ?Bool
-                         } ; Close
+type MathService = +{ Negate: !Int ; ?Int
+                    , IsZero: !Int ; ?Bool
+                    } ; Close
 ```
 
 At the end of each option we want to terminate the protocol, hence the `Close`. The type without the `Close` (and the semiclon) would still be valid, however, **FreeST does not allow creating a channel of a type which does not come to a `Close` or `Wait` type**.
@@ -70,9 +70,9 @@ At the end of each option we want to terminate the protocol, hence the `Close`. 
 
 To obtain the server's point of view of the `MathService` protocol, one can simply use the `dualof` type operator. Thus, instead of computing explicitly the dual type, as in
 ```
-type MathServer : 1A = &{ Negate: ?Int ; !Int
-                         , IsZero: ?Int ; !Bool
-                         } ; Wait
+type MathServer = &{ Negate: ?Int ; !Int
+                   , IsZero: ?Int ; !Bool
+                   } ; Wait
 ```
 we just write `dualof MathService` and FreeST will do the work for us.
 
@@ -212,12 +212,12 @@ The sequential composition operator of session types - the semicolon - allows fo
 
 Imagine a simple protocol to conduct an integer predicate. Again, as seen from the side of the client, the protocol outputs an integer and then inputs the result in the form of a boolean value. The type can be written as follows.
 ```freest
-type IntPred : 1S = !Int ; ?Bool
+type IntPred = !Int ; ?Bool
 ```
 
 We can then write a function to consume such a protocol, a function that receives an `IntPred`. But the function must work on part of the protocol of some channel. At the very least, the channel must be closed. The function could then receive a channel end of type `IntPred ; Close`. But we may want to proceed with some extra communications before closing the channel. Taking advantage of polymorphism, we let the function accept a channel end of type `IntPred ; a`, consume the `IntPred` part, and return the unused part of the channel end, at type `a`. For example a function that invokes the predicate on a given integer `n` and prints the result can be written as follows.
 ```freest
-invokeIntPred : Int -> forall a : 1S . IntPred ; a -> a
+invokeIntPred : Int -> forall a . IntPred ; a -> a
 invokeIntPred n c =
   let (x, c) = c |> send n |> receive in
   print @Bool x;
@@ -229,7 +229,7 @@ Functions that accept a channel end of type `T ; a` and return the same channel 
 Let us know look at a function that produces an `IntPred`, that is to say that consumes a channel end of type `dualof IntPred`. The function receives a predicate, a channel end of type `dualof IntPred ; a` and a returns the channel at type `a`, for `a` a linear session type.
 
 ```freest
-serveIntPred : (Int -> Bool) -> forall a : 1S . dualof IntPred ; a -> a
+serveIntPred : (Int -> Bool) -> forall a . dualof IntPred ; a -> a
 serveIntPred p c =
   let (x, c) = receive c in
   send (p x) c
@@ -237,12 +237,12 @@ serveIntPred p c =
 
 We know play the same game, this time for binary integer operations. The type of the protocol is
 ```freest
-type IntBinOp : 1S = !Int ; !Int ; ?Int
+type IntBinOp = !Int ; !Int ; ?Int
 ```
 
 A consumer of this type invokes the operator with two given integer values, prints the result, and returns the unused part of the channel end.
 ```freest
-invokeIntBinOp : Int -> Int -> forall a : 1S . IntBinOp ; a -> a
+invokeIntBinOp : Int -> Int -> forall a . IntBinOp ; a -> a
 invokeIntBinOp n m c =
   let (x, c) = c |> send n |> send m |> receive in
   print @Int x ;
@@ -250,7 +250,7 @@ invokeIntBinOp n m c =
 ```
 Similarly to `serveIntPred`, the server side for binary integer operators can be written as follows.
 ```freest
-serveIntBinOp : (Int -> Int -> Int) -> forall a : 1S . dualof IntBinOp ; a -> a
+serveIntBinOp : (Int -> Int -> Int) -> forall a . dualof IntBinOp ; a -> a
 serveIntBinOp f c =
   let (x, c) = receive c in
   let (y, c) = receive c in
@@ -278,9 +278,9 @@ Regular session types are good, but context-free session types are a lot **more 
 ```
 data Tree = Node Tree Int Tree | Leaf
 
-type TreeChannel : 1S = +{ Node: TreeChannel ;  !Int ; TreeChannel
-                         , Leaf: Skip
-                         }
+type TreeChannel = +{ Node: TreeChannel ;  !Int ; TreeChannel
+                    , Leaf: Skip
+                    }
 ```
 
 <!-- combining session types with Skip -->
@@ -303,7 +303,7 @@ sendTree (Node lt n rt) c =
 
 And we are greeted by a plethra of errors. The fact is that we where supposed to return the continuation channel, and not `Skip`. But what is this mistery continuation, and how do we type it? The answer is through **polymorphism**.
 ```
-sendTree : forall a:1S . Tree -> TreeChannel ; a -> a
+sendTree : Tree -> TreeChannel ; a -> a
 sendTree Leaf c =
   c |> select Leaf
 sendTree (Node lt i rt) c =
@@ -320,7 +320,7 @@ Where is the continuation channel? Remember that in context-free session types `
 
 The full implementation of `sendTree` is:
 ```
-sendTree : forall a:1S . Tree -> TreeChannel ; a -> a
+sendTree : Tree -> TreeChannel ; a -> a
 sendTree Leaf c =
   c |> select Leaf
 sendTree (Node lt i rt) c =

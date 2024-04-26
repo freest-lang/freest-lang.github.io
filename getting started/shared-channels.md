@@ -46,7 +46,7 @@ Why do choices have no continuation? You might ask. Because shared session types
 
 Let us a consider the type of a stream of integer values as seen from the producer side.
 ```freest
-type IntStream : *S = *!Int
+type IntStream = *!Int
 ```
 
 To produce an unbounded number of integers `n` on an `IntStream` channel end one may write:
@@ -127,14 +127,14 @@ The trick with shared channels is to use them not as a single communication poin
 
 Let's think of a very useful case in programming, a shared data structure, in this case a single memory cell.
 ```
-type Cell : 1S = +{ Read: ?Int
-                  , Write: !Int
-                  }; Close
+type Cell = +{ Read: ?Int
+             , Write: !Int
+             }; Close
 ```
 
 The `Cell` session type describes our possible interaction with an `Int` memory cell.
 ```
-type SharedCell : *S = *?Cell
+type SharedCell = *?Cell
 ```
 
 The `SharedCell` type describes a channel on which a client can `receive` another channel with the `Cell` type. An example of a client that writes to the cell is:
@@ -177,7 +177,7 @@ side if needed.
 
 The `accept` function can be easily written with `new` and `send` as follows:
 ```
-accept : forall a:1A . *!a -> dualof a
+accept : *!a -> dualof a
 accept ch =
   let (x, y) = new @a () in
   send x ch;
