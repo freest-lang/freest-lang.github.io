@@ -43,7 +43,7 @@ function `f`:
 ```
 f : forall a . !Int ; a -> a
 type T = !Int ; T 
-data D = C1 Int | C2 
+data D = E Int | F 
 ```
 would be inferred as follows:
 ```
@@ -72,7 +72,7 @@ unrestricted value can used where a linear one is expected. Therefore, we have
 the following hierarchy of kinds:
 
 ```
-	1T
+    1T
    /  \
   *T   1S
    \  /  \ 
