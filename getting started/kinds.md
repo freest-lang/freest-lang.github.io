@@ -37,25 +37,7 @@ invalid.
 
 From version 3.2 onwards, FreeST offers a kind inference mechanism that
 discovers the correct and most general (or less restrictive) kind for
-polymorphic and recursive type variables. For example, types `T`, `D` and for
-function `f`:
-
-```
-f : forall a . !Int ; a -> a
-type T = !Int ; T 
-data D = E Int | F 
-```
-would be inferred as follows:
-```
-f : forall a : 1S . !Int ; a -> a
-type T : 1S = !Int ; T 
-data D : 1T = C1 Int | C2 
-```
-
-Furthermore, the type for `f` may be simplified to `f : !Int ; a -> a` (the
-prenex occurrences of forall may be omitted). However, even if we do not need to
-write kinds, since they may appear on error messages, having a reference for
-them is essential.
+polymorphic and recursive type variables. 
 
 The kinding system consists of three prekinds, each with its multiplicity. The
 first prekind, `S`, is employed for session types. The second prekind, `A`, is
@@ -80,3 +62,22 @@ the following hierarchy of kinds:
       \  /
        *T
 ```
+
+For example, types `T`, `D` and for function `f`:
+
+```
+f : forall a . !Int ; a -> a
+type T = !Int ; T 
+data D = E Int | F 
+```
+would be inferred as follows:
+```
+f : forall a : 1S . !Int ; a -> a
+type T : 1S = !Int ; T 
+data D : 1T = C1 Int | C2 
+```
+
+Furthermore, the type for `f` may be simplified to `f : !Int ; a -> a` (the
+prenex occurrences of forall may be omitted). However, even if we do not need to
+write kinds, since they may appear on error messages, having a reference for
+them is essential.
