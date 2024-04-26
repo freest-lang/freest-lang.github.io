@@ -63,7 +63,7 @@ the following hierarchy of kinds:
        *T
 ```
 
-For example, types `T`, `D` and for function `f`:
+For example, the kinds for types `T`, `D` and for function `f`:
 
 ```
 f : forall a . !Int ; a -> a
