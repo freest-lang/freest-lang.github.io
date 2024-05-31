@@ -18,13 +18,13 @@ nav_order: 7
 <!-- # PhD Students -->
 - Bernardo Almeida, LASIGE, University of Lisbon, [website](https://bpalmeida.github.io/)
 <!-- # MSc Students -->
-- Afonso Rosa, LASIGE, University of Lisbon
-- António Silvestre, LASIGE, University of Lisbon
 - Diogo Barros, LASIGE, University of Lisbon,
 [website](https://diogo-mustachio-barros.github.io/)
-- Miguel Roldão, LASIGE, University of Lisbon,
-- Gil Silva, LASIGE, University of Lisbon
 - Guilherme Lopes, LASIGE, University of Lisbon
-- João Roque, LASIGE, University of Lisbon
 - Paula Lopes, LASIGE, University of Lisbon
+- Miguel Roldão, LASIGE, University of Lisbon,
+- João Roque, LASIGE, University of Lisbon
+- Afonso Rosa, LASIGE, University of Lisbon
+- Gil Silva, LASIGE, University of Lisbon
+- António Silvestre, LASIGE, University of Lisbon
 <!-- # Undergraduate Students -->
