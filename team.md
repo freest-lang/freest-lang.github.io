@@ -21,8 +21,8 @@ nav_order: 7
 - Afonso Rosa, LASIGE, University of Lisbon
 - António Silvestre, LASIGE, University of Lisbon
 - Diogo Barros, LASIGE, University of Lisbon,
-- Miguel Roldão, LASIGE, University of Lisbon,
 [website](https://diogo-mustachio-barros.github.io/)
+- Miguel Roldão, LASIGE, University of Lisbon,
 - Diogo Ferreira, LASIGE, University of Lisbon
 - Gil Silva, LASIGE, University of Lisbon
 - Guilherme Lopes, LASIGE, University of Lisbon
