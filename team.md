@@ -8,7 +8,7 @@ nav_order: 7
 ---
 
 # Team 
-<!-- # Investigators -->
+<!-- # Senior -->
 - Alcides Fonseca, LASIGE, University of Lisbon, [website](https://wiki.alcidesfonseca.com/)
 - Andreia Mordido, LASIGE, University of Lisbon, [website](http://www.di.fc.ul.pt/~amordido/)
 - Diana Costa, LASIGE, University of Lisbon
@@ -18,9 +18,11 @@ nav_order: 7
 <!-- # PhD Students -->
 - Bernardo Almeida, LASIGE, University of Lisbon, [website](https://bpalmeida.github.io/)
 <!-- # MSc Students -->
-- Afonso Rafael, LASIGE, University of Lisbon
+- Afonso Rosa, LASIGE, University of Lisbon
 - António Silvestre, LASIGE, University of Lisbon
-- Diogo Barros, LASIGE, University of Lisbon, [website](https://diogo-mustachio-barros.github.io/)
+- Diogo Barros, LASIGE, University of Lisbon,
+- Miguel Roldão, LASIGE, University of Lisbon,
+[website](https://diogo-mustachio-barros.github.io/)
 - Diogo Ferreira, LASIGE, University of Lisbon
 - Gil Silva, LASIGE, University of Lisbon
 - Guilherme Lopes, LASIGE, University of Lisbon
