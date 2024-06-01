@@ -8,23 +8,18 @@ nav_order: 7
 ---
 
 # Team 
-<!-- # Senior -->
-- Alcides Fonseca, LASIGE, University of Lisbon, [website](https://wiki.alcidesfonseca.com/)
-- Andreia Mordido, LASIGE, University of Lisbon, [website](http://www.di.fc.ul.pt/~amordido/)
-- Diana Costa, LASIGE, University of Lisbon
-- Diogo Poças, LASIGE, University of Lisbon, [website](https://diogopocas1991.gitlab.io/)
-- Peter Thiemann, Albert-Ludwigs-Universität Freiburg, [website](http://www2.informatik.uni-freiburg.de/~thiemann/)
-- Vasco T. Vasconcelos, LASIGE, University of Lisbon, [website](https://www.di.fc.ul.pt/~vv/)
-<!-- # PhD Students -->
 - Bernardo Almeida, LASIGE, University of Lisbon, [website](https://bpalmeida.github.io/)
-<!-- # MSc Students -->
-- Diogo Barros, LASIGE, University of Lisbon,
-[website](https://diogo-mustachio-barros.github.io/)
+- Diogo Barros, LASIGE, University of Lisbon, [website](https://diogo-mustachio-barros.github.io/)
+- Diana Costa, LASIGE, University of Lisbon
+- Alcides Fonseca, LASIGE, University of Lisbon, [website](https://wiki.alcidesfonseca.com/)
 - Guilherme Lopes, LASIGE, University of Lisbon
 - Paula Lopes, LASIGE, University of Lisbon
+- Andreia Mordido, LASIGE, University of Lisbon, [website](http://www.di.fc.ul.pt/~amordido/)
+- Diogo Poças, LASIGE, University of Lisbon, [website](https://diogopocas1991.gitlab.io/)
 - Miguel Roldão, LASIGE, University of Lisbon,
 - João Roque, LASIGE, University of Lisbon
 - Afonso Rosa, LASIGE, University of Lisbon
 - Gil Silva, LASIGE, University of Lisbon
 - António Silvestre, LASIGE, University of Lisbon
-<!-- # Undergraduate Students -->
+- Peter Thiemann, University of Freiburg, [website](http://www2.informatik.uni-freiburg.de/~thiemann/)
+- Vasco T. Vasconcelos, LASIGE, University of Lisbon, [website](https://www.di.fc.ul.pt/~vv/)
