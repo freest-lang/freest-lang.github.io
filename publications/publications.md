@@ -114,4 +114,3 @@ nav_order: 6
 - [**Context-free Session Types**](http://www.di.fc.ul.pt/~vv/papers/thiemann.vasconcelos_context-free-session-types.pdf)
     - **Thiemann, P. and Vasconcelos, V.T.**
     - [ICFP 2016](https://conf.researchr.org/home/icfp-2016), ACM
-{: .mb-5 }
