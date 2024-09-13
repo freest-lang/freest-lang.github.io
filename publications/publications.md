@@ -12,7 +12,7 @@ nav_order: 6
 
 # Publications, talks, posters
 
-- [**Simple Grammar Bisimilarity, with an Application to Session Type Equivalence**]({% https://arxiv.org/html/2407.04063v1 %})
+- [**Simple Grammar Bisimilarity, with an Application to Session Type Equivalence**]({% https://arxiv.org/abs/2407.04063 %})
      - **Poças, D., Vasconcelos V.T.**
  {: .mb-5 }
 
