@@ -12,9 +12,9 @@ nav_order: 6
 
 # Publications, talks, posters
 
-- [**Simple Grammar Bisimilarity, with an Application to Session Type Equivalence**]<!-- ({% link https://arxiv.org/html/2407.04063v1 %}) -->
-    - **Poças, D., Vasconcelos V.T.**
-{: .mb-5 }
+<!-- - [**Simple Grammar Bisimilarity, with an Application to Session Type Equivalence**]({% link https://arxiv.org/html/2407.04063v1 %}) -->
+<!--     - **Poças, D., Vasconcelos V.T.** -->
+<!-- {: .mb-5 } -->
 
 - [**Programming with T ; U**]({% link publications/talks/PLatLXJun2024.pdf %})
     - **Almeida, B. and others**
