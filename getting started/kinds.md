@@ -60,7 +60,7 @@ the following hierarchy of kinds:
    \  /  \ 
     *S   1A
       \  /
-       *T
+       *A
 ```
 
 For example, the kinds for types `T`, `D` and for function `f`:
