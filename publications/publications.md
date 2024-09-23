@@ -26,14 +26,11 @@ nav_order: 6
     - Talk @ Nagoya University. [合同研究会 拡大](https://sites.google.com/sqlab.jp/231130-seminar/) workshop, 2023
 {: .mb-5 }
 
-- [**Subtyping Context-Free Session Types**]({% link publications/talks/SubtypingContextFreeSessionTypes_INForum2023_Poster.pdf %})
-    - **Silva, G.**
-    - Poster @ [INForum 2023](https://www.inforum2023.org/)
-{: .mb-5 }
-
-- [**Subtyping Context-Free Session Types**](https://drops.dagstuhl.de/opus/volltexte/2023/19005/pdf/LIPIcs-CONCUR-2023-11.pdf)
+- **Subtyping Context-Free Session Types**
     - **Silva, G.; Mordido, A.; Vasconcelos, V.T.**
-    - [CONCUR 2023](https://www.uantwerpen.be/en/conferences/confest-2023/concur/)
+    - [Paper](https://doi.org/10.4230/LIPIcs.CONCUR.2023.11) @ [CONCUR 2023](https://www.uantwerpen.be/en/conferences/confest-2023/concur/)
+    - [Extended abstract](https://inforum2023-ylfd.vercel.app/Atas/paper_5080/5080-SA.pdf), [Poster]({% link publications/talks/SubtypingContextFreeSessionTypes_INForum2023_Poster.pdf %}) @ [INForum 2023]([https://www.inforum2023.org/](https://dei.fe.up.pt/inforum23/))
+    - [Master's Thesis]({% link publications/talks/TM_Gil_Silva.pdf %}) @ University of Lisbon, 2024
 {: .mb-5 }
 
 - [**System $$F^\mu_\omega$$ with Context-free Session Types**](https://link.springer.com/chapter/10.1007/978-3-031-30044-8_15)
