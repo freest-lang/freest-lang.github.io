@@ -226,7 +226,7 @@ invokeIntPred n c =
 
 Functions that accept a channel end of type `T ; a` and return the same channel end, this time at time `a` are quite common in FreeST. The channel may then be used in the continuation.
 
-Let us know look at a function that produces an `IntPred`, that is to say that consumes a channel end of type `dualof IntPred`. The function receives a predicate, a channel end of type `dualof IntPred ; a` and a returns the channel at type `a`, for `a` a linear session type.
+Let us now look at a function that produces an `IntPred`, that is to say that consumes a channel end of type `dualof IntPred`. The function receives a predicate, a channel end of type `dualof IntPred ; a` and a returns the channel at type `a`, for `a` a linear session type.
 
 ```freest
 serveIntPred : (Int -> Bool) -> forall a . dualof IntPred ; a -> a
@@ -235,7 +235,7 @@ serveIntPred p c =
   send (p x) c
 ```
 
-We know play the same game, this time for binary integer operations. The type of the protocol is
+We now play the same game, this time for binary integer operations. The type of the protocol is
 ```freest
 type IntBinOp = !Int ; !Int ; ?Int
 ```
@@ -284,7 +284,7 @@ type TreeChannel = +{ Node: TreeChannel ;  !Int ; TreeChannel
 ```
 
 <!-- combining session types with Skip -->
-Notice how instead of using `Close`, we use `Skip`. If `Close` was used we would not be able to compose a singleton tree (a tree with an integer only) as it would correspond to type `Close ; !Int ; Close`, which doesn't get past the first `Close` because not interaction is possible on a closed channel.
+Notice how instead of using `Close`, we use `Skip`. If `Close` was used we would not be able to compose a singleton tree (a tree with an integer only) as it would correspond to type `Close ; !Int ; Close`, which doesn't get past the first `Close` because no interaction is possible on a closed channel.
 
 The `TreeChannel` is then able to describe binary tree serialization without allowing for missing or unnecessary subtrees, given that it specifically describes the sending of a left and a right subtree.
 
