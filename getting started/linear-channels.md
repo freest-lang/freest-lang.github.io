@@ -284,7 +284,7 @@ type TreeChannel = +{ Node: TreeChannel ;  !Int ; TreeChannel
 ```
 
 <!-- combining session types with Skip -->
-Notice how instead of using `Close`, we use `Skip`. If `Close` was used we would not be able to compose a singleton tree (a tree with an integer only) as it would correspond to type `Close ; !Int ; Close`, which doesn't get past the first `Close` because not interaction is possible on a closed channel.
+Notice how instead of using `Close`, we use `Skip`. If `Close` was used we would not be able to compose a singleton tree (a tree with an integer only) as it would correspond to type `Close ; !Int ; Close`, which doesn't get past the first `Close` because no interaction is possible on a closed channel.
 
 The `TreeChannel` is then able to describe binary tree serialization without allowing for missing or unnecessary subtrees, given that it specifically describes the sending of a left and a right subtree.
 
