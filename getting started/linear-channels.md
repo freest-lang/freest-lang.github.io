@@ -235,7 +235,7 @@ serveIntPred p c =
   send (p x) c
 ```
 
-We know play the same game, this time for binary integer operations. The type of the protocol is
+We now play the same game, this time for binary integer operations. The type of the protocol is
 ```freest
 type IntBinOp = !Int ; !Int ; ?Int
 ```
