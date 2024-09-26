@@ -226,7 +226,7 @@ invokeIntPred n c =
 
 Functions that accept a channel end of type `T ; a` and return the same channel end, this time at time `a` are quite common in FreeST. The channel may then be used in the continuation.
 
-Let us know look at a function that produces an `IntPred`, that is to say that consumes a channel end of type `dualof IntPred`. The function receives a predicate, a channel end of type `dualof IntPred ; a` and a returns the channel at type `a`, for `a` a linear session type.
+Let us now look at a function that produces an `IntPred`, that is to say that consumes a channel end of type `dualof IntPred`. The function receives a predicate, a channel end of type `dualof IntPred ; a` and a returns the channel at type `a`, for `a` a linear session type.
 
 ```freest
 serveIntPred : (Int -> Bool) -> forall a . dualof IntPred ; a -> a
