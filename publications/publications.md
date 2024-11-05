@@ -14,7 +14,14 @@ nav_order: 6
 
 - [**Simple Grammar Bisimilarity, with an Application to Session Type Equivalence**](https://arxiv.org/abs/2407.04063)
      - **Poças, D., Vasconcelos V.T.**
+     - 2024
  {: .mb-5 }
+
+- [**Polymorphic higher-order context-free session types**](https://www.sciencedirect.com/science/article/pii/S030439752400197X)
+    - **Costa, D., Mordido, A., Poças, D. and Vasconcelos, V.T.**
+    - [Theor. Comput. Sci. 1001: 114582
+](https://www.sciencedirect.com/journal/theoretical-computer-science), 2024
+{: .mb-5 }
 
 - [**Programming with T ; U**]({% link publications/talks/PLatLXJun2024.pdf %})
     - **Almeida, B. and others**
