@@ -28,6 +28,12 @@ nav_order: 6
     - Talk @ PL@LX. 2024.
 {: .mb-5 }
 
+- [**Improving Parallel and Concurrent Programming in FreeST**]({% link publications/talks/GuilhermeLopesMSc.pdf %})
+    - **Lopes, G.**
+    - Master's Thesis @ University of Lisbon, 2024
+    - [Slides]({% link publications/talks/GuilhermeLopesSlides.pdf %})
+{: .mb-5 }
+
 - [**FreeST and Polymorphic Higher-order Session Types**]({% link publications/talks/talk_nagoya_nov23.pdf %})
     - **Vasconcelos, V.T.**
     - Talk @ Nagoya University. [合同研究会 拡大](https://sites.google.com/sqlab.jp/231130-seminar/) workshop, 2023
