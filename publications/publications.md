@@ -49,6 +49,7 @@ nav_order: 6
 - [**System $$F^\mu_\omega$$ with Context-free Session Types**](https://link.springer.com/chapter/10.1007/978-3-031-30044-8_15)
     - **Poças, D., Costa, D., Mordido, A. and Vasconcelos, V.T.**
     - [Programming Languages and Systems, ESOP 2023](https://link.springer.com/book/10.1007/978-3-031-30044-8)
+    - [axXiv (long version)](https://arxiv.org/abs/2301.08659)
 {: .mb-5 }
 
 - [**Kind Inference for the FreeST Programming Language**](https://arxiv.org/abs/2304.06396v1)
