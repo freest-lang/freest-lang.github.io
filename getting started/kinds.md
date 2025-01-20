@@ -50,7 +50,7 @@ kind, with possible kinds being `1T`, `*T`, `1S`, `*S`, `1A`, and `*A`.
 
 Given that a value of an unrestricted type may be used zero or more times, and
 one with a linear type must be used exactly once, it should be evident that an
-unrestricted value can used where a linear one is expected. Therefore, we have
+unrestricted value can be used where a linear one is expected. Therefore, we have
 the following hierarchy of kinds:
 
 ```

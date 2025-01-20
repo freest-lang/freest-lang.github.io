@@ -555,7 +555,7 @@ main =
 ## **receiveAndClose**
 **Type**: `forall a:1T . ?a ; Close -> a`
 
-As in receiveAndWait only that the type is Wait and the function closes the
+As in receiveAndWait only that the type is Close and the function closes the
 channel rather the waiting for the channel to be closed.
 
 ## **sendAndWait**
