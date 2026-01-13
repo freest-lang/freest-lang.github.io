@@ -13,8 +13,9 @@ nav_order: 6
 # Publications, talks, posters
 
 - [**Simple Grammar Bisimilarity, with an Application to Session Type Equivalence**](https://arxiv.org/abs/2407.04063)
-     - **Poças, D., Vasconcelos V.T.**
-     - 2024
+     - **Poças, D., Silva, G., Vasconcelos, V.T.**
+     - [arXiv](https://arxiv.org/abs/2407.04063), 2025
+     - [Talk]({% link publications/talks/2026.FCUL.SimpleGrammarBisimilarity.pdf %}) @ Seminário de Lógica Matemática, 2026
  {: .mb-5 }
 
 - [**Polymorphic higher-order context-free session types**](https://www.sciencedirect.com/science/article/pii/S030439752400197X)
