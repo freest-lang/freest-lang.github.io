@@ -12,6 +12,12 @@ nav_order: 6
 
 # Publications, talks, posters
 
+- [**Types as grammars**](https://popl26.sigplan.org/details/wits-2026-papers/1/Types-as-grammars)
+     - **Silva, G., Almeida, B., Costa, D., Mordido, A., Poças, D., Vasconcelos, V. T.**
+     - [Talk]({% link publications/talks/TypesAsGrammars.pdf %}) @ WITS 2026
+{: .mb-5 }
+
+
 - [**Simple Grammar Bisimilarity, with an Application to Session Type Equivalence**](https://arxiv.org/abs/2407.04063)
      - **Poças, D., Silva, G., Vasconcelos, V.T.**
      - [arXiv](https://arxiv.org/abs/2407.04063), 2025
