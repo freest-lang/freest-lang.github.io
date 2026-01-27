@@ -12,9 +12,9 @@ nav_order: 6
 
 # Publications, talks, posters
 
-- [**Types as grammars**](https://popl26.sigplan.org/details/wits-2026-papers/1/Types-as-grammars)
+- [**Types as grammars**]({% link publications/talks/TypesAsGrammarsAbstract.pdf %})
      - **Silva, G., Almeida, B., Costa, D., Mordido, A., Poças, D., Vasconcelos, V. T.**
-     - [Talk]({% link publications/talks/TypesAsGrammars.pdf %}) @ WITS 2026
+     - [Talk]({% link publications/talks/TypesAsGrammars.pdf %}) @ [WITS 2026](https://popl26.sigplan.org/details/wits-2026-papers/1/Types-as-grammars)
 {: .mb-5 }
 
 
