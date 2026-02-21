@@ -51,7 +51,8 @@ nav_order: 6
 
 - **Subtyping Context-Free Session Types**
     - **Silva, G., Mordido, A. and Vasconcelos, V.T.**
-    - [Paper](https://doi.org/10.4230/LIPIcs.CONCUR.2023.11) @ [CONCUR 2023](https://www.uantwerpen.be/en/conferences/confest-2023/concur/)
+    - [Paper](https://doi.org/10.1016/j.tcs.2025.115705) @ Theor. Comput. Sci.1069: 115705
+    - [Paper](https://doi.org/10.4230/LIPIcs.CONCUR.2023.11) @ CONCUR 2023
     - [Extended abstract](https://inforum2023-ylfd.vercel.app/Atas/paper_5080/5080-SA.pdf), [Poster]({% link publications/talks/SubtypingContextFreeSessionTypes_INForum2023_Poster.pdf %}) @ [INForum 2023]([https://www.inforum2023.org/](https://dei.fe.up.pt/inforum23/))
     - [Master's Thesis]({% link publications/talks/TM_Gil_Silva.pdf %}) @ University of Lisbon, 2024
 {: .mb-5 }
