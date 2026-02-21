@@ -17,10 +17,9 @@ nav_order: 6
      - [Talk]({% link publications/talks/TypesAsGrammars.pdf %}) @ [WITS 2026](https://popl26.sigplan.org/details/wits-2026-papers/1/Types-as-grammars)
 {: .mb-5 }
 
-
 - [**Kind inference for the FreeST programming language**](https://www.sciencedirect.com/science/article/abs/pii/S2352220825000495)
      - **Almeida, B., Mordido, A. and Vasconcelos, V.T.**
-     - [ J. Log. Algebraic Methods Program.](https://www.sciencedirect.com/journal/journal-of-logical-and-algebraic-methods-in-programming), 2026
+     - [ J. Log. Algebraic Methods Program. 148:101083](https://www.sciencedirect.com/journal/journal-of-logical-and-algebraic-methods-in-programming), 2026
  {: .mb-5 }
 
 - [**Simple Grammar Bisimilarity, with an Application to Session Type Equivalence**](https://arxiv.org/abs/2407.04063)
