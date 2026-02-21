@@ -13,13 +13,13 @@ nav_order: 6
 # Publications, talks, posters
 
 - [**Types as grammars**]({% link publications/talks/TypesAsGrammarsAbstract.pdf %})
-     - **Silva, G., Almeida, B., Costa, D., Mordido, A., Poças, D., Vasconcelos, V. T.**
+     - **Silva, G., Almeida, B., Costa, D., Mordido, A., Poças, D. and Vasconcelos, V. T.**
      - [Talk]({% link publications/talks/TypesAsGrammars.pdf %}) @ [WITS 2026](https://popl26.sigplan.org/details/wits-2026-papers/1/Types-as-grammars)
 {: .mb-5 }
 
 - [**Kind inference for the FreeST programming language**](https://www.sciencedirect.com/science/article/abs/pii/S2352220825000495)
      - **Almeida, B., Mordido, A. and Vasconcelos, V.T.**
-     - [ J. Log. Algebraic Methods Program. 148:101083](https://www.sciencedirect.com/journal/journal-of-logical-and-algebraic-methods-in-programming), 2026
+     - [ J. Log. Algebraic Methods Program.](https://www.sciencedirect.com/journal/journal-of-logical-and-algebraic-methods-in-programming) 148:101083, 2026
  {: .mb-5 }
 
 - [**Simple Grammar Bisimilarity, with an Application to Session Type Equivalence**](https://arxiv.org/abs/2407.04063)
@@ -30,8 +30,7 @@ nav_order: 6
 
 - [**Polymorphic higher-order context-free session types**](https://www.sciencedirect.com/science/article/pii/S030439752400197X)
     - **Costa, D., Mordido, A., Poças, D. and Vasconcelos, V.T.**
-    - [Theor. Comput. Sci. 1001: 114582
-](https://www.sciencedirect.com/journal/theoretical-computer-science), 2024
+    - [Theor. Comput. Sci.](https://www.sciencedirect.com/journal/theoretical-computer-science) 1001: 114582, 2024
 {: .mb-5 }
 
 - [**Programming with T ; U**]({% link publications/talks/PLatLXJun2024.pdf %})
@@ -60,7 +59,7 @@ nav_order: 6
 - [**System $$F^\mu_\omega$$ with Context-free Session Types**](https://link.springer.com/chapter/10.1007/978-3-031-30044-8_15)
     - **Poças, D., Costa, D., Mordido, A. and Vasconcelos, V.T.**
     - [Programming Languages and Systems, ESOP 2023](https://link.springer.com/book/10.1007/978-3-031-30044-8)
-    - [axXiv (long version)](https://arxiv.org/abs/2301.08659)
+    - [arXiv (long version)](https://arxiv.org/abs/2301.08659)
 {: .mb-5 }
 
 - [**Kind Inference for the FreeST Programming Language**](https://arxiv.org/abs/2304.06396v1)
