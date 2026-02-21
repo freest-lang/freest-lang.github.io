@@ -18,8 +18,13 @@ nav_order: 6
 {: .mb-5 }
 
 
+- [**Kind inference for the FreeST programming language**](https://www.sciencedirect.com/science/article/abs/pii/S2352220825000495)
+     - **Almeida, B., Mordido, A. and Vasconcelos, V.T.**
+     - [ J. Log. Algebraic Methods Program.](https://www.sciencedirect.com/journal/journal-of-logical-and-algebraic-methods-in-programming), 2026
+ {: .mb-5 }
+
 - [**Simple Grammar Bisimilarity, with an Application to Session Type Equivalence**](https://arxiv.org/abs/2407.04063)
-     - **Poças, D., Silva, G., Vasconcelos, V.T.**
+     - **Poças, D., Silva, G., and Vasconcelos, V.T.**
      - [arXiv](https://arxiv.org/abs/2407.04063), 2025
      - [Talk]({% link publications/talks/2026.FCUL.SimpleGrammarBisimilarity.pdf %}) @ Seminário de Lógica Matemática, 2026
  {: .mb-5 }
@@ -47,7 +52,7 @@ nav_order: 6
 {: .mb-5 }
 
 - **Subtyping Context-Free Session Types**
-    - **Silva, G.; Mordido, A.; Vasconcelos, V.T.**
+    - **Silva, G., Mordido, A. and Vasconcelos, V.T.**
     - [Paper](https://doi.org/10.4230/LIPIcs.CONCUR.2023.11) @ [CONCUR 2023](https://www.uantwerpen.be/en/conferences/confest-2023/concur/)
     - [Extended abstract](https://inforum2023-ylfd.vercel.app/Atas/paper_5080/5080-SA.pdf), [Poster]({% link publications/talks/SubtypingContextFreeSessionTypes_INForum2023_Poster.pdf %}) @ [INForum 2023]([https://www.inforum2023.org/](https://dei.fe.up.pt/inforum23/))
     - [Master's Thesis]({% link publications/talks/TM_Gil_Silva.pdf %}) @ University of Lisbon, 2024
