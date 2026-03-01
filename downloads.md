@@ -28,7 +28,7 @@ nav_order: 2
 This extension provides basic syntax highlighting for the FreeST programming
   language.
 
-![demo-highlighting](/resources/demo-highlighting.png)
+![demo-highlighting](/resources/images/demo-highlighting.png)
 
 ### FreeST Language Server for Visual Studio Code
 
@@ -42,7 +42,7 @@ Long gone are the days of switching back and forth between editor and console to
 The extensions verifies files after every file save (not every file change as other extensions
 	do).
 
-![error-highlighting](/resources/demo-error-highlight.gif)
+![error-highlighting](/resources/images/demo-error-highlight.gif)
 
 <!-- Uncomment for cuteness overload -->
 <!-- ![Alt Text](https://media.giphy.com/media/vFKqnCdLPNOKc/giphy.gif) -->
@@ -52,14 +52,14 @@ The extensions verifies files after every file save (not every file change as ot
 Run a FreeST file directly from the editor in VSCode's integrated terminal by right clicking
 	it and selecting `FreeST: Run`.
 
-![run-in-terminal](/resources/demo-run.gif)
+![run-in-terminal](/resources/images/demo-run.gif)
 
 
 #### Load into interpreter
 Load a FreeST file directly into FreeST's interpreter (`freesti`) in VSCode's integrated terminal
 	by right clicking it and selecting `FreeST: Load into interpreter`.
 
-![load-into-interpreter](/resources/demo-load.gif)
+![load-into-interpreter](/resources/images/demo-load.gif)
 
 
 ### FreeST Syntax Highlighting for Emacs

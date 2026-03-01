@@ -21,360 +21,275 @@ parent: Libraries
 {:toc}
 </details>
 
-# **Builtin**
-## **(+)**
-**Type**: `Int -> Int -> Int`
+# **Builtins**
+## `(+) : Int -> Int -> Int`
+{: .no_toc}
 
+## `(-) : Int -> Int -> Int`
+{: .no_toc}
 
-## **(-)**
-**Type**: `Int -> Int -> Int`
+## `(*) : Int -> Int -> Int`
+{: .no_toc}
 
+## `(/) : Int -> Int -> Int`
+{: .no_toc}
 
-## **(*)**
-**Type**: `Int -> Int -> Int`
+## `div : Int -> Int -> Int`
+{: .no_toc}
 
+## `(^) : Int -> Int -> Int`
+{: .no_toc}
 
-## **(/)**
-**Type**: `Int -> Int -> Int`
+## `mod : Int -> Int -> Int`
+{: .no_toc}
 
+## `rem : Int -> Int -> Int`
+{: .no_toc}
 
-## **div**
-**Type**: `Int -> Int -> Int`
+## `max : Int -> Int -> Int`
+{: .no_toc}
 
+## `min : Int -> Int -> Int`
+{: .no_toc}
 
-## **(^)**
-**Type**: `Int -> Int -> Int`
+## `quot : Int -> Int -> Int`
+{: .no_toc}
 
+## `gcd : Int -> Int -> Int`
+{: .no_toc}
 
-## **mod**
-**Type**: `Int -> Int -> Int`
+## `lcm : Int -> Int -> Int`
+{: .no_toc}
 
+## `subtract : Int -> Int -> Int`
+{: .no_toc}
 
-## **rem**
-**Type**: `Int -> Int -> Int`
+## `succ : Int -> Int`
+{: .no_toc}
 
+## `pred : Int -> Int`
+{: .no_toc}
 
-## **max**
-**Type**: `Int -> Int -> Int`
+## `abs : Int -> Int`
+{: .no_toc}
 
+## `negate : Int -> Int`
+{: .no_toc}
 
-## **min**
-**Type**: `Int -> Int -> Int`
+## `even : Int -> Bool`
+{: .no_toc}
 
+## `odd : Int -> Bool`
+{: .no_toc}
 
-## **quot**
-**Type**: `Int -> Int -> Int`
+## `(==) : Int -> Int -> Bool`
+{: .no_toc}
 
+## `(/=) : Int -> Int -> Bool`
+{: .no_toc}
 
-## **gcd**
-**Type**: `Int -> Int -> Int`
+## `(<) : Int -> Int -> Bool`
+{: .no_toc}
 
+## `(>) : Int -> Int -> Bool`
+{: .no_toc}
 
-## **lcm**
-**Type**: `Int -> Int -> Int`
+## `(<=) : Int -> Int -> Bool`
+{: .no_toc}
 
+## `(>=) : Int -> Int -> Bool`
+{: .no_toc}
 
-## **subtract**
-**Type**: `Int -> Int -> Int`
+## `(+.) : Float -> Float -> Float`
+{: .no_toc}
 
+## `(-.) : Float -> Float -> Float`
+{: .no_toc}
 
-## **succ**
-**Type**: `Int -> Int`
+## `(*.) : Float -> Float -> Float`
+{: .no_toc}
 
+## `(/.) : Float -> Float -> Float`
+{: .no_toc}
 
-## **pred**
-**Type**: `Int -> Int`
+## `(>.) : Float -> Float -> Float`
+{: .no_toc}
 
+## `(<.) : Float -> Float -> Float`
+{: .no_toc}
 
-## **abs**
-**Type**: `Int -> Int`
+## `(>=.) : Float -> Float -> Float`
+{: .no_toc}
 
+## `(<=.) : Float -> Float -> Float`
+{: .no_toc}
 
-## **negate**
-**Type**: `Int -> Int`
+## `absF : Float -> Float`
+{: .no_toc}
 
+## `negateF : Float -> Float`
+{: .no_toc}
 
-## **even**
-**Type**: `Int -> Bool`
+## `maxF : Float -> Float -> Float`
+{: .no_toc}
 
+## `minF : Float -> Float -> Float`
+{: .no_toc}
 
-## **odd**
-**Type**: `Int -> Bool`
+## `truncate : Float -> Int`
+{: .no_toc}
 
+## `round : Float -> Int`
+{: .no_toc}
 
-## **(==)**
-**Type**: `Int -> Int -> Bool`
+## `ceiling : Float -> Int`
+{: .no_toc}
 
+## `floor : Float -> Int`
+{: .no_toc}
 
-## **(/=)**
-**Type**: `Int -> Int -> Bool`
+## `recip : Float -> Float`
+{: .no_toc}
 
+## `pi : Float`
+{: .no_toc}
 
-## **(<)**
-**Type**: `Int -> Int -> Bool`
+## `exp : Float -> Float`
+{: .no_toc}
 
+## `log : Float -> Float`
+{: .no_toc}
 
-## **(>)**
-**Type**: `Int -> Int -> Bool`
+## `sqrt : Float -> Float`
+{: .no_toc}
 
+## `(**) : Float -> Float -> Float`
+{: .no_toc}
 
-## **(<=)**
-**Type**: `Int -> Int -> Bool`
+## `logBase : Float -> Float -> Float`
+{: .no_toc}
 
+## `sin : Float -> Float`
+{: .no_toc}
 
-## **(>=)**
-**Type**: `Int -> Int -> Bool`
+## `cos : Float -> Float`
+{: .no_toc}
 
+## `tan : Float -> Float`
+{: .no_toc}
 
-## **(+.)**
-**Type**: `Float -> Float -> Float`
+## `asin : Float -> Float`
+{: .no_toc}
 
+## `acos : Float -> Float`
+{: .no_toc}
 
-## **(-.)**
-**Type**: `Float -> Float -> Float`
+## `atan : Float -> Float`
+{: .no_toc}
 
+## `sinh : Float -> Float`
+{: .no_toc}
 
-## **(*.)**
-**Type**: `Float -> Float -> Float`
+## `cosh : Float -> Float`
+{: .no_toc}
 
+## `tanh : Float -> Float`
+{: .no_toc}
 
-## **(/.)**
-**Type**: `Float -> Float -> Float`
+## `log1p : Float -> Float`
+{: .no_toc}
 
+## `expm1 : Float -> Float`
+{: .no_toc}
 
-## **(>.)**
-**Type**: `Float -> Float -> Float`
+## `log1pexp : Float -> Float`
+{: .no_toc}
 
+## `log1mexp : Float -> Float`
+{: .no_toc}
 
-## **(<.)**
-**Type**: `Float -> Float -> Float`
+## `fromInteger : Int -> Float`
+{: .no_toc}
 
+## `(&&) : Bool -> Bool -> Bool`
+{: .no_toc}
 
-## **(>=.)**
-**Type**: `Float -> Float -> Float`
+## `(||) : Bool -> Bool -> Bool`
+{: .no_toc}
 
+## `ord : Char -> Int`
+{: .no_toc}
 
-## **(<=.)**
-**Type**: `Float -> Float -> Float`
+## `chr : Int -> Char`
+{: .no_toc}
 
+## `(^^) : String -> String -> String`
+{: .no_toc}
 
-## **absF**
-**Type**: `Float -> Float`
+## `show : forall a:*T . a -> String`
+{: .no_toc}
 
+## `readBool : String -> Bool`
+{: .no_toc}
 
-## **negateF**
-**Type**: `Float -> Float`
+## `readInt : String -> Int`
+{: .no_toc}
 
+## `readChar : String -> Char`
+{: .no_toc}
 
-## **maxF**
-**Type**: `Float -> Float -> Float`
+## `fork : forall a:*T. (() 1-> a) -> ()`
+{: .no_toc}
 
+## `error : forall a:*T . String -> a`
+{: .no_toc}
 
-## **minF**
-**Type**: `Float -> Float -> Float`
+## `undefined : forall a:*T . a`
+{: .no_toc}
 
-
-## **truncate**
-**Type**: `Float -> Int`
-
-
-## **round**
-**Type**: `Float -> Int`
-
-
-## **ceiling**
-**Type**: `Float -> Int`
-
-
-## **floor**
-**Type**: `Float -> Int`
-
-
-## **recip**
-**Type**: `Float -> Float`
-
-
-## **pi**
-**Type**: `Float`
-
-
-## **exp**
-**Type**: `Float -> Float`
-
-
-## **log**
-**Type**: `Float -> Float`
-
-
-## **sqrt**
-**Type**: `Float -> Float`
-
-
-## **(**)**
-**Type**: `Float -> Float -> Float`
-
-
-## **logBase**
-**Type**: `Float -> Float -> Float`
-
-
-## **sin**
-**Type**: `Float -> Float`
-
-
-## **cos**
-**Type**: `Float -> Float`
-
-
-## **tan**
-**Type**: `Float -> Float`
-
-
-## **asin**
-**Type**: `Float -> Float`
-
-
-## **acos**
-**Type**: `Float -> Float`
-
-
-## **atan**
-**Type**: `Float -> Float`
-
-
-## **sinh**
-**Type**: `Float -> Float`
-
-
-## **cosh**
-**Type**: `Float -> Float`
-
-
-## **tanh**
-**Type**: `Float -> Float`
-
-
-## **log1p**
-**Type**: `Float -> Float`
-
-
-## **expm1**
-**Type**: `Float -> Float`
-
-
-## **log1pexp**
-**Type**: `Float -> Float`
-
-
-## **log1mexp**
-**Type**: `Float -> Float`
-
-
-## **fromInteger**
-**Type**: `Int -> Float`
-
-
-## **(&&)**
-**Type**: `Bool -> Bool -> Bool`
-
-
-## **(||)**
-**Type**: `Bool -> Bool -> Bool`
-
-
-## **ord**
-**Type**: `Char -> Int`
-
-
-## **chr**
-**Type**: `Int -> Char`
-
-
-## **(^^)**
-**Type**: `String -> String -> String`
-
-
-## **show**
-**Type**: `forall a:*T . a -> String`
-
-
-## **readBool**
-**Type**: `String -> Bool`
-
-
-## **readInt**
-**Type**: `String -> Int`
-
-
-## **readChar**
-**Type**: `String -> Char`
-
-
-## **fork**
-**Type**: `forall a:*T. (() 1-> a) -> ()`
-
-
-## **error**
-**Type**: `forall a:*T . String -> a`
-
-
-## **undefined**
-**Type**: `forall a:*T . a`
-
-
-## **new**
-**Type**: `forall a:1A . () -> (a, dualof a)`
-
+## `new : forall a:1A . () -> (a, dualof a)`
+{: .no_toc}
 Creates two endpoints of a channels of the given type.
 
-## **send**
-**Type**: `forall a:1T . a -> forall b:1S . !a ; b 1-> b`
-
+## `send : forall a:1T . a -> forall b:1S . !a ; b 1-> b`
+{: .no_toc}
 Sends a value on a channel. Returns the continuation channel
 
-## **receive**
-**Type**: `forall a:1T b:1S . ?a ; b -> (a, b)`
-
+## `receive : forall a:1T b:1S . ?a ; b -> (a, b)`
+{: .no_toc}
 Receives a value on a channel. Returns the received value and 
 the continuation channel.
 
-## **close**
-**Type**: `Close -> ()`
-
+## `close : Close -> ()`
+{: .no_toc}
 Closes a channel.
 
-## **wait**
-**Type**: `Wait -> ()`
-
+## `wait : Wait -> ()`
+{: .no_toc}
 Waits for a channel to be closed.
 
 
 # **Base**
-## **Bool**
-**Type**: 
+## `Bool`
+{: .no_toc}
 ```
 data Bool = True | False 
 ```
 
-Bool 
-
-## **not**
-**Type**: `Bool -> Bool`
-
+## `not : Bool -> Bool`
+{: .no_toc}
 Boolean complement
 
-## **id**
-**Type**: `forall a:*T . a -> a`
-
+## `id : forall a:*T . a -> a`
+{: .no_toc}
 The identity function. Will return the exact same value.
 ```
 id 5       -- 5
 id "Hello" -- "Hello"
 ```
 
-## **flip**
-**Type**: `forall a:*T b:*T c:*T . (a -> b -> c) -> b -> a -> c`
-
+## `flip : forall a:*T b:*T c:*T . (a -> b -> c) -> b -> a -> c`
+{: .no_toc}
 Swaps the order of parameters to a function
 ```
  -- | Check if the integer is positive and the boolean is true
@@ -386,9 +301,8 @@ Swaps the order of parameters to a function
  flippedTest = flip @Int @Bool @Bool test
  ```
 
-## **($)**
-**Type**: `forall a:*T b:*T. (a -> b) -> a -> b`
-
+## `($) : forall a:*T b:*T. (a -> b) -> a -> b`
+{: .no_toc}
 Application operator. Takes a function and an argument, and applies 
 the first to the latter. This operator has low right-associative binding 
 precedence, allowing parentheses to be omitted in certain situations.
@@ -397,9 +311,8 @@ For example:
 f $ g $ h x = f (g (h x))
 ```
 
-## **(|>)**
-**Type**: `forall a:*T b:*T. a -> (a -> b) -> b`
-
+## `(|>) : forall a:*T b:*T. a -> (a -> b) -> b`
+{: .no_toc}
 Reverse application operator. Provides notational convenience, especially
 when chaining channel operations. For example:
 ```
@@ -408,9 +321,8 @@ f c = c |> send 5 |> send True |> close
 ```
 Its binding precedence is higher than `$`.
 
-## **(;)**
-**Type**: `forall a:*T b:*T . a -> b -> b`
-
+## `(;) : forall a:*T b:*T . a -> b -> b`
+{: .no_toc}
 Sequential composition. Takes two expressions, evaluates the former and
 discards the result, then evaluates the latter. For example:
 ```
@@ -419,9 +331,8 @@ discards the result, then evaluates the latter. For example:
 evaluates to 4.
 Its binding precedence is rather low.
 
-## **until**
-**Type**: `forall a:*T . (a -> Bool) -> (a -> a) -> a -> a`
-
+## `until : forall a:*T . (a -> Bool) -> (a -> a) -> a -> a`
+{: .no_toc}
 Applies the function passed as the second argument to the third one and
 uses the predicate in the first argument to evaluate the result, if it comes
 as True it returns it, otherwise, it continues to apply the function on
@@ -433,9 +344,8 @@ firstPowerGreaterThan : Int -> Int
 firstPowerGreaterThan limit = until @Int (> limit) (*2) 1
 ```  
 
-## **curry**
-**Type**: `forall a:*T b:*T c:*T . ((a, b) -> c) -> a -> b -> c`
-
+## `curry : forall a:*T b:*T c:*T . ((a, b) -> c) -> a -> b -> c`
+{: .no_toc}
 Converts a function that receives a pair into a function that receives its
 arguments one at a time.
 
@@ -449,9 +359,8 @@ sum : Int -> Int -> Int
 sum = curry @Int @Int @Int sumPair
 ```
 
-## **uncurry**
-**Type**: `forall a:*T b:*T c:*T . (a -> b -> c) -> ((a, b) -> c)`
-
+## `uncurry : forall a:*T b:*T c:*T . (a -> b -> c) -> ((a, b) -> c)`
+{: .no_toc}
 Converts a function that receives its arguments one at a time into a
 function on pairs.
 
@@ -461,45 +370,39 @@ sumPair : (Int, Int) -> Int
 sumPair = uncurry @Int @Int @Int (+)
 ```
 
-## **swap**
-**Type**: `forall a:*T b:*T . (a, b) -> (b, a)`
-
+## `swap : forall a:*T b:*T . (a, b) -> (b, a)`
+{: .no_toc}
 Swaps the components of a pair. The expression `swap (1, True)` evaluates to
 `(True, 1)`.
 
-## **fix**
-**Type**: `forall a:*T . ((a -> a) -> (a -> a)) -> (a -> a)`
-
+## `fix : forall a:*T . ((a -> a) -> (a -> a)) -> (a -> a)`
+{: .no_toc}
 Fixed-point Z combinator
 
-## **fst**
-**Type**: `forall a:1T b:*T . (a, b) -> a`
-
+## `fst : forall a:1T b:*T . (a, b) -> a`
+{: .no_toc}
 Extracts the first element from a pair, discarding the second.
 
-## **snd**
-**Type**: `forall a:*T b:1T . (a, b) -> b`
-
+## `snd : forall a:*T b:1T . (a, b) -> b`
+{: .no_toc}
 Extracts the second element from a pair, discarding the first.
 
 
 # **Concurrency and channels**
-## **Diverge**
-**Type**: 
+## `Diverge`
+{: .no_toc}
 ```
 type Diverge = ()
 ```
 
 A mark for functions that do not terminate
 
-## **sink**
-**Type**: `forall a:*T . a -> ()`
-
+## `sink : forall a:*T . a -> ()`
+{: .no_toc}
 Discards an unrestricted value
 
-## **repeat**
-**Type**: `forall a:*T . Int -> (() -> a) -> ()`
-
+## `repeat : forall a:*T . Int -> (() -> a) -> ()`
+{: .no_toc}
 Executes a thunk n times, sequentially
 
 ```
@@ -509,9 +412,8 @@ main =
   repeat @() 5 (\_:() -> putStrLn "Hello!")
 ```
 
-## **parallel**
-**Type**: `forall a:*T . Int -> (() -> a) -> ()`
-
+## `parallel : forall a:*T . Int -> (() -> a) -> ()`
+{: .no_toc}
 Forks n identical threads. Works the same as a `repeat` call but in parallel
 instead of sequentially.
 
@@ -522,9 +424,8 @@ main =
   parallel @() 5 (\_:() -> putStrLn "Hello!")
 ```
 
-## **receiveAndWait**
-**Type**: `forall a:1T . ?a ; Wait -> a`
-
+## `receiveAndWait : forall a:1T . ?a ; Wait -> a`
+{: .no_toc}
 Receives a value from a linear channel and applies a function to it.
 Discards the result and returns the continuation channel.
 
@@ -552,44 +453,37 @@ main =
   s |> send "Hello!" |> close
 ```
 
-## **receiveAndClose**
-**Type**: `forall a:1T . ?a ; Close -> a`
-
+## `receiveAndClose : forall a:1T . ?a ; Close -> a`
+{: .no_toc}
 As in receiveAndWait only that the type is Close and the function closes the
 channel rather the waiting for the channel to be closed.
 
-## **sendAndWait**
-**Type**: `forall a:1T . a -> !a ; Wait 1-> ()`
-
+## `sendAndWait : forall a:1T . a -> !a ; Wait 1-> ()`
+{: .no_toc}
 Sends a value on a given channel and then waits for the channel to be
 closed. Returns ().
 
-## **sendAndClose**
-**Type**: `forall a:1T . a -> !a ; Close 1-> ()`
-
+## `sendAndClose : forall a:1T . a -> !a ; Close 1-> ()`
+{: .no_toc}
 Sends a value on a given channel and then closes the channel.
 Returns ().
 
-## **receive_**
-**Type**: `forall a:1T . *?a -> a`
-
+## `receive_ : forall a:1T . *?a -> a`
+{: .no_toc}
 Receives a value from a star channel. Unrestricted version of `receive`.
 
-## **send_**
-**Type**: `forall a:1T . a -> *!a 1-> ()`
-
+## `send_ : forall a:1T . a -> *!a 1-> ()`
+{: .no_toc}
 Sends a value on a star channel. Unrestricted version of `send`.
 
-## **accept**
-**Type**: `forall a:1A . *!a -> dualof a`
-
+## `accept : forall a:1A . *!a -> dualof a`
+{: .no_toc}
 Session initiation. Accepts a request for a linear session on a shared
 channel. The requester uses a conventional `receive` to obtain the channel
 end.
 
-## **forkWith**
-**Type**: `forall a:1A b . (dualof a 1-> b) -> a`
-
+## `forkWith : forall a:1A b . (dualof a 1-> b) -> a`
+{: .no_toc}
 Creates a new child process and a channel through which it can
 communicate with its parent process. Returns the channel endpoint.
 
@@ -602,9 +496,8 @@ main =
   c |> send "Hello!" |> wait
 ```
 
-## **runServer**
-**Type**: `forall a:1A b:*T . (b -> dualof a 1-> b) -> b -> *!a -> Diverge`
-
+## `runServer : forall a:1A b:*T . (b -> dualof a 1-> b) -> b -> *!a -> Diverge`
+{: .no_toc}
 Runs an infinite shared server thread given a function to serve a client (a
 handle), the initial state, and the server's shared channel endpoint. It can
 be seen as an infinite sequential application of the handle function over a
@@ -632,8 +525,8 @@ runCounterServer = runServer @Counter @Int counterService 0
 
 
 # **Output and input streams**
-## **OutStream**
-**Type**: 
+## `OutStream`
+{: .no_toc}
 ```
 type OutStream : 1S = +{ PutChar : !Char ; OutStream
                        , PutStr  : !String ; OutStream
@@ -647,16 +540,16 @@ and write mode files). `PutChar` outputs a character, `PutStr` outputs a string,
 and `PutStrLn` outputs a string followed by the newline character (`\n`).
 Operations in this channel must end with the `Close` option.
 
-## **OutStreamProvider**
-**Type**: 
+## `OutStreamProvider`
+{: .no_toc}
 ```
 type OutStreamProvider : *S = *?OutStream
 ```
 
 Unrestricted session type for the `OutStream` type.
 
-## **InStream**
-**Type**: 
+## `InStream`
+{: .no_toc}
 ```
 type InStream : 1S = +{ GetChar: ?Char   ; InStream
                       , GetLine: ?String ; InStream
@@ -670,193 +563,167 @@ files). `GetChar` reads a single character, `GetLine` reads a line, and
 `IsEOF` checks for the EOF (End-Of-File) token, i.e., if an input stream
 reached the end. Operations in this channel end with the `SWait` option.
 
-## **InStreamProvider**
-**Type**: 
+## `InStreamProvider`
+{: .no_toc}
 ```
 type InStreamProvider : *S = *?InStream
 ```
 
 Unrestricted session type for the `OutStream` type.
 
-## **hCloseOut**
-**Type**: `OutStream -> ()`
-
+## `hCloseOut : OutStream -> ()`
+{: .no_toc}
 Closes an `OutStream` channel endpoint. Behaves as a `close`.
 
-## **hPutChar**
-**Type**: `Char -> OutStream -> OutStream`
-
+## `hPutChar : Char -> OutStream -> OutStream`
+{: .no_toc}
 Sends a character through an `OutStream` channel endpoint. Behaves as 
 `|> select PutChar |> send`.
 
-## **hPutStr**
-**Type**: `String -> OutStream -> OutStream`
-
+## `hPutStr : String -> OutStream -> OutStream`
+{: .no_toc}
 Sends a String through an `OutStream` channel endpoint. Behaves as 
 `|> select PutString |> send`.
 
-## **hPutStrLn**
-**Type**: `String -> OutStream -> OutStream`
-
+## `hPutStrLn : String -> OutStream -> OutStream`
+{: .no_toc}
 Sends a string through an `OutStream` channel endpoint, to be output with
 the newline character. Behaves as `|> select PutStringLn |> send`.
 
-## **hPrint**
-**Type**: `forall a:*T . a -> OutStream -> OutStream`
-
+## `hPrint : forall a:*T . a -> OutStream -> OutStream`
+{: .no_toc}
 Sends the string representation of a value through an `OutStream` channel
 endpoint, to be outputed with the newline character. Behaves as `hPutStrLn
 (show @t v)`, where `v` is the value to be sent and `t` its type.
 
-## **hPutChar_**
-**Type**: `Char -> OutStreamProvider -> ()`
-
+## `hPutChar_ : Char -> OutStreamProvider -> ()`
+{: .no_toc}
 Unrestricted version of `hPutChar`. Behaves the same, except it first
 receives an `OutStream` channel endpoint (via session initiation), executes
 an `hPutChar` and then closes the enpoint with `hCloseOut`.
 
-## **hPutStr_**
-**Type**: `String -> OutStreamProvider -> ()`
-
+## `hPutStr_ : String -> OutStreamProvider -> ()`
+{: .no_toc}
 Unrestricted version of `hPutStr`. Behaves similarly, except that it first
 receives an `OutStream` channel endpoint (via session initiation), executes
 an `hPutStr` and then closes the enpoint with `hCloseOut`.
 
-## **hPutStrLn_**
-**Type**: `String -> OutStreamProvider -> ()`
-
+## `hPutStrLn_ : String -> OutStreamProvider -> ()`
+{: .no_toc}
 Unrestricted version of `hPutStrLn`. Behaves similarly, except that it
 first receives an `OutStream` channel endpoint (via session initiation),
 executes an `hPutStrLn` and then closes the enpoint with `hCloseOut`.
 
-## **hPrint_**
-**Type**: `forall a:*T . a -> OutStreamProvider -> ()`
-
+## `hPrint_ : forall a:*T . a -> OutStreamProvider -> ()`
+{: .no_toc}
 Unrestricted version of `hPrint`. Behaves similarly, except that it first
 receives an `OutStream` channel endpoint (via session initiation), executes
 an `hPrint` and then closes the enpoint with `hCloseOut`.
 
-## **hCloseIn**
-**Type**: `InStream -> ()`
-
+## `hCloseIn : InStream -> ()`
+{: .no_toc}
 Closes an `InStream` channel endpoint. Behaves as a `close`.
 
-## **hGetChar**
-**Type**: `InStream -> (Char, InStream)`
-
+## `hGetChar : InStream -> (Char, InStream)`
+{: .no_toc}
 Reads a character from an `InStream` channel endpoint. Behaves as 
 `|> select GetChar |> receive`.
 
-## **hGetLine**
-**Type**: `InStream -> (String, InStream)`
-
+## `hGetLine : InStream -> (String, InStream)`
+{: .no_toc}
 Reads a line (as a string) from an `InStream` channel endpoint. Behaves as 
 `|> select GetLine |> receive`.
 
-## **hIsEOF**
-**Type**: `InStream -> (Bool, InStream)`
-
+## `hIsEOF : InStream -> (Bool, InStream)`
+{: .no_toc}
 Checks if an `InStream` reached the EOF token that marks where no more input can be read. 
 Does the same as `|> select IsEOF |> receive`.
 
-## **hGetContent**
-**Type**: `InStream -> (String, InStream)`
-
+## `hGetContent : InStream -> (String, InStream)`
+{: .no_toc}
 Reads the entire content from an `InStream` (i.e. until EOF is reached). Returns the content
 as a single string and the continuation channel.
 
-## **hGetChar_**
-**Type**: `InStreamProvider -> Char`
-
+## `hGetChar_ : InStreamProvider -> Char`
+{: .no_toc}
 Unrestricted version of `hGetChar`. Behaves the same, except it first receives an `InStream` 
 channel endpoint (via session initiation), executes an `hGetChar` and then closes the 
 enpoint with `hCloseIn`.
 
-## **hGetLine_**
-**Type**: `InStreamProvider -> String`
-
+## `hGetLine_ : InStreamProvider -> String`
+{: .no_toc}
 Unrestricted version of `hGetLine`. Behaves the same, except it first receives an `InStream` 
 channel endpoint (via session initiation), executes an `hGetLine` and then closes the 
 enpoint with `hCloseIn`.
 
-## **hGetContent_**
-**Type**: `InStreamProvider -> String`
-
+## `hGetContent_ : InStreamProvider -> String`
+{: .no_toc}
 Unrestricted version of `hGetContent`. Behaves the same, except it first receives an `InStream`
 channel endpoint (via session initiation), executes an `hGetContent` and then closes the
 endpoint with `hCloseIn`.
 
 
 # **Standard IO**
-## **stdout**
-**Type**: `OutStreamProvider`
-
+## `stdout : OutStreamProvider`
+{: .no_toc}
 Standard output stream. Prints to the console.
 
-## **putChar**
-**Type**: `Char -> ()`
-
+## `putChar : Char -> ()`
+{: .no_toc}
 Prints a character to `stdout`. Behaves the same as `hPutChar_ c stdout`, where `c`
 is the character to be printed.
 
-## **putStr**
-**Type**: `String -> ()`
-
+## `putStr : String -> ()`
+{: .no_toc}
 Prints a string to `stdout`. Behaves the same as `hPutStr_ s stdout`, where `s` is
 the string to be printed.
 
-## **putStrLn**
-**Type**: `String -> ()`
-
+## `putStrLn : String -> ()`
+{: .no_toc}
 Prints a string to `stdout`, followed by the newline character `\n`. Behaves
 as `hPutStrLn_ s stdout`, where `s` is the string to be printed.
 
-## **print**
-**Type**: `forall a:*T . a -> ()`
-
+## `print : forall a:*T . a -> ()`
+{: .no_toc}
 Prints the string representation of a given value to `stdout`, followed by
 the newline character `\n`. Behaves the same as `hPrint_ @t v stdout`, where `v` is
 the value to be printed and `t` its type.
 
-## **stderr**
-**Type**: `OutStreamProvider`
-
+## `stderr : OutStreamProvider`
+{: .no_toc}
 Standard error stream. Prints to the console.
 
-## **stdin**
-**Type**: `InStreamProvider`
-
+## `stdin : InStreamProvider`
+{: .no_toc}
 Standard input stream. Reads from the console.
 
-## **getChar**
-**Type**: `Char`
-
+## `getChar : Char`
+{: .no_toc}
 Reads a single character from `stdin`.
 
-## **getLine**
-**Type**: `String`
-
+## `getLine : String`
+{: .no_toc}
 Reads a single line from `stdin`. 
 
 
 # **File types**
-## **FilePath**
-**Type**: 
+## `FilePath`
+{: .no_toc}
 ```
 type FilePath = String
 ```
 
 File paths.
 
-## **FileHandle**
-**Type**: 
+## `FileHandle`
+{: .no_toc}
 ```
 data FileHandle = FileHandle ()
 ```
 
 
-## **IOMode**
-**Type**: 
+## `IOMode`
+{: .no_toc}
 ```
 data IOMode = ReadMode | WriteMode | AppendMode
 ```

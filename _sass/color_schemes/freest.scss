@@ -1,0 +1,18 @@
+@import url(https://overpass-30e2.kxcdn.com/overpass.css);
+@import url(https://overpass-30e2.kxcdn.com/overpass-mono.css);
+
+$body-font-family: overpass, system-ui, -apple-system, blinkmacsystemfont, sans-serif;
+$mono-font-family: overpass-mono, monospace;
+
+$blue-000: #0073bd !default;
+$blue-100: #0063a3 !default;
+$blue-200: #00548a !default;
+$blue-300: #004470 !default;
+
+$link-color: $blue-100;
+$sidebar-color: $white;
+$btn-primary-color: $blue-100;
+
+h1 {
+  font-weight: 500;
+}

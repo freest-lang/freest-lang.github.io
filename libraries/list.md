@@ -12,217 +12,176 @@ parent: Libraries
 {: .no_toc}
 
 <!-- collapsible TOC (check https://just-the-docs.github.io/just-the-docs/docs/navigation-structure/#top) -->
-<details markdown="block">
+<!-- <details markdown="block">
   <summary>
     Table of contents
   </summary>
   {: .text-delta }
 - TOC
 {:toc}
-</details>
+</details> -->
 
-## **head**
-**Type**: `[Int] -> Int`
+## `head : [Int] -> Int`
 
 
 
-## **last**
-**Type**: `[Int] -> Int`
+## `last : [Int] -> Int`
 
 
 
-## **tail**
-**Type**: `[Int] -> [Int]`
+## `tail : [Int] -> [Int]`
 
 
 
-## **init**
-**Type**: `[Int] -> [Int]`
+## `init : [Int] -> [Int]`
 
 
 
-## **singleton**
-**Type**: `Int -> [Int]`
+## `singleton : Int -> [Int]`
 
 
 
-## **null**
-**Type**: `[Int] -> Bool`
+## `null : [Int] -> Bool`
 
 
 
-## **length**
-**Type**: `[Int] -> Int`
+## `length : [Int] -> Int`
 
 
 
-## **map**
-**Type**: `(Int -> Int) -> [Int] -> [Int]`
+## `map : (Int -> Int) -> [Int] -> [Int]`
 
 
 
-## **reverse**
-**Type**: `[Int] -> [Int]`
+## `reverse : [Int] -> [Int]`
 
 
 
-## **intersperse**
-**Type**: `Int -> [Int] -> [Int]`
+## `intersperse : Int -> [Int] -> [Int]`
 
 
 
-## **foldl**
-**Type**: `forall a:*T . (a -> Int -> a) -> a -> [Int] -> a`
+## `foldl : forall a:*T . (a -> Int -> a) -> a -> [Int] -> a`
 
 
 
-## **foldr**
-**Type**: `forall a:*T . (Int -> a -> a) -> a -> [Int] -> a`
+## `foldr : forall a:*T . (Int -> a -> a) -> a -> [Int] -> a`
 
 
 
-## **any**
-**Type**: `(Int -> Bool) -> [Int] -> Bool`
+## `any : (Int -> Bool) -> [Int] -> Bool`
 
 
 
-## **all**
-**Type**: `(Int -> Bool) -> [Int] -> Bool`
+## `all : (Int -> Bool) -> [Int] -> Bool`
 
 
 
-## **concatMap**
-**Type**: `(Int -> [Int]) -> [Int] -> [Int]`
+## `concatMap : (Int -> [Int]) -> [Int] -> [Int]`
 
 
 
-## **sum**
-**Type**: `[Int] -> Int`
+## `sum : [Int] -> Int`
 
 
 
-## **product**
-**Type**: `[Int] -> Int`
+## `product : [Int] -> Int`
 
 
 
-## **maximum**
-**Type**: `[Int] -> Int`
+## `maximum : [Int] -> Int`
 
 
 
-## **minimum**
-**Type**: `[Int] -> Int`
+## `minimum : [Int] -> Int`
 
 
 
-## **scanl**
-**Type**: `(Int -> Int -> Int) -> Int -> [Int] -> [Int]`
+## `scanl : (Int -> Int -> Int) -> Int -> [Int] -> [Int]`
 
 
 
-## **scanl1**
-**Type**: `(Int -> Int -> Int) -> [Int] -> [Int]`
+## `scanl1 : (Int -> Int -> Int) -> [Int] -> [Int]`
 
 
 
-## **scanr**
-**Type**: `(Int -> Int -> Int) -> Int -> [Int] -> [Int]`
+## `scanr : (Int -> Int -> Int) -> Int -> [Int] -> [Int]`
 
 
 
-## **scanr1**
-**Type**: `(Int -> Int -> Int) -> [Int] -> [Int]`
+## `scanr1 : (Int -> Int -> Int) -> [Int] -> [Int]`
 
 
 
-## **mapAccumL**
-**Type**: `forall a:*T . (a -> Int -> (a, Int)) -> a -> [Int] -> (a, [Int])`
+## `mapAccumL : forall a:*T . (a -> Int -> (a, Int)) -> a -> [Int] -> (a, [Int])`
 
 
 
-## **mapAccumR**
-**Type**: `forall a:*T . (a -> Int -> (a, Int)) -> a -> [Int] -> (a, [Int])`
+## `mapAccumR : forall a:*T . (a -> Int -> (a, Int)) -> a -> [Int] -> (a, [Int])`
 
 
 
-## **take**
-**Type**: `Int -> [Int] -> [Int]`
+## `take : Int -> [Int] -> [Int]`
 
 
 
-## **drop**
-**Type**: `Int -> [Int] -> [Int]`
+## `drop : Int -> [Int] -> [Int]`
 
 
 
-## **splitAt**
-**Type**: `Int -> [Int] -> ([Int], [Int])`
+## `splitAt : Int -> [Int] -> ([Int], [Int])`
 
 
 
-## **takeWhile**
-**Type**: `(Int -> Bool) -> [Int] -> [Int]`
+## `takeWhile : (Int -> Bool) -> [Int] -> [Int]`
 
 
 
-## **dropWhile**
-**Type**: `(Int -> Bool) -> [Int] -> [Int]`
+## `dropWhile : (Int -> Bool) -> [Int] -> [Int]`
 
 
 
-## **span**
-**Type**: `(Int -> Bool) -> [Int] -> ([Int], [Int])`
+## `span : (Int -> Bool) -> [Int] -> ([Int], [Int])`
 
 
 
-## **break**
-**Type**: `(Int -> Bool) -> [Int] -> ([Int], [Int])`
+## `break : (Int -> Bool) -> [Int] -> ([Int], [Int])`
 
 
 
-## **elem**
-**Type**: `Int -> [Int] -> Bool`
+## `elem : Int -> [Int] -> Bool`
 
 
 
-## **notElem**
-**Type**: `Int -> [Int] -> Bool`
+## `notElem : Int -> [Int] -> Bool`
 
 
 
-## **filter**
-**Type**: `(Int -> Bool) -> [Int] -> [Int]`
+## `filter : (Int -> Bool) -> [Int] -> [Int]`
 
 
 
-## **partition**
-**Type**: `(Int -> Bool) -> [Int] -> ([Int], [Int])`
+## `partition : (Int -> Bool) -> [Int] -> ([Int], [Int])`
 
 
 
-## **nth**
-**Type**: `[Int] -> Int -> Int`
+## `nth : [Int] -> Int -> Int`
 
 
 
-## **zipWith**
-**Type**: `(Int -> Int -> Int) -> [Int] -> [Int] -> [Int]`
+## `zipWith : (Int -> Int -> Int) -> [Int] -> [Int] -> [Int]`
 
 
 
-## **zipWith3**
-**Type**: `(Int -> Int -> Int -> Int) -> [Int] -> [Int] -> [Int] -> [Int]`
+## `zipWith3 : (Int -> Int -> Int -> Int) -> [Int] -> [Int] -> [Int] -> [Int]`
 
 
 
-## **elemAt**
-**Type**: `[Int] -> Int -> Int`
+## `elemAt : [Int] -> Int -> Int`
 
 
 
-## **equal**
-**Type**: `[Int] -> [Int] -> Bool`
+## `equal : [Int] -> [Int] -> Bool`
 
 
 
