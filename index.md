@@ -5,7 +5,6 @@
 title: Home
 layout: minimal
 nav_order: 1
-back_to_top: false
 ---
 
 <div align="center">
