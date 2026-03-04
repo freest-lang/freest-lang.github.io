@@ -2,13 +2,13 @@
 # Feel free to add content and custom Front Matter to this file.
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
-title: Linear channels and session types
+title: Channels and session types
 layout: default
 nav_order: 4
-parent: Getting started
+parent: Get started
 ---
 
-# Linear channels and session types
+# Channels and session types
 {: .no_toc }
 
 <!-- TODO -->

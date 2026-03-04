@@ -2,13 +2,13 @@
 # Feel free to add content and custom Front Matter to this file.
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
-title: Sharing is caring
+title: Shared channels
 layout: default
 nav_order: 6
-parent: Getting started
+parent: Get started
 ---
 
-# Sharing is caring
+# Shared channels
 {: .no_toc }
 
 <!-- collapsible TOC (check https://just-the-docs.github.io/just-the-docs/docs/navigation-structure/#top) -->

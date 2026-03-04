@@ -2,14 +2,14 @@
 # Feel free to add content and custom Front Matter to this file.
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
-title: A guide to errors
+title: IO
 layout: default
-nav_order: 8
-parent: Getting started
+nav_order: 6
+parent: Get started
 nav_exclude: true
 ---
 
-# A guide to errors
+# IO
 {: .no_toc }
 
 <!-- TODO -->
@@ -26,4 +26,8 @@ nav_exclude: true
 </details>
 
 <!-- TODO: -->
-<!-- a guide on why each error is thrown and how to fix/workaround it -->
+<!-- IO in FreeST is based on channels (shared + linear) -->
+<!-- The combination of shared and linear channels served by a single channel allow for resource capture -->
+<!-- ## Standard IO -->
+<!-- ## File IO -->
+<!-- how to acquire  -->

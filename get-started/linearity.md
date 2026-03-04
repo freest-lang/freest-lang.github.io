@@ -2,10 +2,10 @@
 # Feel free to add content and custom Front Matter to this file.
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
-title: Handling linearity
+title: Linearity
 layout: default
 nav_order: 3
-parent: Getting started
+parent: Get started
 ---
 
 # Linearity
@@ -28,7 +28,7 @@ parent: Getting started
 
 ## Handling linearity
 Most programming languages treat all values the same way, but FreeST is very different from them.
-    FreeST has a `linear system` which differentiates **linear** from **unrestricted** values and 
+    FreeST has a `linear type system` which differentiates **linear** from **unrestricted** values and 
     types. An unrestricted value is one that may be used **0 or more times** during the program's 
     execution(it's what most programming languages have). A linear value or type is one that must 
     be used **exactly once** during the program's execution. If linear constraints are violated,

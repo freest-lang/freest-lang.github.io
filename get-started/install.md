@@ -5,7 +5,7 @@
 title: Setup and install
 layout: default
 nav_order: 1
-parent: Getting started
+parent: Get started
 ---
 
 # Ready, set, install!

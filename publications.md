@@ -22,7 +22,7 @@ nav_order: 6
   [ J. Log. Algebraic Methods Program.](https://www.sciencedirect.com/journal/journal-of-logical-and-algebraic-methods-in-programming) 148:101083, 2026
  {: .mb-5 }
 
-- [**Simple Grammar Bisimilarity, with an Application to Session Type Equivalence**](https://arxiv.org/abs/2407.04063)  
+- [**Simple grammar bisimilarity, with an application to session type equivalence**](https://arxiv.org/abs/2407.04063)  
   **Poças, D., Silva, G., and Vasconcelos, V.T.**  
   [arXiv](https://arxiv.org/abs/2407.04063), 2025  
   [Talk]({% link resources/publications/2026.FCUL.SimpleGrammarBisimilarity.pdf %}) @ Seminário de Lógica Matemática, 2026
@@ -38,18 +38,18 @@ nav_order: 6
   Talk @ PL@LX. 2024.
 {: .mb-5 }
 
-- [**Improving Parallel and Concurrent Programming in FreeST**]({% link resources/publications/GuilhermeLopesMSc.pdf %})
+- [**Improving Parallel and Concurrent Programming in FreeST**]({% link resources/publications/GuilhermeLopesMSc.pdf %})  
   **Lopes, G.**  
   Master's Thesis @ University of Lisbon, 2024  
   [Slides]({% link resources/publications/GuilhermeLopesSlides.pdf %})
 {: .mb-5 }
 
-- [**FreeST and Polymorphic Higher-order Session Types**]({% link resources/publications/talk_nagoya_nov23.pdf %})
+- [**FreeST and Polymorphic Higher-order Session Types**]({% link resources/publications/talk_nagoya_nov23.pdf %})  
   **Vasconcelos, V.T.**  
   Talk @ Nagoya University. [合同研究会 拡大](https://sites.google.com/sqlab.jp/231130-seminar/) workshop, 2023
 {: .mb-5 }
 
-- **Subtyping Context-Free Session Types**  
+- [**Subtyping context-free session types**](https://doi.org/10.1016/j.tcs.2025.115705)  
   **Silva, G., Mordido, A. and Vasconcelos, V.T.**  
   [Paper](https://doi.org/10.1016/j.tcs.2025.115705) @ Theor. Comput. Sci.1069: 115705  
   [Paper](https://doi.org/10.4230/LIPIcs.CONCUR.2023.11) @ CONCUR 2023  

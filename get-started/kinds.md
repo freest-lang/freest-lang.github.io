@@ -5,7 +5,7 @@
 title: Kinds
 layout: default
 nav_order: 8
-parent: Getting started
+parent: Get started
 ---
 
 # Kinds

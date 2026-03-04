@@ -5,7 +5,7 @@
 title: Modules
 layout: default
 nav_order: 7
-parent: Getting started
+parent: Get started
 ---
 
 # Modules
