@@ -28,13 +28,13 @@ parent: Get started
 ## Pre-requisites
 <!-- pre-requisites to install -->
 Before installing FreeST you need two things: Haskell and Stack. You can see how to install them at 
-    [Haskell's official website](https://www.haskell.org/downloads/) (they recommend using GHCup).
+    [Haskell's official website](https://www.haskell.org/download/) (they recommend using GHCup).
 
 
 
 ## Download and install FreeST
 <!-- where to download -->
-Download FreeST's latest version [here]({{ site.url }}{{ site.baseurl }}\downloads).
+Download FreeST's latest version [here]({{ site.url }}{{ site.baseurl }}\download).
 
 <!-- how to install -->
 To install, first unzip the folder and then run `stack install` inside it. This will install `freest` and

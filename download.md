@@ -2,12 +2,12 @@
 # Feel free to add content and custom Front Matter to this file.
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
-title: Downloads
+title: Download
 layout: default
 nav_order: 2
 ---
 
-# Downloads
+# Download
 {: .no_toc }
 
 <!-- collapsible TOC (check https://just-the-docs.github.io/just-the-docs/docs/navigation-structure/#top) -->
@@ -76,16 +76,16 @@ For installation details please refer to the README file in the corresponding zi
 
 | Version | Release date | Changelog                                                             | Download link                                                                            |
 |---------|--------------|-----------------------------------------------------------------------|:----------------------------------------------------------------------------------------:|
-| 3.2.0   | Apr 22, 2024 | [Changelog]({{ site.url }}{{ site.baseurl }}/downloads/#version-320)  | [Download]({{ site.url }}{{ site.baseurl }}/assets/downloads/FreeST-3.2.0.zip){: .btn }  |
-| 3.1.0   | Nov 27, 2023 | [Changelog]({{ site.url }}{{ site.baseurl }}/downloads/#version-310)  | [Download]({{ site.url }}{{ site.baseurl }}/assets/downloads/FreeST-3.1.0.zip){: .btn }  |
-| 3.0.0   | Apr 12, 2023 | [Changelog]({{ site.url }}{{ site.baseurl }}/downloads/#version-300)  | [Download](http://rss.di.fc.ul.pt/wp-content/uploads/2023/04/FreeST-3.0.0.zip){: .btn }  |
-| 2.2.0   | Nov 16, 2021 | [Changelog]({{ site.url }}{{ site.baseurl }}/downloads/#version-220)  | [Download](http://rss.di.fc.ul.pt/wp-content/uploads/2021/11/FreeST-2.2.0.zip){: .btn }  |
-| 2.1.0   | Mar 30, 2021 | [Changelog]({{ site.url }}{{ site.baseurl }}/downloads/#version-210)  | [Download](http://rss.di.fc.ul.pt/wp-content/uploads/2021/03/FreeST-2.1.0.zip){: .btn }  |
-| 2.0.0   | Feb 15, 2021 | [Changelog]({{ site.url }}{{ site.baseurl }}/downloads/#version-200)  | [Download](http://rss.di.fc.ul.pt/wp-content/uploads/2021/02/FreeST-2.0.0.zip){: .btn }  |
-| 1.0.3a  | Jan 12, 2021 | [Changelog]({{ site.url }}{{ site.baseurl }}/downloads/#version-103a) | [Download](http://rss.di.fc.ul.pt/wp-content/uploads/2021/01/FreeST-1.0.3a.zip){: .btn } |
-| 1.0.3   | Jan 10, 2021 | [Changelog]({{ site.url }}{{ site.baseurl }}/downloads/#version-103)  | [Download](http://rss.di.fc.ul.pt/wp-content/uploads/2021/01/FreeST-1.0.3.zip){: .btn }  |
-| 1.0.2   | Nov 26, 2020 | [Changelog]({{ site.url }}{{ site.baseurl }}/downloads/#version-102)  | [Download](http://rss.di.fc.ul.pt/wp-content/uploads/2020/11/FreeST-1.0.2.zip){: .btn }  |
-| 1.0.1   | Jul 22, 2020 | [Changelog]({{ site.url }}{{ site.baseurl }}/downloads/#version-101)  | [Download](http://rss.di.fc.ul.pt/wp-content/uploads/2020/07/FreeST-1.0.1.zip){: .btn }  |
+| 3.2.0   | Apr 22, 2024 | [Changelog]({{ site.url }}{{ site.baseurl }}/download/#version-320)  | [Download]({{ site.url }}{{ site.baseurl }}/assets/download/FreeST-3.2.0.zip){: .btn }  |
+| 3.1.0   | Nov 27, 2023 | [Changelog]({{ site.url }}{{ site.baseurl }}/download/#version-310)  | [Download]({{ site.url }}{{ site.baseurl }}/assets/download/FreeST-3.1.0.zip){: .btn }  |
+| 3.0.0   | Apr 12, 2023 | [Changelog]({{ site.url }}{{ site.baseurl }}/download/#version-300)  | [Download](http://rss.di.fc.ul.pt/wp-content/uploads/2023/04/FreeST-3.0.0.zip){: .btn }  |
+| 2.2.0   | Nov 16, 2021 | [Changelog]({{ site.url }}{{ site.baseurl }}/download/#version-220)  | [Download](http://rss.di.fc.ul.pt/wp-content/uploads/2021/11/FreeST-2.2.0.zip){: .btn }  |
+| 2.1.0   | Mar 30, 2021 | [Changelog]({{ site.url }}{{ site.baseurl }}/download/#version-210)  | [Download](http://rss.di.fc.ul.pt/wp-content/uploads/2021/03/FreeST-2.1.0.zip){: .btn }  |
+| 2.0.0   | Feb 15, 2021 | [Changelog]({{ site.url }}{{ site.baseurl }}/download/#version-200)  | [Download](http://rss.di.fc.ul.pt/wp-content/uploads/2021/02/FreeST-2.0.0.zip){: .btn }  |
+| 1.0.3a  | Jan 12, 2021 | [Changelog]({{ site.url }}{{ site.baseurl }}/download/#version-103a) | [Download](http://rss.di.fc.ul.pt/wp-content/uploads/2021/01/FreeST-1.0.3a.zip){: .btn } |
+| 1.0.3   | Jan 10, 2021 | [Changelog]({{ site.url }}{{ site.baseurl }}/download/#version-103)  | [Download](http://rss.di.fc.ul.pt/wp-content/uploads/2021/01/FreeST-1.0.3.zip){: .btn }  |
+| 1.0.2   | Nov 26, 2020 | [Changelog]({{ site.url }}{{ site.baseurl }}/download/#version-102)  | [Download](http://rss.di.fc.ul.pt/wp-content/uploads/2020/11/FreeST-1.0.2.zip){: .btn }  |
+| 1.0.1   | Jul 22, 2020 | [Changelog]({{ site.url }}{{ site.baseurl }}/download/#version-101)  | [Download](http://rss.di.fc.ul.pt/wp-content/uploads/2020/07/FreeST-1.0.1.zip){: .btn }  |
 
 ### Changelog
 
