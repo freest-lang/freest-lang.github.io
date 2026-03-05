@@ -24,4 +24,4 @@ nav_order: 7
 - Peter Thiemann, University of Freiburg, [website](http://www2.informatik.uni-freiburg.de/~thiemann/)
 - Vasco T. Vasconcelos, LASIGE, University of Lisbon, [website](https://www.di.fc.ul.pt/~vv/)
 
-FreeST is funded by FCT, project [SafeSessions](https://www.lasige.pt/project/safesessions/), Safe Concurrent Programming with Session Types, [DOI](https://sciproj.ptcris.pt/en/164457PRJ), from March 2021 to August 2024.
+FreeST was funded by FCT, project [SafeSessions](https://www.lasige.pt/project/safesessions/), Safe Concurrent Programming with Session Types, [DOI](https://sciproj.ptcris.pt/en/164457PRJ), from March 2021 to August 2024.
