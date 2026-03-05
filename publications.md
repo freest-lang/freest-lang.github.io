@@ -12,6 +12,10 @@ nav_order: 6
 
 # Publications
 
+- [**The types of dyadic interaction, a tribute to Kohei Honda**]({% link resources/publications/talk_ifip2.8_mar26.pdf %})  
+  **Costa, D., Mordido, A., Poças, D. and Vasconcelos, V. T.**  @ [IFIP WG 2.8 2026](https://www.cs.cornell.edu/ifip28-2026/)
+{: .mb-5 }
+
 - [**Types as grammars**]({% link resources/publications/TypesAsGrammarsAbstract.pdf %})  
   **Silva, G., Almeida, B., Costa, D., Mordido, A., Poças, D. and Vasconcelos, V. T.**  
   [Talk]({% link resources/publications/TypesAsGrammars.pdf %}) @ [WITS 2026](https://popl26.sigplan.org/details/wits-2026-papers/1/Types-as-grammars)
