@@ -28,5 +28,3 @@ polymorphic context-free session types. Built on a core linear functional
 programming language, FreeST features primitives for forking new threads, for
 creating channels and for communicating on these. The compiler builds on a
 novel algorithm for deciding the equivalence of context-free types.
-
-FreeST is funded by FCT, project [SafeSessions](https://www.lasige.pt/project/safesessions/), Safe Concurrent Programming with Session Types, [DOI](https://sciproj.ptcris.pt/en/164457PRJ), from March 2021 to August 2024.
