@@ -53,7 +53,7 @@ Be sure to correctly add (or maintain) this header with the correct `<library na
 
 ## How add a new version
 
-After a new FreeST release, there are two major changes required to the `Downloads` page 
-    (`downloads.md` file):
+After a new FreeST release, there are two major changes required to the `Download` page 
+    (`download.md` file):
     - changelog added to the `Changelog` section 
     - a new table line with: version, release date, link to changelog, and download link
