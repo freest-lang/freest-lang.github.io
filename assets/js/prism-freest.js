@@ -52,18 +52,22 @@
 
   /* --- kramdown / Rouge integration ------------------------------------
    * Jekyll (kramdown + Rouge) does not know the `freest` language, so it
-   * falls back to a plain block:
-   *   <div class="language-freest highlighter-rouge">
-   *     <div class="highlight"><pre><code>...</code></pre></div>
-   *   </div>
-   * The <code> element carries no `language-*` class, so we add it and ask
-   * Prism to highlight each block explicitly (Prism.manual is set in <head>).
+   * falls back to a plain block with the class on the <code> element:
+   *   <pre><code class="language-freest">...</code></pre>
+   * (Some setups instead wrap it as <div class="language-freest ..."><pre>
+   * <code>...</code></pre></div>.) We handle both shapes and highlight each
+   * block explicitly, since Prism.manual is set in <head>.
    */
   function highlightFreeST() {
-    var blocks = document.querySelectorAll(
-      'div.language-freest pre code, div.language-fst pre code'
-    );
+    var blocks = document.querySelectorAll([
+      'pre > code.language-freest',
+      'pre > code.language-fst',
+      'div.language-freest pre code',
+      'div.language-fst pre code'
+    ].join(', '));
     Array.prototype.forEach.call(blocks, function (code) {
+      if (code.getAttribute('data-freest-highlighted')) return;
+      code.setAttribute('data-freest-highlighted', '1');
       code.classList.add('language-freest');
       Prism.highlightElement(code);
     });
