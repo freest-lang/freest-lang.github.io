@@ -142,6 +142,10 @@ Functions `f` and `g` are fundamental to understand how functions deal with line
 ## Linear constants as datatypes
 
 If all constants are unrestricted how do we talk of linear constants? Currently, the only way to work with linear constants is to take advantage of *linear datatypes*.
+```freest
+type LinBool : 1T
+data LinBool = LTrue | LFalse
+```
 
 <!-- TODO -->
 <!-- maybe talk about a generator function `() -> (T 1-> U)` that might be useful in some cases -->
