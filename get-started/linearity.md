@@ -35,7 +35,7 @@ Most programming languages treat all values the same way, but FreeST is very dif
     the program will **not type check**, and therefore, will **not run**.
 
 All constants are by default unrestricted values, so the following code is valid:
-```
+```freest
 f : Int -> Int
 f x = x + 1
 
@@ -53,14 +53,14 @@ Functions are the first construct programmers face that can also be linear. A
     **linear function** is simply a function that has to be used exactly once (following the
     linear constraint). Let us write a linear function `linIncrement` that increments an integer 
     by 1:
-```
+```freest
 linIncrement : Int 1-> Int
 linIncrement x = x + 1
 ```
 
 If this function is part of your code, then you are obliged by linearity to use it. The following
     would not run:
-```
+```freest
 linIncrement : Int 1-> Int
 linIncrement x = x + 1
 
@@ -71,7 +71,7 @@ main = 1
 <!-- TODO: insert what error is thrown by freest in the above example -->
 
 Fixing the above code is simple, just make sure you use `linIncrement` exactly once, for example:
-``` 
+```freest 
 linIncrement : Int 1-> Int
 linIncrement x = x + 1
 
@@ -87,7 +87,7 @@ Linear functions seem simple, however there is more to it than meets the eye. Th
     but what about type `Int 1-> Int -> Int`? This type also describes a linear function, but with
     a twist: only the first part is linear (instead of the whole as before). If you partially apply
     a function of this type with a single integer, it will become an unrestricted function.
-```
+```freest
 f : Int 1-> Int -> Int
 f x y = x + y
 
@@ -105,7 +105,7 @@ Let us now analyse a similar in form, but quite different in behaviour, type `In
     what we've seen until now. Let's analyze it step by step, look at it as `Int -> (Int 1-> Int)`.
     Now it's clearer that it represents an **unrestricted** function that takes an integer and 
     returns another **linear** function that takes an integer and returns an integer.
-```
+```freest
 g : Int -> Int 1-> Int
 g x y = x + y
 

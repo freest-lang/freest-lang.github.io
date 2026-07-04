@@ -126,19 +126,19 @@ If shared channels are more practical than linear ones, why bother with linear c
 The trick with shared channels is to use them not as a single communication point, but as a rendez-vous point to establish more complex communication in a linear channel by exchanging endpoints. We call this process **session initiation**.
 
 Let's think of a very useful case in programming, a shared data structure, in this case a single memory cell.
-```
+```freest
 type Cell = +{ Read: ?Int
              , Write: !Int
              }; Close
 ```
 
 The `Cell` session type describes our possible interaction with an `Int` memory cell.
-```
+```freest
 type SharedCell = *?Cell
 ```
 
 The `SharedCell` type describes a channel on which a client can `receive` another channel with the `Cell` type. An example of a client that writes to the cell is:
-```
+```freest
 cellClient : SharedCell -> ()
 cellClient c =
   c |> receive_ @Cell  -- acquire a linear channel 
@@ -149,7 +149,7 @@ cellClient c =
 
 However, it is the server that bears the important part of session initiation: to create the new channel and send one of its ends. 
 To aid session initiation, FreeST offers the `accept` function which creates the channel endpoints, sends one to the client and returns the other. Taking advantage of pattern-matching on external choice types, we may thus write:
-```
+```freest
 cellServer : dualof SharedCell -> ()
 cellServer c = serve $ accept @Cell c
 
@@ -159,7 +159,7 @@ serve (Write s) = receiveAndWait @Int s ; ()
 ```
 
 To use a single function  we may use the `match-with` destructor for external choice types. The match returns the continuation channel, so that we may  `wait` for the other side to close the channel.
-```
+```freest
 cellServer : dualof SharedCell -> ()
 cellServer c =
   match accept @Cell c with {
@@ -176,7 +176,7 @@ distributing channels. Nevertheless sessions may easily be started at the client
 side if needed.
 
 The `accept` function can be easily written with `new` and `send` as follows:
-```
+```freest
 accept : *!a -> dualof a
 accept ch =
   let (x, y) = new @a () in
@@ -185,7 +185,7 @@ accept ch =
 ```
 
 <!-- The following is a one-shot server that only serves one client and then stops:
-```
+```freest
 cellServer : dualof SharedCell -> ()
 cellServer c =
     let (client, server) = new @Cell () in -- create linear endpoints

@@ -65,13 +65,13 @@ the following hierarchy of kinds:
 
 For example, the kinds for types `T`, `D` and for function `f`:
 
-```
+```freest
 f : forall a . !Int ; a -> a
 type T = !Int ; T 
 data D = E Int | F 
 ```
 would be inferred as follows:
-```
+```freest
 f : forall a : 1S . !Int ; a -> a
 type T : 1S = !Int ; T 
 data D : 1T = C1 Int | C2 

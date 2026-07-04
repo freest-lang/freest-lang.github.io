@@ -95,7 +95,7 @@ main =
 Equipped with functions `new` and `fork` we can easily write `forkWith`. Nevertheless, `forkWith` stands at an higher level of abstraction and is prone to less concurrency errors, hence it remains our favourite choice. For function types, defintions and comprehensive documentation, check out the [Prelude]({{ site.url }}{{ site.baseurl }}/libraries/prelude) documentation page.
 
 <!-- 
-```
+```freest
 forkWith : forall a:1A b . (dualof a 1-> b) -> a
 forkWith f =
     let (x, y) = new @a () in

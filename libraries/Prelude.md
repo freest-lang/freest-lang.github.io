@@ -272,7 +272,7 @@ Waits for a channel to be closed.
 # **Base**
 ## `Bool`
 {: .no_toc}
-```
+```freest
 data Bool = True | False 
 ```
 
@@ -283,7 +283,7 @@ Boolean complement
 ## `id : forall a:*T . a -> a`
 {: .no_toc}
 The identity function. Will return the exact same value.
-```
+```freest
 id 5       -- 5
 id "Hello" -- "Hello"
 ```
@@ -291,7 +291,7 @@ id "Hello" -- "Hello"
 ## `flip : forall a:*T b:*T c:*T . (a -> b -> c) -> b -> a -> c`
 {: .no_toc}
 Swaps the order of parameters to a function
-```
+```freest
  -- | Check if the integer is positive and the boolean is true
  test : Int -> Bool -> Bool
  test i b = i > 0 && b
@@ -307,7 +307,7 @@ Application operator. Takes a function and an argument, and applies
 the first to the latter. This operator has low right-associative binding 
 precedence, allowing parentheses to be omitted in certain situations.
 For example:
-```
+```freest
 f $ g $ h x = f (g (h x))
 ```
 
@@ -315,7 +315,7 @@ f $ g $ h x = f (g (h x))
 {: .no_toc}
 Reverse application operator. Provides notational convenience, especially
 when chaining channel operations. For example:
-```
+```freest
 f : !Int ; !Bool ; Close -> () 
 f c = c |> send 5 |> send True |> close
 ```
@@ -325,7 +325,7 @@ Its binding precedence is higher than `$`.
 {: .no_toc}
 Sequential composition. Takes two expressions, evaluates the former and
 discards the result, then evaluates the latter. For example:
-```
+```freest
 3 ; 4
 ```
 evaluates to 4.
@@ -338,7 +338,7 @@ uses the predicate in the first argument to evaluate the result, if it comes
 as True it returns it, otherwise, it continues to apply the function on
 previous results until the predicate evaluates to True.
 
-```
+```freest
 -- | First base 2 power greater than a given limit
 firstPowerGreaterThan : Int -> Int
 firstPowerGreaterThan limit = until @Int (> limit) (*2) 1
@@ -349,7 +349,7 @@ firstPowerGreaterThan limit = until @Int (> limit) (*2) 1
 Converts a function that receives a pair into a function that receives its
 arguments one at a time.
 
-```
+```freest
 -- | Sums the elements of a pair of integers
 sumPair : (Int, Int) -> Int
 sumPair p = let (x, y) = p in x + y
@@ -364,7 +364,7 @@ sum = curry @Int @Int @Int sumPair
 Converts a function that receives its arguments one at a time into a
 function on pairs.
 
-```
+```freest
 -- | Sums the elements of a pair of integers
 sumPair : (Int, Int) -> Int
 sumPair = uncurry @Int @Int @Int (+)
@@ -391,7 +391,7 @@ Extracts the second element from a pair, discarding the first.
 # **Concurrency and channels**
 ## `Diverge`
 {: .no_toc}
-```
+```freest
 type Diverge = ()
 ```
 
@@ -405,7 +405,7 @@ Discards an unrestricted value
 {: .no_toc}
 Executes a thunk n times, sequentially
 
-```
+```freest
 main : ()
 main = 
   -- print "Hello!" 5 times sequentially
@@ -417,7 +417,7 @@ main =
 Forks n identical threads. Works the same as a `repeat` call but in parallel
 instead of sequentially.
 
-```
+```freest
 main : ()
 main = 
   -- print "Hello!" 5 times in parallel
@@ -429,7 +429,7 @@ main =
 Receives a value from a linear channel and applies a function to it.
 Discards the result and returns the continuation channel.
 
-```
+```freest
 main : ()
 main =
   -- create channel endpoints
@@ -442,7 +442,7 @@ main =
 Receives a value from a channel that continues to `Wait`, closes the 
 continuation and returns the value.
 
-```
+```freest
 main : ()
 main =
   -- create channel endpoints
@@ -487,7 +487,7 @@ end.
 Creates a new child process and a channel through which it can
 communicate with its parent process. Returns the channel endpoint.
 
-```
+```freest
 main : ()
 main =
   -- fork a thread that receives a string and prints
@@ -505,7 +505,7 @@ newly accepted session, while continuously updating the state.
   
 Note: this only works with session types that use session initiation.
 
-```
+```freest
 type SharedCounter : *S = *?Counter
 type Counter : 1S = +{ Inc: Wait
                      , Dec: Wait
@@ -527,7 +527,7 @@ runCounterServer = runServer @Counter @Int counterService 0
 # **Output and input streams**
 ## `OutStream`
 {: .no_toc}
-```
+```freest
 type OutStream : 1S = +{ PutChar : !Char ; OutStream
                        , PutStr  : !String ; OutStream
                        , PutStrLn: !String ; OutStream
@@ -542,7 +542,7 @@ Operations in this channel must end with the `Close` option.
 
 ## `OutStreamProvider`
 {: .no_toc}
-```
+```freest
 type OutStreamProvider : *S = *?OutStream
 ```
 
@@ -550,7 +550,7 @@ Unrestricted session type for the `OutStream` type.
 
 ## `InStream`
 {: .no_toc}
-```
+```freest
 type InStream : 1S = +{ GetChar: ?Char   ; InStream
                       , GetLine: ?String ; InStream
                       , IsEOF  : ?Bool   ; InStream
@@ -565,7 +565,7 @@ reached the end. Operations in this channel end with the `SWait` option.
 
 ## `InStreamProvider`
 {: .no_toc}
-```
+```freest
 type InStreamProvider : *S = *?InStream
 ```
 
@@ -709,7 +709,7 @@ Reads a single line from `stdin`.
 # **File types**
 ## `FilePath`
 {: .no_toc}
-```
+```freest
 type FilePath = String
 ```
 
@@ -717,13 +717,13 @@ File paths.
 
 ## `FileHandle`
 {: .no_toc}
-```
+```freest
 data FileHandle = FileHandle ()
 ```
 
 
 ## `IOMode`
 {: .no_toc}
-```
+```freest
 data IOMode = ReadMode | WriteMode | AppendMode
 ```

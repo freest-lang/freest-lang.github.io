@@ -56,7 +56,7 @@ All functions must have a **signature** (a type), that describes both its parame
 <!-- how to define a function -->
 To define functions, simply state the function's name and signature and then its body. Let's create
     our own `plus` function based on the `(+)` operator:
-```Haskell
+```freest
 plus : Int -> Int -> Int    -- signature
 plus x y = x + y            -- body
 ```
@@ -73,7 +73,7 @@ The function's body consists of the name of the function, the variables describe
 For functions that share signatures, we can define them together separating their names with a 
     comma. For a function `minus` based on the `(-)` operator, we have the exact same signature
     as `plus`, so we can write:
-```Haskell
+```freest
 plus, minus : Int -> Int -> Int
 plus x y = x + y
 minus x y = x - y
@@ -81,7 +81,7 @@ minus x y = x - y
 
 Functions in FreeST can have their signature and body separated, however we incentivize to **not** 
     write code like this:
-```Haskell
+```freest
 plus : Int -> Int -> Int
 
 minus : Int -> Int -> Int
@@ -95,7 +95,7 @@ At first glance, functions can't have more than one return type. However, functi
     return two or more values. How do we do this? We take advantage of **tuples** to encapsulate
     multiple return values inside a single one. To exemplify, Function `makeTwins` takes an integer 
     and returns it and its twin (a copy!) within a tuple.
-```Haskell
+```freest
 makeTwins : Int -> (Int, Int)
 makeTwins x = (x, x)
 ```
@@ -104,7 +104,7 @@ makeTwins x = (x, x)
 Not all functions can (or should) be described using a single expression. To prevent this from 
     becoming a limitation, we use `let` expressions which lets (pun intended) us store values in
     variables for later use. 
-```Haskell
+```freest
 betterDivision : Int -> Int -> (Int, Int)
 betterDivision n div =
     let quotient = n / div
@@ -119,7 +119,7 @@ Function `betterDivision` simply divides a number by another and returns both th
 <!-- pair pattern matching with `let` -->
 Furthermore, it's through `let` expressions that we can 'open' pairs to access their elements 
     (instead of relying on `fst` and `snd`).
-```Haskell
+```freest
 main : ()
 main = 
     let (quotient, rest) = betterDivision 3 2 in
@@ -129,7 +129,7 @@ main =
 <!-- if statements -->
 For conditional branching, `if` statements are provided. Note that both the `then` and `else` 
     branches must be present, so you can't write just the `then` branch.
-```Haskell
+```freest
 -- Returns the absolute value of an integer
 abs' : Int -> Int
 abs' x = 
@@ -151,7 +151,7 @@ We want to write a function `sumFirstN` that calculates the sum of the first `n`
     `sumFirstN`? The answer is **recursion**.
 
 Trivially, the recursive definition of `sumFirstN` is: `sumFirstN 0 == 0` and `sumFirstN n == n + sumFirstN (n-1)`. In FreeST it translates to:
-```Haskell
+```freest
 sumFirstN : Int -> Int
 sumFirstN n =
     if n <= 0
@@ -162,7 +162,7 @@ sumFirstN n =
 If you need to propagate parameters forward while in recursion, you can do it by changing the 
     function's signature to have them. An example is a variation of the `sumFirstN` function 
     that accumulates the sum forward and returns it in the end (when `n` is 0):
-```Haskell
+```freest
 sumFirstN' : Int -> Int -> Int
 sumFirstN' n curr =
     if curr == n
@@ -176,7 +176,7 @@ However, every time we can, we prefer to write `sumFirstN` instead of `sumFirstN
 ## User-defined types
 
 You're a novice programmer into this fictitious new project and you cross upon this function:
-```Haskell
+```freest
 f : (Int -> Int) -> Int -> (Int, Int)
 f g x = (x, g x)
 ```
@@ -184,21 +184,21 @@ f g x = (x, g x)
 What is this? What are its parameters? What is the purpose of function `f`? Maybe it helps `calcFunY`, but it perhaps is not enough. The biggest problem continues to be the **confusing signature**.
 
 Preventing confusing signatures can be done if we create higher-level types that stand in for those we use, but that bear a clearer meaning. We start by creating a couple of type *abbreviations*:
-```Haskell
+```freest
 type Function, Point : *T
 type Function = Int -> Int
 type Point = (Int, Int)
 ```
 
 Equipped with these new names, a better signature for `calcFunY` looks like: 
-```Haskell
+```freest
 calcFunY : Function -> Int -> Point
 calcFunY fun x = (x, fun x)
 ```
 
 User-defined types can be used in any place a normal type can, so you can write a type
     that uses another of your types:
-```Haskell
+```freest
 type Radius, Point, Circle : *T
 type Radius = Float
 type Point = (Float, Float)
@@ -210,14 +210,14 @@ Source code becomes more readable and provides more context to functions when we
 ## User-defined data types
 
 User-defined types do a lot to improve readability and code organization, but it sometimes is not enough. Remember type `Circle` above. We want to add other shapes such as `Rectangle` and `Triangle`. With just types we write:
-```Haskell
+```freest
 type Rectangle, Triangle : *T
 type Rectangle = (Point, Point)
 type Triangle = (Point, Point, Point)
 ```
 
 For now there are no issues. Next we want to write a function `calcArea` that takes a shape and calculates its area accordingly. What is the signature of such a function? It either receives a `Circle`, a `Rectangle` or a `Triangle`, so it in fact has to be split among three different functions. Good programming practices teach us that it is best to use a super type from which all shapes derive from. We create a new *datatype* `Shape` where all different shapes are represented by different constructors each with their set of parameters.
-```Haskell
+```freest
 type Shape: *T
 data Shape = Circle Point Radius
            | Rectangle Point Point
@@ -225,7 +225,7 @@ data Shape = Circle Point Radius
 ```
 
 An `area` function then takes advantage of the `Shape` data type and a `case` expression to calculate each case separately.
-```Haskell
+```freest
 area : Shape -> Float
 area shape =
     case shape of {
@@ -236,7 +236,7 @@ area shape =
 ```
 
 A more compact definition uses *pattern matching*:
-```Haskell
+```freest
 area' : Shape -> Float
 area' (Circle _ r) = pi *. r *. r
 area' (Rectangle (x1, y1) (x2, y2)) = absF (x2 -. x1) *. absF (y2 -. y1)
@@ -245,7 +245,7 @@ area' (Triangle (x1, y1) (x2, y2) (x3, y3)) =
 ```
 
 Data structures can also be recursive (in the same way as types). A binary tree of integers is defined as:
-```Haskell
+```freest
 data IntBinaryTree = Leaf | Node Int IntBinaryTree IntBinaryTree
 ```
 
