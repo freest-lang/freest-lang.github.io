@@ -82,7 +82,7 @@ copy =
     print (linDouble 5 + linDouble 5)
 ```
 The compiler complains at the attempt to use the function for the second time:
-```
+```bash
 CopyLinearFun.fst:6:23–8:29: error:
 Variable out of scope: `double`
   | 
@@ -100,7 +100,7 @@ copy =
     print 20
 ```
 greeted by the compiler with an error stating that the value is not used:
-```
+```bash
 DiscardLinearFun.fst:1:1–3:7: error:
 Linear variable `double` is not consumed
   | 
@@ -141,7 +141,11 @@ Functions `f` and `g` are fundamental to understand how functions deal with line
 
 ## Linear constants as datatypes
 
-If all constants are unrestricted how do we talk of linear constants? Currently, the only way to work with linear constants is to take advantage of *linear datatypes*.
+If all constants are unrestricted how do we talk of linear constants?
+
+The easiest way is to place a conventional (unrestricted) value inside a linear shelter.
+
+Currently, the only way to work with linear constants is to take advantage of *linear datatypes*.
 ```freest
 type LinBool : 1T
 data LinBool = LTrue | LFalse
