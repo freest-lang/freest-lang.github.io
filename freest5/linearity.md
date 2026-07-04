@@ -141,14 +141,77 @@ Functions `f` and `g` are fundamental to understand how functions deal with line
 
 ## Linear constants as datatypes
 
-If all constants are unrestricted how do we talk of linear constants?
+If all primitive types are unrestricted how do we talk of linear constants? There are different ways of addressing the problem.
 
-The easiest way is to place a conventional (unrestricted) value inside a linear shelter.
+1. Wrap an unrestricted type inside a linear type.
 
-Currently, the only way to work with linear constants is to take advantage of *linear datatypes*.
+Works:
+```freest
+type LinInt : 1T
+type LinInt = Int
+
+extract : LinInt -> Int
+extract x = x
+
+copy : LinInt -> (LinInt, LinInt)
+copy x = let y = extract x in (y, y)
+```
+
+Works not:
+```freest
+copy : LinInt -> (LinInt, LinInt)
+copy x = (x, x)
+```
+Complaint:
+```bash
+LinIntType.fst:7:14–7:15: error:
+Variable out of scope: `x`
+  | 
+7 | copy x = (x, x)
+  |              ^
+```
+
+2. Wrap an unrestricted type inside a linear datatype.
+
+Works:
+```freest
+type LinInt : 1T
+data LinInt = MkLinInt Int
+
+copy : LinInt -> (LinInt, LinInt)
+copy (MkLinInt x) = (MkLinInt x, MkLinInt x)
+```
+Works not:
+```freest
+copy : LinInt -> (LinInt, LinInt)
+copy x = (x, x)
+```
+Complaint:
+```bash
+LinIntData.fst:7:14–7:15: error:
+Variable out of scope: `x`
+  | 
+7 | copy x = (x, x)
+  |              ^
+```
+
+3. Define a linear datatype 
 ```freest
 type LinBool : 1T
 data LinBool = LTrue | LFalse
+```
+This is sort of useless. The constructors can only be used once.
+```freest
+doubleTrue : (LinBool, LinBool)
+doubleTrue = (LTrue, LTrue)
+```
+Complaint:
+```bash
+LinBoolData.fst:7:22–7:27: error:
+Constructor out of scope: `LTrue`
+  | 
+7 | doubleTrue = (LTrue, LTrue)
+  |                      ^^^^^
 ```
 
 <!-- TODO -->
