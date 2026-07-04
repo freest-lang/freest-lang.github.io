@@ -1,0 +1,49 @@
+/* ---------------------------------------------------------------------------
+ * Syntax colours for FreeST code blocks (```freest).
+ *
+ * Palette harmonises with the FreeST brand blue (#0063a3, see
+ * _sass/color_schemes/freest.scss). Scoped to `.language-freest` so it never
+ * affects the Rouge-highlighted blocks (e.g. ```Haskell) elsewhere on the site.
+ * Prism emits <span class="token TYPE">; Just the Docs styles the surrounding
+ * container (background, padding, mono font), which we deliberately inherit.
+ * ------------------------------------------------------------------------- */
+
+.language-freest .token.comment {
+  color: #6b7680;
+  font-style: italic;
+}
+
+.language-freest .token.keyword {
+  color: #0063a3;               /* brand blue -- let/in/case/forall/... */
+  font-weight: 600;
+}
+
+.language-freest .token.builtin {
+  color: #7048e8;               /* violet -- Int, Skip, Close, Wait, ... */
+}
+
+.language-freest .token.class-name {
+  color: #0b7285;               /* teal -- constructors & type names */
+}
+
+.language-freest .token.function {
+  color: #d9480f;               /* rust -- function/type definition name */
+  font-weight: 600;
+}
+
+.language-freest .token.string,
+.language-freest .token.char {
+  color: #2b8a3e;               /* green -- string & char literals */
+}
+
+.language-freest .token.number {
+  color: #b02a37;               /* red -- Int & Float literals */
+}
+
+.language-freest .token.operator {
+  color: #364152;               /* slate -- ->, !, ?, &, +, ::, ... */
+}
+
+.language-freest .token.punctuation {
+  color: #868e96;               /* grey -- ( ) { } [ ] , ; */
+}

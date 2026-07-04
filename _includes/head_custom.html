@@ -1,0 +1,17 @@
+{%- comment -%}
+  FreeST syntax highlighting (Prism.js core + custom FreeST 5 grammar).
+  Loaded ONLY on FreeST 5 sections, so the FreeST 3.0 pages under
+  /get-started/ are left completely unhighlighted. To highlight another
+  section, add its URL prefix to `freest5_sections` below.
+{%- endcomment -%}
+{%- assign freest5_sections = "/freest5/,/libraries/" | split: "," -%}
+{%- assign load_freest_highlight = false -%}
+{%- for prefix in freest5_sections -%}
+  {%- if page.url contains prefix -%}{%- assign load_freest_highlight = true -%}{%- endif -%}
+{%- endfor -%}
+{%- if load_freest_highlight -%}
+<link rel="stylesheet" href="{{ '/assets/css/freest-syntax.css' | relative_url }}">
+<script>window.Prism = window.Prism || {}; window.Prism.manual = true;</script>
+<script defer src="{{ '/assets/js/prism-core.min.js' | relative_url }}"></script>
+<script defer src="{{ '/assets/js/prism-freest.js' | relative_url }}"></script>
+{%- endif -%}

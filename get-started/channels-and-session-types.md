@@ -58,7 +58,7 @@ First, our options (`Negate` and `IsZero`) map directly to selecting choices, so
 and then receive an `Int`, which comes as `!Int` and `?Int` respectively, that are then combined
 into `!Int ; ?Int`. Now type `U` seems much simpler, we send an `Int` and then receive a `Bool`,
 so we write `!Int ; ?Bool`. The full session type in FreeST is:
-```freest
+```
 type MathService = +{ Negate: !Int ; ?Int
                     , IsZero: !Int ; ?Bool
                     } ; Close
@@ -69,7 +69,7 @@ At the end of each option we want to terminate the protocol, hence the `Close`. 
   useful when the intention is to combine the session type with others. -->
 
 To obtain the server's point of view of the `MathService` protocol, one can simply use the `dualof` type operator. Thus, instead of computing explicitly the dual type, as in
-```freest
+```
 type MathServer = &{ Negate: ?Int ; !Int
                    , IsZero: ?Int ; !Bool
                    } ; Wait
@@ -96,7 +96,7 @@ To instantiate new channels we use `new`. For function types and comprehensive d
 To implement a client of our `MathService` we follow the protocol (specified by the session type). A very effective tip on programming with channels in FreeST is to **always program around the session type**. If you focus on your protocols, you give priority to designing how you structure your processes, and then the implementation will come naturally by following said protocol.
 
 Let us begin implementing a simple `MathService` client that wants the negation of `5`. Looking at the session type, our first step is to select an option (between `Negate` and `IsZero`):
-```freest
+```
 mathClient : MathService -> Int
 mathClient c0 =
   let c1 = select Negate c0 in
@@ -105,7 +105,7 @@ mathClient c0 =
 
 Now channel `c1` has type `!Int ; ?Int ; Close`, therefore we must send an `Int`, and in this case it's 
   the number we want to negate:
-```freest
+```
 mathClient : MathService -> Int
 mathClient c0 =
   ...
@@ -114,7 +114,7 @@ mathClient c0 =
 ```
 
 Then for `c2` with type `?Int ; Close` we receive an `Int` (our negated number):
-```freest
+```
 mathClient : MathService -> Int
 mathClient c0 =
   ...
@@ -123,7 +123,7 @@ mathClient c0 =
 ```
 
 And finally we are left with `c3` of type `Close` and we simply `close` the channel:
-```freest
+```
 mathClient : MathService -> Int
 mathClient c0 =
   ...
@@ -132,7 +132,7 @@ mathClient c0 =
 ```
 
 So our full `mathClient` looks like this:
-```freest
+```
 mathClient : MathService -> Int
 mathClient c0 =
   let c1 = select Negate c0 in
@@ -143,21 +143,21 @@ mathClient c0 =
 ```
 
 To avoid the first two `let` expressions, we can use the `|>` operator to streamline session operations, and `close` the channel together with the `receive` using `receiveAndClose`. Our final client is:
-```freest
+```
 mathClient : MathService -> Int
 mathClient c =
   c |> select Negate |> send 5 |> receiveAndClose @Int
 ```
 
 Our client is done, we are only missing a **server**. Here the main difference is that instead of a single select like the client, the server has to provide for every option. Taking advantage of pattern-matching we start as
-```freest
+```
 mathServer : dualof MathService -> ()
 mathServer (Negate c1) = ...,
 mathServer (IsZero c1) -> ...
 ```
 In each equation we must handle the corresponding type. For example, in the `Negate` equation, channel `c1` has type `?Int ; !Int`. In either case we are left with type `Wait`, which calls for a call to the `wait` function. The full implementation is as follows:
 
-```freest
+```
 mathServer : dualof MathService -> ()
 mathServer (Negate c1) =
   let (i, c2) = receive c1 in
@@ -168,7 +168,7 @@ mathServer (IsZero c1) =
 ```
 
 Finally, taking advantage of the Prelude's function `sendAndWait`, we can simply write:
-```freest
+```
 mathServer : dualof MathService -> ()
 mathServer (Negate c1) =
       let (i, c2) = receive c1 in
@@ -179,7 +179,7 @@ mathServer (IsZero c1) =
 ```
 <!-- The version with match - no need
  through a `match` expression (very similar to a `case` expression).
-```freest
+```
 mathServer : dualof MathService -> ()
 mathServer c0 = 
   match c0 with {
@@ -190,7 +190,7 @@ mathServer c0 =
 ```
 
 For each branch of the `match` expression, we must handle the corresponding type. For example, in the `Negate` branch, channel `c1` has type `?Int ; !Int`. After the `match` expression, we are left with `Wait`, to which we can pipe into a close. The full implementation is as follows:
-```freest
+```
 mathServer : dualof MathService -> ()
 mathServer c0 = 
   match c0 with {
@@ -275,7 +275,7 @@ serve c =
 Functions `invoke` and `serve` can be run in different threads while communicating on a channel featuring type `IntPred ; IntBinOp ; Close` on the `invoke` side.
 
 Regular session types are good, but context-free session types are a lot **more powerful**. With context-free session types you can correcty serialize a binary tree of integers using a single channel. We start by defining a conventional datatype for a binary tree of integer values and the corresponding type for a channel that consumes a tree channel.
-```freest
+```
 data Tree = Node Tree Int Tree | Leaf
 
 type TreeChannel = +{ Node: TreeChannel ;  !Int ; TreeChannel
@@ -290,7 +290,7 @@ The `TreeChannel` is then able to describe binary tree serialization without all
 
 <!-- polymorphic recursion -->
 We write a function `sendTree` that sends any `Tree` through a `TreeChannel`. Naively we write this:
-```freest
+```
 sendTree : Tree -> TreeChannel -> Skip
 sendTree Leaf c =
   c |> select Leaf
@@ -302,7 +302,7 @@ sendTree (Node lt n rt) c =
 ```
 
 And we are greeted by a plethra of errors. The fact is that we where supposed to return the continuation channel, and not `Skip`. But what is this mistery continuation, and how do we type it? The answer is through **polymorphism**.
-```freest
+```
 sendTree : Tree -> TreeChannel ; a -> a
 sendTree Leaf c =
   c |> select Leaf
@@ -319,7 +319,7 @@ Where is the continuation channel? Remember that in context-free session types `
 -->
 
 The full implementation of `sendTree` is:
-```freest
+```
 sendTree : Tree -> TreeChannel ; a -> a
 sendTree Leaf c =
   c |> select Leaf
