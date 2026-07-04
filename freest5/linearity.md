@@ -139,9 +139,9 @@ This time, function `f` is used multiple times to create linear functions `g1` a
 
 Functions `f` and `g` are fundamental to understand how functions deal with linearity and how us programmers should both write and use them. From here on out, there are many possible cases that combine both cases of `f` and `g`, but by breaking it down type by type as we did above, we can quickly understand any combination of linear and unrestricted functions.
 
-## Linear constants
+## Linear constants as datatypes
 
-If all constants are unrestricted how do we talk of linear constants? On possibility is to define a linear datatype inside which we place a plain o
+If all constants are unrestricted how do we talk of linear constants? Currently, the only way to work with linear constants is to take advantage of *linear datatypes*.
 
 <!-- TODO -->
 <!-- maybe talk about a generator function `() -> (T 1-> U)` that might be useful in some cases -->
