@@ -192,7 +192,7 @@ in print $ onePlusOne x
 ```
 
 
-## Running scripts in FreeST
+### Running scripts in FreeST
 
 A FreeST script is a list of declarations, as for example, `adder` and `onePlusOne`. To run the above code one has to place it inside a declaration. For example:
 ```freest
@@ -212,6 +212,47 @@ Expression `receive c in wait c'` is of type `()`, an *unrestricted* type. And t
 
 The type of the semicolon operator is `forall (a : *T) (b : 1T) -*-> a -*-> b -*-> b`. [To be Completed]
 
+
+### Selecting and offering choices
+
+We have seen how to exchange values on channels and how to close channels. We now look at how we select and offer choices on channels. Imagine channel offering three choices after which it waits for the channel to be closed, in all cases. The channel can be written `&{Green: Wait, Yellow: Wait, Red: Wait}`, a semaphore as seen from the point of view of the reader.
+
+A function that consumes one such channel endpoint and returns an appropriate string, needs to take a different action depending of the choice found at the front of the queue. The easiest way to deconstruct an `&` type is to use pattern matching.
+```freest
+showSemaphore : &{Green: Wait, Yellow: Wait, Red: Wait} -> String
+showSemaphore (&Green s)  = wait s ; "Green"
+showSemaphore (&Yellow s) = wait s ; "Yellow"
+showSemaphore (&Red s)    = wait s ; "Red"
+```
+
+If pattern matching is not an option, one can always try a `case` expression:
+```freest
+showSemaphore' : &{Green: Wait, Yellow: Wait, Red: Wait} -> String
+showSemaphore' s = case s of
+  &Green s  -> wait s ; "Green"
+  &Yellow s -> wait s ; "Yellow"
+  &Red s    -> wait s ; "Red"
+```
+Notice that `s` is once again rebound in each case, under the same name.
+
+The dual of the semahore type, that is the type of the other channel endpoint, is `+{Green: Close, Yellow: Close, Red: Close}`. To consume one such channel endpoint, we take advantage of expression `select Green` (in this case):
+```freest
+selectGreen : +{Green: Close, Yellow: Close, Red: Close} -> ()
+selectGreen c = c |> select Green |> close
+```
+Since `select Green` is an expression (`select` alone is not), one may as well write the above function using point free programming, taking advantage of the function composition operator `.`:
+```freest
+selectGreen' : +{Green: Close, Yellow: Close, Red: Close} -> ()
+selectGreen' = close . select Green
+```
+
+Putting the two functions together in a FreeST script we may write:
+```freest
+_ =
+  let x = forkWith selectGreen
+  in print $ showSemaphore x
+```
+and expect to read `"Green"` on the console.
 
 
 
