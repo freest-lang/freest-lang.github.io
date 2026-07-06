@@ -28,6 +28,8 @@ parent: Freest5
 
 Channels are how FreeST threads communicate with each other. Each channel is made of **two endpoints** (usulaly abbreviated as channel ends). Threads use the endpoints to write to or read from channels.
 
+### Session types and duality
+
 Channels behave according to predefined **protocols**. A protocol is just a type, a type of a special nature, a **session type**. Protocols are built from eight **basic elements of interaction**:
 
 | Session type | Meaning |
@@ -43,7 +45,7 @@ Channels behave according to predefined **protocols**. A protocol is just a type
 
 The two endpoints of a channel are usually held by two different threads. These threads do not observe the the endpoint equaly. In fact they must follow different protocols. Imagine that both threads see the endpoint at type `!Int`. Then, to conform to the procotol, both threads must write on the channel. In order for communication to proceed smoothly one of the threads must wirte an integer value and the other must read the value, that is, one thread must see the channel as `?Int` and the other as `!Int`. These two types are said to by **dual** to each other. In fact, the eight basic elements of interaction come in dual pairs as follows:
 
-| `S` | ` Dual S` |
+| `S` | `Dual S` |
 | --- | --- |
 | `!T` | `?T` |
 | `?T` | `!T` |
@@ -56,6 +58,8 @@ The two endpoints of a channel are usually held by two different threads. These 
 
  The elements of interaction may be composed by means of sequential composition and recursion. We start with sequential composition and leave recursion for later. The sequential composition of (session) types is denote by the semicolon binary operator. Is `T` and `U` are session types, then type `T ; U` denotes the type that first preforms `T` and then `U`.
 
+### Exchanging values and closing channels
+
 Let us start with a very basic protocol: send an integer and then close the channel. This is written as `!Int ; Close`. Let us now write a consumer for this type, that is, a function and receives a channel of type `!Int ; Close` and exhausts the channel (that is, reads a value and closes the channel). Primitive functions `send` and `close` send a value o a given channel and close a given channels, respectively. The former returns a pair composed of a value and a channel endpoint (on which to continue the interaction), the latter returns `()`, the unit type.
 
 ```freestx
@@ -64,7 +68,7 @@ writeFive c =
   let c' = send 5 c in close c'
 ```
 
-What is important to notice here is that `send` returns a channel end point of a different type: `c` is of type `!Int ; Close` and `c'` is of type `Close`. In more "functionl" style, one can omit the `let` and write:
+What is important to notice here is that `send` returns a channel endpoint of a different type: `c` is of type `!Int ; Close` and `c'` is of type `Close`. In more "functional" style, one can omit the `let` and write:
 ```freest
 writeFive' : !Int ; Close -> ()
 writeFive' c =
@@ -76,9 +80,15 @@ writeFive'' : !Int ; Close -> ()
 writeFive'' c =
   c |> send 5 |> close
 ```
-This is our preferred style. In fact, this idiom (send and close) is common that the Prelude has name for it: `sendAndClose` of type `a -*-> !a; Close -1-> ()`. [To Be Completed]
+This is our preferred style. The `|>` operator is included in the Prelude and defined as `(|>) x f = f x`. We defer the study of its type section "Multiplicity polymorphism".
 
-At this point it is worth studying what the type system of FreeST gives us. Channel endpoints such as the above are **linear**. They cannot be copied or discarded. This is central to the goal of ensuring that communication follows smoothly. Suppose we try to reuse channel `c` after having used it in the `send` function:
+ In fact, this idiom (send and close) is so common that the Prelude has a name for it: `sendAndClose`. Using the new combinator, `writeFive` can be further simplified:
+ ```freest
+ writeFive''' : !Int ; Close -> ()
+writeFive''' = sendAndClose 5
+```
+ 
+ At this point it is worth studying what the type system of FreeST gives us. Channel endpoints such as the above are **linear**. They cannot be copied or discarded. This is central to the goal of ensuring that communication follows smoothly. Suppose we try to reuse channel `c` after having used it in the `send` function:
 ```freest
 writeFive : !Int ; Close -> ()
 writeFive c =
@@ -113,8 +123,8 @@ Couldn't match expected type `!Int; ạ` with actual type `Close`
 
 Let us now look at the other end of the channel and write a consumer for type `?Int; Wait`. This time we use primitive functions `receive` and `wait`. The former returns a pair composed of the value dequeued from the channel endpoint and the continuation enpoint, the latter returns `()`.
 ```freest
-receiveInt : ?Int ; Wait -> ()
-receiveInt c =
+readInt : ?Int ; Wait -> ()
+readInt c =
   let (_, c') = receive c in wait c'
 ```
 
@@ -126,22 +136,38 @@ receiveInt' c =
 ```
 Once again, this pattern is so common that the Prelude provides for a combinator `receiveAndWait : ?a; Wait -*-> a`. Then we can use `receiveAndWait` in place of `receiveInt` as follows:
 ```freest
-receiveInt'' : ?Int ; Wait -> Int
-receiveInt'' = receiveAndWait
+readInt'' : ?Int ; Wait -> Int
+readInt'' = receiveAndWait
 ```
+
+### Creating new threads
+
+At this point we have a consumer for channel end `!Int ; Close` and another for the dual endpoint `?Int ; Wait`. How do we put the two together in a program? The plan is for "main" to fork a thread with the code for the `writeFive` and continue with `readInt`. The more concise, and also the safest, way is to use the Prelude combinator `forkWith`. The combinator receives a function `f` (from a channel `T` to type `()`() and creates a channel of type `T`. Then uses one of the thus obtained channel end, say `y`, to fork a thread runing `f y` and returns the other end of the cannel, say `x`.
+
+For example, the expression below is expected to print `5` on the console.
+```freest
+let x = forkWith writeFive
+in print $ readInt' x
+```
+
 
 ### A word on the semicolon expression operator
 
 Expression `receive c in wait c'` is of type `()`, an *unrestricted* type. And that is the reason why it can de discarded in expression `receive c in wait c' ; x`.
 
-What is important to notice here is that `receive` rer
+The type of the semicolon operator is `forall (a : *T) (b : 1T) -*-> a -*-> b -*-> b`. [To be Completed]
+
+**Note.** The easiest way to check the type of a primitive operator is ask FreeST's interactive console `freest -i`:
+ ```bash
+$ freest -i
+The FreeST Compiler, version 5.0, https://freest-lang.github.io/, :h for help
+Ok, no modules loaded.
+freest> :t (;)
+(;) : forall (a : *T) (b : 1T) -*-> a -*-> b -*-> b
+```
 
 
- Its dual is the type that reads an integer value and then waits for the channel to be closed. And this is written as `?Int ; Wait`.
-
-
-
-
+### Odl stuff
 
 Imagine a server offering basic mathematical operations, governed by a protocol (or type) named `MathService`. The  `MathService` type gives clients two options: either negate a number or test whether a number is zero. Textually, we'll describe it as:
 ```
