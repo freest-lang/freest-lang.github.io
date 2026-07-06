@@ -25,6 +25,43 @@ parent: Freest5
 </details>
 
 
+## Functions with multiple parameters
+
+Consider a function `f` with one parameter that does not refer to linear values in its body. Further suppose that the parameter is of type `L`,a linear type. Then, in each call site, a different linear argument must be provided. But the function itself can be used as often as needed: it may be of type `L -*-> T`, with `T` the type of the result. If the programmer knows that the function is meant to be used once only, then they may assign `f`  type `L -1-> T` instead.
+
+Now consider the case of a function `g` that accepts more arguments, say three, the two extra arguments being of types `U1` and `U2` (unrestricted). What are the possible signatures for `g`? Is `L -*-> U1 -> U2 -> T` a possible type for `g`? What about `L -> U1 -> U2 -1-> T`? Let us make the case concrete. Consider the function:
+```freest
+linBinApply f x y = f x y
+```
+The reasoning for the first parameter is the one we have followed for function `f`, above. So `linBinApply` is of type `L -> U1 ...` (or `L -1-> U1 ...`), with `L` the type `Int -1-> Int -1-> Int`. If `h` is a value of type `L`, then `linBinApply h` captures in its body a linear value and hence cannot be duplicated or discarded. This means that function `linBinApply h` must be linear. Then, one possible type for the function is:
+```freest
+linBinApply : (Int -1-> Int -1-> Int) -*-> Int -1-> Int -1-> Int
+```
+
+Suppose that we insist that `linBinApply h` is of an unrestricted type:
+ ```freest
+ linBinApply : (Int -1-> Int -1-> Int) -*-> Int -*-> Int -1-> Int
+```
+Then the compiler complaints as follows.
+```bash
+MultipleArgs.fst:4:13–4:14: error:
+Linear variable `f` of type `Int -1-> Int -1-> Int`, bound at
+  Valid/Tutorial/MultipleArgs/MultipleArgs.fst:4:13–4:14
+  | 
+4 | linBinApply f x y = f x y
+  |             ^
+ is consumed in body of an unrestricted function
+  Valid/Tutorial/MultipleArgs/MultipleArgs.fst:4:15–4:26
+  | 
+4 | linBinApply f x y = f x y
+  |               ^^^^^^^^^^^
+(This would allow duplicating or discarding the value. Consider using a linear function instead.)
+```
+The highlighted region `x y = f x y` is the partial application `linBinApply h`, that is, the function `\x y -> f x y`. Its type, `Int -*-> Int -1-> Int`, is unrestricted (the second `-*->`), yet its body captures the linear value `h`. Making this function unrestricted would allow duplicating or discarding `h`, hence the error.
+
+
+## Linear functions, as opposed to functions with linear parameters
+
 
 ## Linear and unrestricted values
 
