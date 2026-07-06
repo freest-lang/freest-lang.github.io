@@ -84,7 +84,7 @@ This is our preferred style. The `|>` operator is included in the Prelude and de
 
  In fact, this idiom (send and close) is so common that the Prelude has a name for it: `sendAndClose`. Using the new combinator, `writeFive` can be further simplified:
  ```freest
- writeFive''' : !Int ; Close -> ()
+writeFive''' : !Int ; Close -> ()
 writeFive''' = sendAndClose 5
 ```
  
@@ -102,7 +102,21 @@ Variable out of scope: `c`
 5 |   let c' = send 5 c in close c
   |                              ^
 ```
-Suppose now that we forget closing the channel: [To Be Completed]
+Suppose now that we forget closing the channel:
+```freest
+writeFive : !Int ; Close -> ()
+writeFive c =
+  let c' = send 5 c in ()
+```
+The type checker complains that the scope of variable `c` ended and the variable was not consumed.
+```bash
+SendClose.fst:5:7–5:9: error:
+Linear variable `c'` of type `Close` is not consumed
+  | 
+5 |   let c' = send 5 c in ()
+  |       ^^
+  hint: consume it with `close`
+```
 
 Now suppose we try to write two values on the channel, one after the other:
 ```freest
@@ -112,7 +126,7 @@ writeFive' c =
       c'' = send 7 c'
   in close c''
 ```
-The type checker complaints that the code does not follow the protocol, in particular that, in order to write an integer value an a channel, its type must be of type `!Int`, not `Close`.
+The type checker complaints that the code does not follow the protocol, in particular that, in order to write an integer value in a channel, its type must be of type `!Int`, not `Close`.
 ```bash
 SendClose.fst:5:20–10:22: error:
 Couldn't match expected type `!Int; ạ` with actual type `Close`
@@ -140,14 +154,55 @@ readInt'' : ?Int ; Wait -> Int
 readInt'' = receiveAndWait
 ```
 
+**Note.** The easiest way to check the type of a primitive operator is ask FreeST's interactive console `freest -i`:
+ ```bash
+$ freest -i
+The FreeST Compiler, version 5.0, https://freest-lang.github.io/, :h for help
+Ok, no modules loaded.
+freest> :t (;)
+receiveAndWait : forall (a : 1T) -*-> ?a; Wait -*-> a
+```
+
+Let us a try a slightly more complex protocol: that of a remote adder. The remote adder reads two integer values and writes an integer, before waiting for the channel to be closed. The type of the communication channel is `?Int ; ?Int ; !Int ; Wait`. A consumer for the channel is as follows:
+```freest
+adder : ?Int ; ?Int ; !Int ; Wait -> ()
+adder c =
+  let (x, c) = receive c
+      (y, c) = receive c
+  in sendAndWait (x + y) c
+```
+Notice that we don't use different names for the different incarnations of channel `c`. The channel is rebound twice, always with its original name, `c`. This is quite commom in FreeST source code.
+
+The other end of the channel is of type `!Int ; !Int ; ?Int ; Close`. A function that consumes such a channel can be concisely written with the reverse function application operator `|>` and the Prelude function `receiveAndClose`.
+```freest
+onePlusOne : !Int ; !Int ; ?Int ; Close -> Int
+onePlusOne c =
+  c |> send 1 |> send 1 |> receiveAndClose
+```
+
+
 ### Creating new threads
 
-At this point we have a consumer for channel end `!Int ; Close` and another for the dual endpoint `?Int ; Wait`. How do we put the two together in a program? The plan is for "main" to fork a thread with the code for the `writeFive` and continue with `readInt`. The more concise, and also the safest, way is to use the Prelude combinator `forkWith`. The combinator receives a function `f` (from a channel `T` to type `()`() and creates a channel of type `T`. Then uses one of the thus obtained channel end, say `y`, to fork a thread runing `f y` and returns the other end of the cannel, say `x`.
+At this point we have a consumer for channel end `?Int ; ?Int ; !Int ; Wait` and another for the dual endpoint `!Int ; !Int ; ?Int ; Close`. How do we put the two together in a program? The plan is for "main" to fork a thread with the code for the `adder` and continue with `onePlusOne`. The more concise, and also the safest, way is to use the Prelude combinator `forkWith`. The combinator receives a function `f` (from a channel `T` to type `()`() and creates a channel of type `T`. Then uses one of the thus obtained channel end, say `y`, to fork a thread runing `f y` and returns the other end of the cannel, say `x`.
 
-For example, the expression below is expected to print `5` on the console.
+For example, the expression below is expected to print `2` on the console.
 ```freest
-let x = forkWith writeFive
-in print $ readInt' x
+let x = forkWith adder
+in print $ onePlusOne x
+```
+
+
+## Running scripts in FreeST
+
+A FreeST script is a list of declarations, as for example, `adder` and `onePlusOne`. To run the above code one has to place it inside a declaration. For example:
+```freest
+main =
+  let x = forkWith adder in print $ onePlusOne x
+```
+But `main` is just another name. And since we are nor using it, we may as well use an wildcard:
+```freest
+_ =
+  let x = forkWith adder in print $ onePlusOne x
 ```
 
 
@@ -157,17 +212,10 @@ Expression `receive c in wait c'` is of type `()`, an *unrestricted* type. And t
 
 The type of the semicolon operator is `forall (a : *T) (b : 1T) -*-> a -*-> b -*-> b`. [To be Completed]
 
-**Note.** The easiest way to check the type of a primitive operator is ask FreeST's interactive console `freest -i`:
- ```bash
-$ freest -i
-The FreeST Compiler, version 5.0, https://freest-lang.github.io/, :h for help
-Ok, no modules loaded.
-freest> :t (;)
-(;) : forall (a : *T) (b : 1T) -*-> a -*-> b -*-> b
-```
 
 
-### Odl stuff
+
+## Old stuff
 
 Imagine a server offering basic mathematical operations, governed by a protocol (or type) named `MathService`. The  `MathService` type gives clients two options: either negate a number or test whether a number is zero. Textually, we'll describe it as:
 ```
