@@ -27,7 +27,7 @@ parent: Freest5
 
 ## Functions with multiple parameters
 
-Consider a function `f` with one parameter that does not refer to linear values in its body. Further suppose that the parameter is of type `L`,a linear type. Then, in each call site, a different linear argument must be provided. But the function itself can be used as often as needed: it may be of type `L -*-> T`, with `T` the type of the result. If the programmer knows that the function is meant to be used once only, then they may assign `f`  type `L -1-> T` instead.
+Consider a function `f` with one parameter that does not refer to linear values in its body. Further suppose that the parameter is of type `L`, a linear type. Then, in each call site, a different linear argument must be provided. But the function itself can be used as often as needed: it may be of type `L -*-> T`, with `T` the type of the result. If the programmer knows that the function is meant to be used once only, then they may assign `f`  type `L -1-> T` instead.
 
 Now consider the case of a function `g` that accepts more arguments, say three, the two extra arguments being of types `U1` and `U2` (unrestricted). What are the possible signatures for `g`? Is `L -*-> U1 -> U2 -> T` a possible type for `g`? What about `L -> U1 -> U2 -1-> T`? Let us make the case concrete. Consider the function:
 ```freest

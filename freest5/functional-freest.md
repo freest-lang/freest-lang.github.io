@@ -175,13 +175,13 @@ However, every time we can, we prefer to write `sumFirstN` instead of `sumFirstN
 
 ## User-defined types
 
-You're a novice programmer into this fictitious new project and you cross upon this function:
+You're a novice programmer into this fictitious new project and you come across this function:
 ```freest
 f : (Int -> Int) -> Int -> (Int, Int)
 f g x = (x, g x)
 ```
 
-What is this? What are its parameters? What is the purpose of function `f`? Maybe it helps `calcFunY`, but it perhaps is not enough. The biggest problem continues to be the **confusing signature**.
+What is this? What are its parameters? What is the purpose of function `f`? Maybe it helps `calcFunY`, but perhaps it is not enough. The biggest problem continues to be the **confusing signature**.
 
 Preventing confusing signatures can be done if we create higher-level types that stand in for those we use, but that bear a clearer meaning. We start by creating a couple of type *abbreviations*:
 ```freest
@@ -209,7 +209,7 @@ Source code becomes more readable and provides more context to functions when we
 
 ## User-defined data types
 
-User-defined types do a lot to improve readability and code organization, but it sometimes is not enough. Remember type `Circle` above. We want to add other shapes such as `Rectangle` and `Triangle`. With just types we write:
+User-defined types do a lot to improve readability and code organization, but sometimes it is not enough. Remember type `Circle` above. We want to add other shapes such as `Rectangle` and `Triangle`. With just types we write:
 ```freest
 type Rectangle, Triangle : *T
 type Rectangle = (Point, Point)
