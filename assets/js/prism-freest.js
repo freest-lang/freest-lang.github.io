@@ -27,11 +27,12 @@
     // Built-in (session / functional) type constructors.
     'builtin': /\b(?:Char|Close|Dual|Float|Int|Skip|Void|Wait)\b/,
 
-    // NOTE: lower-case identifiers (functions AND variables) are left
-    // unstyled on purpose. A regex cannot tell a function's definition from
-    // a call or a plain variable, so highlighting only the definition site
-    // made the same name red in one place and plain in another. Leaving them
-    // all plain -- as Rouge's Haskell lexer does -- keeps colouring consistent.
+    // Definition-site name: the lower-case identifier that opens a top-level
+    // declaration line (a function signature or an equation head), at column
+    // 0 -- e.g. both `writeFive :` and `writeFive c =`. Indented / mid-line
+    // uses (call sites, variables) stay plain, since a regex cannot tell a
+    // use from a definition.
+    'function': /^[a-z][A-Za-z0-9_']*/m,
 
     // Data / type constructors and (qualified) type names: Mod.Con, List, ...
     'class-name': /\b[A-Z][A-Za-z0-9_']*(?:\.[A-Z][A-Za-z0-9_']*)*\b/,
