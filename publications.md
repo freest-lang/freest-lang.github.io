@@ -16,6 +16,11 @@ nav_order: 6
   **Costa, D., Mordido, A., Poças, D. and Vasconcelos, V. T.**  @ [IFIP WG 2.8 2026](https://www.cs.cornell.edu/ifip28-2026/)
 {: .mb-5 }
 
+- [**Session types R context free**]( {% link resources/publications/Dagstuhl Feb 2026.pdf %} )  
+  **Vasconcelos, V.T.**  
+  Talk @ Dagstuhl Seminar, Behavioral Types for Resilience. February 2026.
+{: .mb-5 }
+
 - [**Types as grammars**]({% link resources/publications/TypesAsGrammarsAbstract.pdf %})  
   **Silva, G., Almeida, B., Costa, D., Mordido, A., Poças, D. and Vasconcelos, V. T.**  
   [Talk]({% link resources/publications/TypesAsGrammars.pdf %}) @ [WITS 2026](https://popl26.sigplan.org/details/wits-2026-papers/1/Types-as-grammars)
@@ -102,7 +107,7 @@ nav_order: 6
   [Information and Computation](https://www.sciencedirect.com/journal/information-and-computation), 2022
 {: .mb-5 }
 
-- [**Polymorphic Context-free Session Types**]( {% link resources/publications/Dagstuhl Sep 2021.key.pdf %} )  
+- [**Polymorphic Context-free Session Types**]( {% link resources/publications/Dagstuhl Sep 2021.pdf %} )  
   **Vasconcelos, V.T.**  
   Talk @ Dagstuhl Seminar, Behavioural Types: Bridging Theory and Practice. September 2021.
 {: .mb-5 }

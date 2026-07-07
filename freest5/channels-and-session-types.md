@@ -181,9 +181,11 @@ onePlusOne c =
 ```
 
 
-### Creating new threads
+### Creating new channels and new threads
 
-At this point we have a consumer for channel end `?Int ; ?Int ; !Int ; Wait` and another for the dual endpoint `!Int ; !Int ; ?Int ; Close`. How do we put the two together in a program? The plan is for "main" to fork a thread with the code for the `adder` and continue with `onePlusOne`. The more concise, and also the safest, way is to use the Prelude combinator `forkWith`. The combinator receives a function `f` (from a channel `T` to type `()`() and creates a channel of type `T`. Then uses one of the thus obtained channel end, say `y`, to fork a thread runing `f y` and returns the other end of the cannel, say `x`.
+At this point we have a consumer for endpoint `?Int ; ?Int ; !Int ; Wait` and another for the dual endpoint `!Int ; !Int ; ?Int ; Close`. How do we put the two together in a program? We need to create a new channel and to fork a new thread. The plan is for "main" to fork a thread with the code for the `adder` and continue with `onePlusOne`.
+
+The more concise, and also the safest, way is to use the Prelude combinator `forkWith`. The combinator receives a function `f` (from a channel `T` to type `()`() and creates a channel of type `T`. Then uses one of the thus obtained channel end, say `y`, to fork a thread runing `f y` and returns the other end of the cannel, say `x`.
 
 For example, the expression below is expected to print `2` on the console.
 ```freest
@@ -253,6 +255,14 @@ _ =
   in print $ showSemaphore x
 ```
 and expect to read `"Green"` on the console.
+
+
+## Exchanging types
+
+The last pair of dual session operators provide for exchanging types on channels. This is closed related to conventional (universal and existential) polymorphism, but applied to session types. Exchanging types allow writing protocols on which subsequent actions depend on the type exchanged.
+
+Imagine a rendering service that transforms to strings values of different types. Clearly the service cannot know in advance all types in the world, and hence we leave to the client supplying the function that converts its type to a string. So, in the end, the role of the server is to conduct the (possibly heavy) process of transforming a value to a string, given a client supplied rendering function.
+
 
 
 
