@@ -26,11 +26,6 @@
   color: #0b7285;               /* teal -- constructors & type names */
 }
 
-.language-freest .token.function {
-  color: #d9480f;               /* rust -- function/type definition name */
-  font-weight: 600;
-}
-
 .language-freest .token.string,
 .language-freest .token.char {
   color: #2b8a3e;               /* green -- string & char literals */

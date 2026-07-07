@@ -27,12 +27,11 @@
     // Built-in (session / functional) type constructors.
     'builtin': /\b(?:Char|Close|Dual|Float|Int|Skip|Void|Wait)\b/,
 
-    // Definition site: a lower-case name (or comma-separated names) at the
-    // start of a line, followed by a signature ':' or a binding '='.
-    'function': {
-      pattern: /(^[ \t]*)[a-z][A-Za-z0-9_']*(?=(?:[ \t]*,[ \t]*[a-z][A-Za-z0-9_']*)*[ \t]*[:=])/m,
-      lookbehind: true
-    },
+    // NOTE: lower-case identifiers (functions AND variables) are left
+    // unstyled on purpose. A regex cannot tell a function's definition from
+    // a call or a plain variable, so highlighting only the definition site
+    // made the same name red in one place and plain in another. Leaving them
+    // all plain -- as Rouge's Haskell lexer does -- keeps colouring consistent.
 
     // Data / type constructors and (qualified) type names: Mod.Con, List, ...
     'class-name': /\b[A-Z][A-Za-z0-9_']*(?:\.[A-Z][A-Za-z0-9_']*)*\b/,
