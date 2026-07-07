@@ -62,7 +62,7 @@ The two endpoints of a channel are usually held by two different threads. These 
 
 Let us start with a very basic protocol: send an integer and then close the channel. This is written as `!Int ; Close`. Let us now write a consumer for this type, that is, a function and receives a channel of type `!Int ; Close` and exhausts the channel (that is, reads a value and closes the channel). Primitive functions `send` and `close` send a value o a given channel and close a given channels, respectively. The former returns a pair composed of a value and a channel endpoint (on which to continue the interaction), the latter returns `()`, the unit type.
 
-```freestx
+```freest
 writeFive : !Int ; Close -> ()
 writeFive c =
   let c' = send 5 c in close c'
