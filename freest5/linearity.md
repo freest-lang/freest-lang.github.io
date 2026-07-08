@@ -61,6 +61,57 @@ The highlighted region `x y = f x y` is the partial application `linBinApply h`,
 
 
 ## Linear functions, as opposed to functions with linear parameters
+[comment]: Piggy back on the previous section, emphasize the point, explain where are the constraints and give another example.
+[comment]: Introduce the difference, name the different styles, references.
+[comment]: Explain linear logic-inspired, introduce example and dissect it.
+
+Defining functions as either unrestricted or linear is then mostly a matter of conforming to safety constraints.
+Unrestricted functions can be discarded or used more than once because they do not capture linear resources, such as the function `id`.
+
+```freest
+id : Int -*-> Int
+id x = x
+```
+
+On the other hand, if a function does capture a linear resource, it must be defined as linear.
+By not being permitted to be discarded or duplicated, one is ensured that the linear resource it captures is also not discarded or duplicated.
+
+```freest
+linPlus : Int -1-> Int
+linPlus x = x + l
+```
+
+If we take `l` to be a linear resource, then `linPlus` must be defined as linear, since otherwise, `l` could be discarded or duplicated.
+We call this flavour of linearity Walker's style (cf. Advanced Topics in Types and Programming Languages, chapter 1, David Walker).
+
+However, we find it important for the reader to appreciate the difference between defining functions as either unrestricted or linear, à là Walker as we've just discussed, from defining functions that take unrestricted or linear parameters, as inspired by linear logic and present in Linear Haskell.
+
+In systems inspired by linear logic, the constraint is not on the function value itself but on how its bound variable may be used within the body.
+This is expressed in the literature by a different kind of arrow, the linear arrow `T1 ⊸ T2`, commonly referred to as *lollipop*, which states the argument is used exactly once.
+
+```freest
+dup : Int --o (Int, Int)
+dup x = (x, x)
+```
+
+Obviously, the `dup` function is rejected, because the use of the bound variable `x` breaks the constraint imposed by the lollipop arrow i.e., it is used twice, instead of exactly once.
+Note that the multiplicity i.e., being unrestricted or linear, of the argument is of no consequence here: we may define a function that takes an unrestricted argument and uses it only once.
+In order to "fix" this function, and thus make it well-typed, the lollipop arrow `--o` should be swapped with a "normal" arrow `-->` (or `-*->`).
+
+The difference between the two styles becomes more apparent once we realise these aim to control orthogonal aspects: Walker's style imposes restrictions on the use of the function itself, whereas linear logic inspired systems impose restrictions on the use of bound variables inside the body of the function.
+
+```freest
+id1 : Int --o Int
+id1 x = x
+
+id2 : Int -1-> Int
+id2 x = x
+
+someFunc : someType
+someFunc = ... id2 (used exactly once) ...
+```
+
+Both `id1` and `id2` are well-typed: `id1` ensures the argument is used only once inside the body, whereas `id2` is ensured to be used exactly once in the program, even though in this case, `id2 : Int -*-> Int` would also be sound.
 
 
 ## Linear and unrestricted values
@@ -76,7 +127,7 @@ copy =
     let n = 5 in print (n + n)
 ```
 
-Unrestricted values may not be used at all. The program below still prints `n` but never uses the value in variable `n`.
+Unrestricted values may not be used at all. The program below still prints `10` but never uses the value in variable `n`.
 ```freest
 discard : ()
 discard = 
