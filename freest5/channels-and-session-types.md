@@ -181,6 +181,27 @@ onePlusOne c =
 ```
 
 
+### Pattern matching on session input operations
+
+Pattern matchings provides for concise and readable code. Apart from the conventional pattern matching on datatypes and literals, FreeST supports
+pattern matching on all input (also know as negative) operations. We have discussed two so far: receiving a message and waiting for a channel to be closed.
+
+We have seen a function `readInt : ?Int ; Wait -> ()` that reads an integer value and then waits for the channel to be read. This can be written as follows.
+```freest
+readInt : ?Int ; Wait -> ()
+readInt (?x ; Wait) = print x
+```
+Pattern `(?x ; p)` receives a value from a channel (the channel argument to the function), binds the value to `x` and continues as prescribed by pattern `p`. So this pattern matches type `?T ; U` if `p` is a pattern of type `U`. In this case the continuation `p` stands for `Wait`, and `Wait` is the pattern for type `Wait` (the pattern and the type shared the same name).
+
+Patterns may have as many semicolons as needed. For example to print the sum of three integer values read from a channel (and waiting for the channel to be closed), one can write
+```freest
+sumThree : ?Int ; ?Int ; ?Int ; Wait -> ()
+sumThree (?x ; ?y ; ?z ; Wait) = print $ x + y + z
+```
+
+Pattern matching on sessions is available only for input operations; one cannot pattern match on send or close. There are two further session patterns that we discuss below.
+
+
 ### Creating new channels and new threads
 
 At this point we have a consumer for endpoint `?Int ; ?Int ; !Int ; Wait` and another for the dual endpoint `!Int ; !Int ; ?Int ; Close`. How do we put the two together in a program? We need to create a new channel and to fork a new thread. The plan is for "main" to fork a thread with the code for the `adder` and continue with `onePlusOne`.
@@ -192,7 +213,6 @@ For example, the expression below is expected to print `2` on the console.
 let x = forkWith adder
 in print $ onePlusOne x
 ```
-
 
 ### Running scripts in FreeST
 
@@ -257,13 +277,18 @@ _ =
 and expect to read `"Green"` on the console.
 
 
-## Exchanging types
+### Exchanging types
 
 The last pair of dual session operators provide for exchanging types on channels. This is closed related to conventional (universal and existential) polymorphism, but applied to session types. Exchanging types allow writing protocols on which subsequent actions depend on the type exchanged.
 
-Imagine a rendering service that transforms to strings values of different types. Clearly the service cannot know in advance all types in the world, and hence we leave to the client supplying the function that converts its type to a string. So, in the end, the role of the server is to conduct the (possibly heavy) process of transforming a value to a string, given a client supplied rendering function.
+Imagine a rendering service that transforms to strings values of different types. Clearly the service cannot know in advance all types in the world, and hence we leave to the client supplying the function that converts its type to a string. So, in the end, the role of the server is to conduct the (possibly heavy) process of converting a value into a string, given a client supplied rendering function.
 
-
+To accept a type on a channel, bound to type variable `a` and continue as `T` on writes `?type a . T`. Then the type of the channel the rendering service is
+```freest
+?type (a:*T) . ?(a -1-> String) ; ?a ; !String ; Wait 
+```
+Here we have chosen a linear function, `a -1-> String`, a way of signaling the client that the service will not reuse the function.
+The service can
 
 
 ## Old stuff
