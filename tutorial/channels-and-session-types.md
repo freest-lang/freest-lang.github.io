@@ -279,17 +279,50 @@ and expect to read `"Green"` on the console.
 
 ### Exchanging types
 
-The last pair of dual session operators provide for exchanging types on channels. This is closed related to conventional (universal and existential) polymorphism, but applied to session types. Exchanging types allow writing protocols on which subsequent actions depend on the type exchanged.
+The last pair of dual session operators provide for exchanging types on channels. This is closely related to conventional (universal and existential) polymorphism, but applied to session types. Exchanging types allow writing protocols on which subsequent actions depend on the type exchanged.
 
 Imagine a rendering service that transforms to strings values of different types. Clearly the service cannot know in advance all types in the world, and hence we leave to the client supplying the function that converts its type to a string. So, in the end, the role of the server is to conduct the (possibly heavy) process of converting a value into a string, given a client supplied rendering function.
 
-To accept a type on a channel, bound to type variable `a` and continue as `T` on writes `?type a . T`. Then the type of the channel the rendering service is
+To accept a type on a channel, bound it to type variable `a`, and then continue as `T` one writes `?type a . T`. With this in mind, the type of the channel the rendering service reads is:
 ```freest
 ?type (a:*T) . ?(a -1-> String) ; ?a ; !String ; Wait 
 ```
-Here we have chosen a linear function, `a -1-> String`, a way of signaling the client that the service will not reuse the function.
-The service can
+Here we have chosen a linear function, `a -1-> String`, as way of signaling the client that the service will not reuse the function, but we could equaly have used an unrestricted function `a -> String`.
 
+The best way to receive a type is to use pattern-matching. The pattern `!type a . p` receives a type, binds it to `a` and continues as pattern `p`. The pattern may then use type variable `a` if needed. The first three operations on the channel are all of input nature, and that calls for a four level deep pattern: receive a type `a`, receive a value `f`, receive a value `x`, and continue with channel `c`. Then we apply `x` to `f` and call the Prelude function `sendAndWait` to send `f x` and wait for the channel to be closed.
+
+```freest
+render : ?type (a:*T) . ?(a -1-> String) ; ?a ; !String ; Wait -> ()
+render (?type a . ?f ; ?x ; c) =
+  sendAndWait (f x) c
+```
+
+To interact with `render` we need to chose a type `T`, provide for a function to convert `T` into a string, send a value of type `T`, wait for a string, and close the channel. Here's a client that chose `Char` for `Char`. We use the backwards function application operator `|>` to chain all the three outputs, and then use the Prelude's function `receiveAndClose` to complete the protocol.
+```freest
+charRenderer : !type a . !(a -1-> String) ; !a ; ?String ; Close -> String
+charRenderer c =
+  c |> sendType @Char |> send showChar |> send 'F' |> receiveAndClose
+  where
+    showChar : Char -1-> String
+    showChar c = "My favourite char is " ++ show c
+```
+
+Here's a different client that interacts with the renderer by using a pair `(String, Double)`.
+```freest
+pairRenderer : !type a . !(a -1-> String) ; !a ; ?String ; Close -> String
+pairRenderer c =
+  c |> sendType @(String, Float) |> send showPair |> send ("FreeST", 5.0) |> receiveAndClose
+  where
+    showPair : (String, Float) -1-> String
+    showPair (x, y) = x ++ " " ++ show y
+```
+
+To put a server and a client together, we proceed as usual. Notice that `print` prints the result of `pairRenderer`
+```freest
+_ = print $ 
+  forkWith render |>
+  pairRenderer
+```
 
 ## Old stuff
 
