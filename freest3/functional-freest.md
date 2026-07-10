@@ -5,7 +5,7 @@
 title: Functional FreeST
 layout: default
 nav_order: 2
-parent: Get started
+parent: FreeST3
 ---
 
 # Functional FreeST

@@ -5,7 +5,7 @@
 title: A guide to errors
 layout: default
 nav_order: 8
-parent: Get started
+parent: FreeST3
 nav_exclude: true
 ---
 

@@ -5,7 +5,7 @@
 title: Channels and session types
 layout: default
 nav_order: 4
-parent: Freest5
+parent: Tutorial
 ---
 
 # Channels and session types

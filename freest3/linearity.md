@@ -5,7 +5,7 @@
 title: Linearity
 layout: default
 nav_order: 3
-parent: Get started
+parent: FreeST3
 ---
 
 # Linearity

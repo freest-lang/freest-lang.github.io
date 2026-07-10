@@ -2,10 +2,10 @@
 # Feel free to add content and custom Front Matter to this file.
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
-title: Setup and install
+title: Install
 layout: default
 nav_order: 1
-parent: Get started
+parent: FreeST3
 ---
 
 # Ready, set, install!
