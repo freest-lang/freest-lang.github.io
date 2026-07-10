@@ -210,21 +210,27 @@ The more concise, and also the safest, way is to use the Prelude combinator `for
 
 For example, the expression below is expected to print `2` on the console.
 ```freest
-let x = forkWith adder
-in print $ onePlusOne x
+forkWith adder |> onePlusOne |> print
+```
+
+If the above syntax seems confusing, you may always use plain old function application, but you'd better read the code right-to-left.
+```freest
+print (onePlusOne (forkWith adder))
+```
+or
+```freest
+print $ onePlusOne $ forkWith adder
 ```
 
 ### Running scripts in FreeST
 
 A FreeST script is a list of declarations, as for example, `adder` and `onePlusOne`. To run the above code one has to place it inside a declaration. For example:
 ```freest
-main =
-  let x = forkWith adder in print $ onePlusOne x
+main = forkWith adder |> onePlusOne |> print
 ```
 But `main` is just another name. And since we are nor using it, we may as well use an wildcard:
 ```freest
-_ =
-  let x = forkWith adder in print $ onePlusOne x
+_ = forkWith adder |> onePlusOne |> print
 ```
 
 
@@ -270,9 +276,7 @@ selectGreen' = close . select Green
 
 Putting the two functions together in a FreeST script we may write:
 ```freest
-_ =
-  let x = forkWith selectGreen
-  in print $ showSemaphore x
+_ = forkWith selectGreen |> showSemaphore |> print
 ```
 and expect to read `"Green"` on the console.
 
@@ -322,11 +326,7 @@ To put a server and a client together, we proceed as usual. Notice that `print` 
 _ = forkWith render |> pairRenderer |> print
 ```
 
-If the above syntax seems confusing, you may always use plain on function application, but you'd better read the code right-to-left.
-```freest
-_ = print (charRenderer (forkWith render))
-```
-[TODO: `receiveType`]
+[TODO: `receiveType` and `sendType`]
 
 ## Old stuff
 
