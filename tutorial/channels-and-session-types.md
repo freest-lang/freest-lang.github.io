@@ -317,12 +317,16 @@ pairRenderer c =
     showPair (x, y) = x ++ " " ++ show y
 ```
 
-To put a server and a client together, we proceed as usual. Notice that `print` prints the result of `pairRenderer`
+To put a server and a client together, we proceed as usual. Notice that `print` prints the result of `pairRenderer`.
 ```freest
-_ = print $ 
-  forkWith render |>
-  pairRenderer
+_ = forkWith render |> pairRenderer |> print
 ```
+
+If the above syntax seems confusing, you may always use plain on function application, but you'd better read the code right-to-left.
+```freest
+_ = print (charRenderer (forkWith render))
+```
+[TODO: `receiveType`]
 
 ## Old stuff
 
