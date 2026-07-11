@@ -328,6 +328,49 @@ _ = forkWith render |> pairRenderer |> print
 
 [TODO: `receiveType` and `sendType`]
 
+
+## Unbounded protocols
+
+All protocols we have seen so far comprise a fixed number of interactions. For example, to consume type `?type a . ?(a -1-> String) ; ?a ; !String ; Wait`, five interactions are needed.
+
+There are however cases when one cannot antecipate the exact number of interactions. Imagine a server that reads from a channel integer values until a negative value is received. Clearly the type constructors we have seen so far cannot describe this protocol. Here's how the server may act: receive a value; if negative signal the client that no more numbers are expected; if positive ask for a new number. In the former case the server waits for the channel to be closed; in the latter the server "goes back to the beginning" of the protocol. To implement the "going back" part we name the protocol and use this name as a type.
+
+Then, the `Repeat` protocol becomes: receive an int, select between options `Done` or `More`. If the former is selected, `Wait`, otherwise `Repeat`:
+```freest
+type Repeat = ?Int ; +{Done: Wait, More: Repeat}
+```
+
+For a consumer of type `Repeat` we setup an adder that sums all numbers until a negative number is encountered. Notice the first guard `x < 0`, leading to `select Done` and then `wait`. The result is `0` in this case. The second guard, being the negation of the first, is not strictly needed.
+```freest
+adder : Repeat -> Int
+adder (?x ; c) | x < 0  =      c |> select Done |> wait ; 0
+adder (?x ; c) | x >= 0 = x + (c |> select More |> adder)
+```
+
+For the client, we setup a function that consumes the dual of `Repeat`. The difficult, error prone way, is to define a different type, for example `Feed` or `CoRepeat`. The easy way is to use the `Dual` type operator, that takes a session type and returns another session type, with all operations dualised.
+
+Then a client that sums the first `n` natural numbers can be written as follows.
+```freest
+sumTo : Int -> Dual Repeat -> ()
+sumTo n c = case send n c of
+    &More c -> sumTo (n - 1) c
+    &Done c -> close c
+```
+
+Finally, we put the two process together as we have done before. Expect to read `55` on the console.
+```freest
+_ = forkWith (sumTo 10) |> adder |> print
+```
+
+***Note:*** 
+Most functional programming languages provide for *type abbreviations*, often introduced with keyword `type`. FreeST is no exception. For example
+```
+type IntPair = (Int, Int)
+```
+introduces a name for type `(Int, Int)`. Code may use `IntPair` and `(Int, Int)` interchangeably.
+
+But the `type` keyword in FreeST may introduce genuine new types, as `Repeat` above. This is a recursive type and the only means of introducing recursive types is via a `type` construction. 
+
 ## Old stuff
 
 Imagine a server offering basic mathematical operations, governed by a protocol (or type) named `MathService`. The  `MathService` type gives clients two options: either negate a number or test whether a number is zero. Textually, we'll describe it as:
