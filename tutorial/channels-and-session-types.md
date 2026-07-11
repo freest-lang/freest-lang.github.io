@@ -289,19 +289,19 @@ Imagine a rendering service that transforms to strings values of different types
 
 To accept a type on a channel, bound it to type variable `a`, and then continue as `T` one writes `?type a . T`. With this in mind, the type of the channel the rendering service reads is:
 ```freest
-?type (a:*T) . ?(a -1-> String) ; ?a ; !String ; Wait 
+?type a . ?(a -1-> String) ; ?a ; !String ; Wait 
 ```
 Here we have chosen a linear function, `a -1-> String`, as way of signaling the client that the service will not reuse the function, but we could equaly have used an unrestricted function `a -> String`.
 
-The best way to receive a type is to use pattern-matching. The pattern `!type a . p` receives a type, binds it to `a` and continues as pattern `p`. The pattern may then use type variable `a` if needed. The first three operations on the channel are all of input nature, and that calls for a four level deep pattern: receive a type `a`, receive a value `f`, receive a value `x`, and continue with channel `c`. Then we apply `x` to `f` and call the Prelude function `sendAndWait` to send `f x` and wait for the channel to be closed.
+The best way to receive a type is to use pattern-matching. The pattern `?type a . p` receives a type, binds it to `a` and continues as pattern `p`. The pattern may then use type variable `a` if needed. Back to our example, the first three operations on the channel are all of input nature, and that calls for a four level deep pattern: receive a type `a`, receive a value `f`, receive a value `x`, and continue with channel `c`. Then we apply `x` to `f` and call the Prelude function `sendAndWait` to send `f x` and wait for the channel to be closed.
 
 ```freest
-render : ?type (a:*T) . ?(a -1-> String) ; ?a ; !String ; Wait -> ()
+render : ?type a . ?(a -1-> String) ; ?a ; !String ; Wait -> ()
 render (?type a . ?f ; ?x ; c) =
   sendAndWait (f x) c
 ```
 
-To interact with `render` we need to chose a type `T`, provide for a function to convert `T` into a string, send a value of type `T`, wait for a string, and close the channel. Here's a client that chose `Char` for `Char`. We use the backwards function application operator `|>` to chain all the three outputs, and then use the Prelude's function `receiveAndClose` to complete the protocol.
+To interact with `render` we need to chose a type `T`, provide for a function to convert `T` into a string, send a value of type `T`, wait for a string, and close the channel. To send a type `T` we use expression `sendType @T` which returns the continuation channel endpoint. Here's a client that chose `Char` for `T`. We use the backwards function application operator `|>` to chain all the three outputs, and then use the Prelude's function `receiveAndClose` to complete the protocol.
 ```freest
 charRenderer : !type a . !(a -1-> String) ; !a ; ?String ; Close -> String
 charRenderer c =
@@ -321,7 +321,7 @@ pairRenderer c =
     showPair (x, y) = x ++ " " ++ show y
 ```
 
-To put a server and a client together, we proceed as usual. Notice that `print` prints the result of `pairRenderer`.
+To put a server and a client together, we proceed as usual.
 ```freest
 _ = forkWith render |> pairRenderer |> print
 ```
