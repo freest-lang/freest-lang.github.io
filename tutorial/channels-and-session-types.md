@@ -371,9 +371,61 @@ introduces a name for type `(Int, Int)`. Code may use `IntPair` and `(Int, Int)`
 
 But the `type` keyword in FreeST may introduce genuine new types, as `Repeat` above. This is a recursive type and the only means of introducing recursive types is via a `type` construction. 
 
-## By the power of context-free session types!
-<!-- context-free session types -->
+## By the power of context-free sessions!
 
+Let us start with a simple exercise: sending and receiving a list on a channel. We could send the whole list in one go and that would be it. But we are interested in really large data that needs to be marshalled and unmarshaled piecewise.
+
+Let us the set up a type to convey (a finite or infinite) number of values of a given type `a` on a channel. The type takes the view of the writer process.
+```freest
+type Stream a = +{Done: Close, More: !a ; Stream a}
+```
+
+To consume one such channel, we write a function that takes a list of elements of type `a` and a channel and sends the elements in the list, one at a time, on the channel:
+```freest
+marshall : forall a -> [a] -> Stream a -> ()
+marshall []        c = c |> select Done |> close
+marshall (x :: xs) c = c |> select More |> send x |> marshall xs
+```
+
+To consume the other endpoint of the channel, that is, to consume a channel of type `Dual (Stream a)`, we take advantage of pattern-matching on session operations:
+```freest
+unmarshall : forall a -> Dual (Stream a) -> [a]
+unmarshall (&Done Wait)     = []
+unmarshall (&More (?x ; c)) = x :: unmarshall c
+```
+
+Here's a little test. Expect to read `[1, 2, 3, 4, 5]` in the console.
+```freest
+_ = forkWith (marshall [1, 2, 3, 4, 5]) |> unmarshall |> print
+```
+
+Now imagine that, rather than a list, we are interested in marshalling and unmarshalling binary trees. The datatype for binary trees of arbitratry elements `a` is as follows:
+```freest
+data Tree a = Leaf | Node (Tree a) a (Tree a)
+```
+
+A first instinct is to reuse the flat `Stream a` we already have. It can carry a tree, but at a price. A `Stream a` conveys a one-dimensional run of payloads terminated by `Done`; it records nothing about tree shape. To move a `Tree a` across it, the sender first *flattens* the tree along an agreed traversal and, since a bare payload cannot tell a `Leaf` from a `Node`, each element must also carry that shape bit — for instance streaming the tree as a `Stream (Maybe a)`, emitting `Nothing` for every `Leaf` and `Just x` for the root of   every `Node`.
+
+Fix a **pre-order** walk: emit the node, then its left subtree, then its right. The receiver rebuilds the tree by reading tokens in that same order. The catch is that a `Stream` only guarantees a well-typed *sequence* of tokens, not that its length matches any tree, so the reader must add two runtime checks that a structured protocol would not need:
+
+* **premature `Done`** — a token is required but the stream has ended (a truncated tree), and
+* **trailing tokens** — the tree is complete yet the stream still offers `More` (leftover data).
+
+We leave to the reader writing a function that tries to unmarshalls a tree from a stream, while checking for the two error situations above:
+```freest
+unmarshall : forall a -> Dual (Stream (Maybe a)) -> Tree a
+```
+
+The bookkeeping and error-handling is exactly what a dedicated, structured channel type for trees lets us avoid, by duplicating the tree's shape into the protocol itself:
+```freest
+type TreeC a = +{Leaf: Skip, Node: TreeC a ; !a ; TreeC a}
+```
+The session type now admits precisely the well-formed serialisations, and the two checks above become impossible to violate. The remainder of this section develops the `TreeC a` approach.
+
+The first thing to note is that the `TreeC` protocol does not close the channel. We say that `TreeC` is a *session* type but not a *channel* type. It cannot be used to create channels; in particular it cannot be used with `forkWith`. Why don't we then write the type as `+{Leaf: Close, Node: ...}`, similarly to what we have done for type `Stream`? Imagine a `Node` tree whose left tree is a `Leaf`: after selecting `Node` and then `Leaf` we are left with the type `Close; !a; TreeC a`. But after closing a channel no further operations are available on the channel. Another way of seeing this is to remember that `Close ; T` is equivalent to `Close` for all type `T` (`Close` is a left-absorbing element of the semicolon type operator).
+
+
+## Old stuff
 The sequential composition operator of session types - the semicolon - allows for a convenient protocol composition and decomposition.
 
 Imagine a simple protocol to conduct an integer predicate. Again, as seen from the side of the client, the protocol outputs an integer and then inputs the result in the form of a boolean value. The type can be written as follows.
