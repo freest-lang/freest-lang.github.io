@@ -239,6 +239,15 @@ But `main` is just another name. And since we are nor using it, we may as well u
 _ = forkWith adder |> onePlusOne |> print
 ```
 
+The list of declarations in a script is evaluated in order, so that
+```freest
+_ = forkWith adder |> onePlusOne |> print
+_ = forkWith adder |> onePlusOne |> print
+```
+would print `2` twice.
+
+Channels are *buffered*. The output operations (`send`, `sendType`, `select` and `close`) are nonblocking. The input operations (`receive`, `receiveType`, `case` and `Wait`) may block is the buffer isf empty.
+
 
 <!-- ## A word on the semicolon expression operator
 
