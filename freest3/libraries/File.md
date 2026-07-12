@@ -12,46 +12,57 @@ grand_parent: FreeST3
 # File
 {: .no_toc}
 
+<div class="lib-note" markdown="1">
+The **File** library provides functions for reading from and writing to files,
+built on the `OutStream` and `InStream` stream types from the Prelude. Bring it
+into scope with `import File`.
+</div>
+
 <!-- collapsible TOC (check https://just-the-docs.github.io/just-the-docs/docs/navigation-structure/#top) -->
-<!-- <details markdown="block">
+<details markdown="block">
   <summary>
     Table of contents
   </summary>
   {: .text-delta }
 - TOC
 {:toc}
-</details> -->
+</details>
 
-## `openWriteFile : FilePath -> OutStream`
-{: .no_toc}
+## `openWriteFile`
+```freest
+openWriteFile : FilePath -> OutStream
+```
 Opens an `OutStream` channel endpoint to a file specified by a path, in write mode.
 
-
-## `openAppendFile : FilePath -> OutStream`
-{: .no_toc}
+## `openAppendFile`
+```freest
+openAppendFile : FilePath -> OutStream
+```
 Opens an `OutStream` channel endpoint to a file specified by a path, in append mode.
 
-
-## `openReadFile : FilePath -> InStream`
-{: .no_toc}
+## `openReadFile`
+```freest
+openReadFile : FilePath -> InStream
+```
 Opens an `InStream` channel endpoint to a file specified by a path, in read mode.
 
-
-## `writeFile : FilePath -> String -> ()`
-{: .no_toc}
+## `writeFile`
+```freest
+writeFile : FilePath -> String -> ()
+```
 Writes a string to a file specified by a path. 
 Does the same as `openWriteFile fp |> hPutStr s |> hCloseOut`.
 
-
-## `appendFile : FilePath -> String -> ()`
-{: .no_toc}
+## `appendFile`
+```freest
+appendFile : FilePath -> String -> ()
+```
 Write a string to a file specified by a path. 
 Does the same as `openAppendFile fp |> hPutStr s |> hCloseOut`.
 
-
-## `readFile : FilePath -> String`
-{: .no_toc}
+## `readFile`
+```freest
+readFile : FilePath -> String
+```
 Read the contents of a file specified by a path. Note that the string separates lines 
 explicitely with the newline character `\n`.
-
-

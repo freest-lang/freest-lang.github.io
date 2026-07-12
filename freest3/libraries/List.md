@@ -12,177 +12,109 @@ grand_parent: FreeST3
 # List
 {: .no_toc}
 
+<div class="lib-note" markdown="1">
+The **List** library collects operations over integer lists (`[Int]`). Bring it
+into scope with `import List`.
+
+The functions are grouped by purpose below; each table lists a function and its
+type.
+</div>
+
 <!-- collapsible TOC (check https://just-the-docs.github.io/just-the-docs/docs/navigation-structure/#top) -->
-<!-- <details markdown="block">
+<details markdown="block">
   <summary>
     Table of contents
   </summary>
   {: .text-delta }
 - TOC
 {:toc}
-</details> -->
-
-## `head : [Int] -> Int`
-
-
-
-## `last : [Int] -> Int`
-
-
-
-## `tail : [Int] -> [Int]`
-
-
-
-## `init : [Int] -> [Int]`
-
-
-
-## `singleton : Int -> [Int]`
-
-
-
-## `null : [Int] -> Bool`
-
-
-
-## `length : [Int] -> Int`
-
-
-
-## `map : (Int -> Int) -> [Int] -> [Int]`
-
-
-
-## `reverse : [Int] -> [Int]`
-
-
-
-## `intersperse : Int -> [Int] -> [Int]`
-
-
-
-## `foldl : forall a:*T . (a -> Int -> a) -> a -> [Int] -> a`
-
-
-
-## `foldr : forall a:*T . (Int -> a -> a) -> a -> [Int] -> a`
-
-
-
-## `any : (Int -> Bool) -> [Int] -> Bool`
-
-
-
-## `all : (Int -> Bool) -> [Int] -> Bool`
-
-
-
-## `concatMap : (Int -> [Int]) -> [Int] -> [Int]`
-
-
-
-## `sum : [Int] -> Int`
-
-
-
-## `product : [Int] -> Int`
-
-
-
-## `maximum : [Int] -> Int`
-
-
-
-## `minimum : [Int] -> Int`
-
-
-
-## `scanl : (Int -> Int -> Int) -> Int -> [Int] -> [Int]`
-
-
-
-## `scanl1 : (Int -> Int -> Int) -> [Int] -> [Int]`
-
-
-
-## `scanr : (Int -> Int -> Int) -> Int -> [Int] -> [Int]`
-
-
-
-## `scanr1 : (Int -> Int -> Int) -> [Int] -> [Int]`
-
-
-
-## `mapAccumL : forall a:*T . (a -> Int -> (a, Int)) -> a -> [Int] -> (a, [Int])`
-
-
-
-## `mapAccumR : forall a:*T . (a -> Int -> (a, Int)) -> a -> [Int] -> (a, [Int])`
-
-
-
-## `take : Int -> [Int] -> [Int]`
-
-
-
-## `drop : Int -> [Int] -> [Int]`
-
-
-
-## `splitAt : Int -> [Int] -> ([Int], [Int])`
-
-
-
-## `takeWhile : (Int -> Bool) -> [Int] -> [Int]`
-
-
-
-## `dropWhile : (Int -> Bool) -> [Int] -> [Int]`
-
-
-
-## `span : (Int -> Bool) -> [Int] -> ([Int], [Int])`
-
-
-
-## `break : (Int -> Bool) -> [Int] -> ([Int], [Int])`
-
-
-
-## `elem : Int -> [Int] -> Bool`
-
-
-
-## `notElem : Int -> [Int] -> Bool`
-
-
-
-## `filter : (Int -> Bool) -> [Int] -> [Int]`
-
-
-
-## `partition : (Int -> Bool) -> [Int] -> ([Int], [Int])`
-
-
-
-## `nth : [Int] -> Int -> Int`
-
-
-
-## `zipWith : (Int -> Int -> Int) -> [Int] -> [Int] -> [Int]`
-
-
-
-## `zipWith3 : (Int -> Int -> Int -> Int) -> [Int] -> [Int] -> [Int] -> [Int]`
-
-
-
-## `elemAt : [Int] -> Int -> Int`
-
-
-
-## `equal : [Int] -> [Int] -> Bool`
-
-
-
+</details>
+
+## Basic operations
+
+{: .lib-table}
+| Function | Type |
+|:---------|:-----|
+| `head` | `[Int] -> Int`{: .language-freest } |
+| `last` | `[Int] -> Int`{: .language-freest } |
+| `tail` | `[Int] -> [Int]`{: .language-freest } |
+| `init` | `[Int] -> [Int]`{: .language-freest } |
+| `singleton` | `Int -> [Int]`{: .language-freest } |
+| `null` | `[Int] -> Bool`{: .language-freest } |
+| `length` | `[Int] -> Int`{: .language-freest } |
+| `reverse` | `[Int] -> [Int]`{: .language-freest } |
+
+## Transforming lists
+
+{: .lib-table}
+| Function | Type |
+|:---------|:-----|
+| `map` | `(Int -> Int) -> [Int] -> [Int]`{: .language-freest } |
+| `intersperse` | `Int -> [Int] -> [Int]`{: .language-freest } |
+| `concatMap` | `(Int -> [Int]) -> [Int] -> [Int]`{: .language-freest } |
+| `filter` | `(Int -> Bool) -> [Int] -> [Int]`{: .language-freest } |
+| `partition` | `(Int -> Bool) -> [Int] -> ([Int], [Int])`{: .language-freest } |
+
+## Folding and scanning
+
+{: .lib-table}
+| Function | Type |
+|:---------|:-----|
+| `foldl` | `forall a:*T . (a -> Int -> a) -> a -> [Int] -> a`{: .language-freest } |
+| `foldr` | `forall a:*T . (Int -> a -> a) -> a -> [Int] -> a`{: .language-freest } |
+| `scanl` | `(Int -> Int -> Int) -> Int -> [Int] -> [Int]`{: .language-freest } |
+| `scanl1` | `(Int -> Int -> Int) -> [Int] -> [Int]`{: .language-freest } |
+| `scanr` | `(Int -> Int -> Int) -> Int -> [Int] -> [Int]`{: .language-freest } |
+| `scanr1` | `(Int -> Int -> Int) -> [Int] -> [Int]`{: .language-freest } |
+| `mapAccumL` | `forall a:*T . (a -> Int -> (a, Int)) -> a -> [Int] -> (a, [Int])`{: .language-freest } |
+| `mapAccumR` | `forall a:*T . (a -> Int -> (a, Int)) -> a -> [Int] -> (a, [Int])`{: .language-freest } |
+
+## Searching and predicates
+
+{: .lib-table}
+| Function | Type |
+|:---------|:-----|
+| `any` | `(Int -> Bool) -> [Int] -> Bool`{: .language-freest } |
+| `all` | `(Int -> Bool) -> [Int] -> Bool`{: .language-freest } |
+| `elem` | `Int -> [Int] -> Bool`{: .language-freest } |
+| `notElem` | `Int -> [Int] -> Bool`{: .language-freest } |
+
+## Aggregating
+
+{: .lib-table}
+| Function | Type |
+|:---------|:-----|
+| `sum` | `[Int] -> Int`{: .language-freest } |
+| `product` | `[Int] -> Int`{: .language-freest } |
+| `maximum` | `[Int] -> Int`{: .language-freest } |
+| `minimum` | `[Int] -> Int`{: .language-freest } |
+
+## Extracting sublists
+
+{: .lib-table}
+| Function | Type |
+|:---------|:-----|
+| `take` | `Int -> [Int] -> [Int]`{: .language-freest } |
+| `drop` | `Int -> [Int] -> [Int]`{: .language-freest } |
+| `splitAt` | `Int -> [Int] -> ([Int], [Int])`{: .language-freest } |
+| `takeWhile` | `(Int -> Bool) -> [Int] -> [Int]`{: .language-freest } |
+| `dropWhile` | `(Int -> Bool) -> [Int] -> [Int]`{: .language-freest } |
+| `span` | `(Int -> Bool) -> [Int] -> ([Int], [Int])`{: .language-freest } |
+| `break` | `(Int -> Bool) -> [Int] -> ([Int], [Int])`{: .language-freest } |
+
+## Indexing and comparison
+
+{: .lib-table}
+| Function | Type |
+|:---------|:-----|
+| `nth` | `[Int] -> Int -> Int`{: .language-freest } |
+| `elemAt` | `[Int] -> Int -> Int`{: .language-freest } |
+| `equal` | `[Int] -> [Int] -> Bool`{: .language-freest } |
+
+## Zipping
+
+{: .lib-table}
+| Function | Type |
+|:---------|:-----|
+| `zipWith` | `(Int -> Int -> Int) -> [Int] -> [Int] -> [Int]`{: .language-freest } |
+| `zipWith3` | `(Int -> Int -> Int -> Int) -> [Int] -> [Int] -> [Int] -> [Int]`{: .language-freest } |
