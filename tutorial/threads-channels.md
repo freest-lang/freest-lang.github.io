@@ -143,4 +143,4 @@ _ = let (x, y) = channel @SendIntInt
 ```
 Expect to read `3` on the console.
 
-Now suppose that we replace `Close` by `Wait` in the `sendIntInt` type. The two consumers are easy to derive: exchange `close` and `wait`. The result is however catastrophic. The (only) thread waits indefinitly by itself. A *deadlock*.
+Now suppose that we replace `Close` by `Wait` in the `sendIntInt` type. The two consumers are easy to derive: exchange `close` and `wait`. The type of one endpoint is no longer output-only. The result is however catastrophic. The (only) thread waits indefinitly for itself. A *deadlock*.
