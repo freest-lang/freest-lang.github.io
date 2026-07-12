@@ -31,6 +31,6 @@ Download FreeST by cloning the repository:
 git clone --branch fopss26 --depth 1 https://github.com/freest-lang/freest.git
 ```
 
-To install run `cd freest && stack install`. This will install `freest`.
+To install run `cd freest && stack install`. This will install `freest`. To type check and run a script use `freest`. To run the interactive interpreter type `freest -i`.
 
-Please be sure that Stack's install folder is part of your system's path, or else you will not be able to use the executable.
+Please be sure that the Stack's install folder is part of your system's path, or else you will not be able to run `freest`.
