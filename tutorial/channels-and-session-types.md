@@ -355,7 +355,7 @@ The table below summarises what we have seen on session type operations.
 | `Close` | `Wait` | Channel closing |
 | Input | Output | |
 | Negative | Positive | |
-| Pattern matching available | Chaining (|>) available | |
+| Pattern matching available | Chaining available | |
 | Blocking operations | Nonblocking operations | |
 
 
