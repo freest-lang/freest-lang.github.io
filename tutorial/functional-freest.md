@@ -243,7 +243,28 @@ _ = print (area' aTriangle -. area aTriangle <. 0.0001)
 and expect `True` on the console.
 
 
+## Datatype and type declarations
+
+Keyword `data` introduces a new type, different from all others; `type` may introduce a type abbreviation as well as new type (if the name of the type appears on the right; we discuss this in the next section). `data` is nominal; `type` is structural. This means that types `T` and `U` can never be equivalent, regardeless of what the ellipsis stand for:
+```freest
+data T = ...
+data U = ...
+```
+
+On the other hand, `V` and `W` are equivalent types. They are both equivalent to `Int` and all three may be interchangeably used in code.
+```freest
+type V = Int
+type W = int
+```
+
+Datatype constructors cannot be reused. The declarations below are *not* valid.
+```freest
+data T = D
+data U = D
+```
+
 ## Recursion, recursion, recursion, ...
+
 We want to write a function `sumUpTo` that calculates the sum of the first `n` natural numbers.
     Functions such as `sumUpTo` which require some form of *iteration* are translated to using
     *loops*. FreeST does not have any type of loop syntax, so how can we write function 
