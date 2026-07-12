@@ -58,7 +58,7 @@ The two endpoints of a channel are usually held by two different threads. These 
 
  The elements of interaction may be composed by means of sequential composition and recursion. We start with sequential composition and leave recursion for later. The sequential composition of (session) types is denote by the semicolon binary operator. Is `T` and `U` are session types, then type `T ; U` denotes the type that first preforms `T` and then `U`.
 
-### Exchanging values and closing channels
+## Exchanging values and closing channels
 
 Let us start with a very basic protocol: send an integer and then close the channel. This is written as `!Int ; Close`. Let us now write a consumer for this type, that is, a function and receives a channel of type `!Int ; Close` and exhausts the channel (that is, reads a value and closes the channel). Primitive functions `send` and `close` send a value o a given channel and close a given channels, respectively. The former returns a pair composed of a value and a channel endpoint (on which to continue the interaction), the latter returns `()`, the unit type.
 
@@ -202,7 +202,7 @@ sumThree (?x ; ?y ; ?z ; Wait) = print $ x + y + z
 Pattern matching on sessions is available only for input operations; one cannot pattern match on send or close. There are two further session patterns that we discuss below.
 
 
-### Creating new channels and new threads
+## Creating new channels and new threads
 
 At this point we have a consumer for endpoint `?Int ; ?Int ; !Int ; Wait` and another for the dual endpoint `!Int ; !Int ; ?Int ; Close`. How do we put the two together in a program? We need to create a new channel and to fork a new thread. The plan is for "main" to fork a thread with the code for the `adder` and continue with `onePlusOne`.
 
@@ -448,8 +448,9 @@ Now, the recursive function must return a channel for two reasons: the driver fu
 Let us start with the exercise of marshalling a tree. The driver function is `marshall` and the recursive function is `mars`. The driver is easy to write:
 ```freest
 marshall : forall a -> Tree a -> TreeC a; Close -> ()
-marshall t c = mars t c |> close
+marshall t c = c |> mars t |> close
 ```
+(or `close (mars t c)` if you prefer.)
 
 What is the type of `mars`? Would the below type work?
 ```freest
@@ -468,7 +469,7 @@ marshall @a t c = mars @a @Close t c |> close
 Type parameters are introduced as `@a` at the head of the function, explict type arguments are introduced in the body of the function also with the `@` notation, but this time followed by a type (`@Close`).
 
 ***Note:***
-Impredicative polymorphism and the rich set of laws of context-free session types is an explosive mixture, streching the limits of the Quicklook algorithm. The FreeST compiler does its best at inferring type annotations as parameters to functions. If the compiler struggles then it may be a good idea to help it by providing some type annotations.
+Impredicative polymorphism and the rich set of laws of context-free session types make an explosive mixture, streching the limits of the Quicklook algorithm. The FreeST compiler does its best at inferring type annotations as parameters to functions. If the compiler struggles then it may be a good idea to help it by providing some type annotations.
 
 We are now in a position the write `mars`. We make use of the `where` clause and write:
 
@@ -477,10 +478,8 @@ marshall : forall a -> Tree a -> TreeC a; Close -> ()
 marshall t c = mars t c |> close
     where
       mars : forall a b -> Tree a -> TreeC a; b -> b
-      mars Leaf         c = 
-        c |> select Leaf
-      mars (Node l x r) c =
-        c |> select Node |> mars l |> send x |> mars r
+      mars Leaf         c = c |> select Leaf
+      mars (Node l x r) c = c |> select Node |> mars l |> send x |> mars r
 ```
 The code is extremely compact and lightweight thanks to the `|>` operator and the implicit type parameters.
 
