@@ -352,8 +352,7 @@ The table below summarises what we have seen on session type operations.
 | `!T` | `?T` | Value exchange |
 | `!type T` | `?type T` | Type exchange |
 | `+{l: T, ..}` | `&{l: T, ..}` | Choice |
-| `Close` | `Wait` | Channel closing
-| --- | --- |
+| `Close` | `Wait` | Channel closing |
 | Input | Output | |
 | Negative | Positive | |
 | Pattern matching available | Chaining (`|>`) available
