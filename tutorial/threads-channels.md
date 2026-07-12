@@ -109,4 +109,4 @@ forkWith @a f =
   fork (\_  -1-> f y);
   x
 ```
-The discussion of its type is postponed for later.
+The discussion of its type is postponed for a later section.
