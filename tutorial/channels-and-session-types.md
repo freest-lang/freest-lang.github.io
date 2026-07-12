@@ -374,7 +374,7 @@ But the `type` keyword in FreeST may introduce genuine new types, as `Repeat` ab
 
 ## By the power of context-free sessions!
 
-Let us start with a simple exercise: sending and receiving a list on a channel. We could send the whole list in one go and that would be it. But we are interested in really large data that needs to be streamed piecewise.
+Let us start with a simple exercise, that of sending and receiving a list on a channel. We could send the whole list in one go and that would be it. But we are interested in really large data that needs to be streamed piecewise.
 
 Let us the set up a type to convey (a finite or infinite) number of values of a given type `a` on a channel. The type takes the view of the writer process.
 ```freest
@@ -429,14 +429,14 @@ Why don't we then write the type as `+{Leaf: Close, Node: ...}`, similarly to wh
 
 Another way of seeing this is to remember that `Close ; T` is equivalent to `Close` for all type `T`.
 Types `Close` and `Wait` are the *left-absorbing* elements of the semicolon type operator. If we use symbol `≡` to denote type equivalence, this laws can be written as follows:
-```
+```freest
 Close ; T ≡ Close
  Wait ; T ≡ Wait
 ```
 For this reason, when time comes to create a channel, we use the type `TreeC a ; Close` (or `TreeC a ; Wait`, but in FreeST we tend to keep the positive — output — and the negative — input — type constructors together).
 
 So let us go back to the example of a `Node` tree whose left tree is a `Leaf`. Now, after selecting `Node` and then `Leaf` we are left with the type `Skip; !a; TreeC a`. But `Skip` is the (left and right) neutral element of the semicolon type operator. We write this as follows:
-```
+```freest
 Skip ; T ≡ T
 T ; Skip ≡ T
 ```
