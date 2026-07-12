@@ -40,26 +40,26 @@ their own entry with a description and, where useful, a worked example.
 {: .lib-table}
 | Function | Type |
 |:---------|:-----|
-| `(+)`{: .language-freest } | `Int -> Int -> Int`{: .language-freest } |
-| `(-)` | `Int -> Int -> Int` |
-| `(*)` | `Int -> Int -> Int` |
-| `(/)` | `Int -> Int -> Int` |
-| `div` | `Int -> Int -> Int` |
-| `(^)` | `Int -> Int -> Int` |
-| `mod` | `Int -> Int -> Int` |
-| `rem` | `Int -> Int -> Int` |
-| `max` | `Int -> Int -> Int` |
-| `min` | `Int -> Int -> Int` |
-| `quot` | `Int -> Int -> Int` |
-| `gcd` | `Int -> Int -> Int` |
-| `lcm` | `Int -> Int -> Int` |
-| `subtract` | `Int -> Int -> Int` |
-| `succ` | `Int -> Int` |
-| `pred` | `Int -> Int` |
-| `abs` | `Int -> Int` |
-| `negate` | `Int -> Int` |
-| `even` | `Int -> Bool` |
-| `odd` | `Int -> Bool` |
+| `(+)` | `Int -> Int -> Int`{: .language-freest } |
+| `(-)` | `Int -> Int -> Int`{: .language-freest } |
+| `(*)` | `Int -> Int -> Int`{: .language-freest } |
+| `(/)` | `Int -> Int -> Int`{: .language-freest } |
+| `div` | `Int -> Int -> Int`{: .language-freest } |
+| `(^)` | `Int -> Int -> Int`{: .language-freest } |
+| `mod` | `Int -> Int -> Int`{: .language-freest } |
+| `rem` | `Int -> Int -> Int`{: .language-freest } |
+| `max` | `Int -> Int -> Int`{: .language-freest } |
+| `min` | `Int -> Int -> Int`{: .language-freest } |
+| `quot` | `Int -> Int -> Int`{: .language-freest } |
+| `gcd` | `Int -> Int -> Int`{: .language-freest } |
+| `lcm` | `Int -> Int -> Int`{: .language-freest } |
+| `subtract` | `Int -> Int -> Int`{: .language-freest } |
+| `succ` | `Int -> Int`{: .language-freest } |
+| `pred` | `Int -> Int`{: .language-freest } |
+| `abs` | `Int -> Int`{: .language-freest } |
+| `negate` | `Int -> Int`{: .language-freest } |
+| `even` | `Int -> Bool`{: .language-freest } |
+| `odd` | `Int -> Bool`{: .language-freest } |
 
 ### Integer comparison
 {: .no_toc}
@@ -67,12 +67,12 @@ their own entry with a description and, where useful, a worked example.
 {: .lib-table}
 | Function | Type |
 |:---------|:-----|
-| `(==)` | `Int -> Int -> Bool` |
-| `(/=)` | `Int -> Int -> Bool` |
-| `(<)` | `Int -> Int -> Bool` |
-| `(>)` | `Int -> Int -> Bool` |
-| `(<=)` | `Int -> Int -> Bool` |
-| `(>=)` | `Int -> Int -> Bool` |
+| `(==)` | `Int -> Int -> Bool`{: .language-freest } |
+| `(/=)` | `Int -> Int -> Bool`{: .language-freest } |
+| `(<)` | `Int -> Int -> Bool`{: .language-freest } |
+| `(>)` | `Int -> Int -> Bool`{: .language-freest } |
+| `(<=)` | `Int -> Int -> Bool`{: .language-freest } |
+| `(>=)` | `Int -> Int -> Bool`{: .language-freest } |
 
 ### Floating-point arithmetic and comparison
 {: .no_toc}
@@ -80,19 +80,19 @@ their own entry with a description and, where useful, a worked example.
 {: .lib-table}
 | Function | Type |
 |:---------|:-----|
-| `(+.)` | `Float -> Float -> Float` |
-| `(-.)` | `Float -> Float -> Float` |
-| `(*.)` | `Float -> Float -> Float` |
-| `(/.)` | `Float -> Float -> Float` |
-| `(>.)` | `Float -> Float -> Float` |
-| `(<.)` | `Float -> Float -> Float` |
-| `(>=.)` | `Float -> Float -> Float` |
-| `(<=.)` | `Float -> Float -> Float` |
-| `absF` | `Float -> Float` |
-| `negateF` | `Float -> Float` |
-| `maxF` | `Float -> Float -> Float` |
-| `minF` | `Float -> Float -> Float` |
-| `recip` | `Float -> Float` |
+| `(+.)` | `Float -> Float -> Float`{: .language-freest } |
+| `(-.)` | `Float -> Float -> Float`{: .language-freest } |
+| `(*.)` | `Float -> Float -> Float`{: .language-freest } |
+| `(/.)` | `Float -> Float -> Float`{: .language-freest } |
+| `(>.)` | `Float -> Float -> Float`{: .language-freest } |
+| `(<.)` | `Float -> Float -> Float`{: .language-freest } |
+| `(>=.)` | `Float -> Float -> Float`{: .language-freest } |
+| `(<=.)` | `Float -> Float -> Float`{: .language-freest } |
+| `absF` | `Float -> Float`{: .language-freest } |
+| `negateF` | `Float -> Float`{: .language-freest } |
+| `maxF` | `Float -> Float -> Float`{: .language-freest } |
+| `minF` | `Float -> Float -> Float`{: .language-freest } |
+| `recip` | `Float -> Float`{: .language-freest } |
 
 ### Floating-point functions
 {: .no_toc}
@@ -100,25 +100,25 @@ their own entry with a description and, where useful, a worked example.
 {: .lib-table}
 | Function | Type |
 |:---------|:-----|
-| `pi` | `Float` |
-| `exp` | `Float -> Float` |
-| `log` | `Float -> Float` |
-| `sqrt` | `Float -> Float` |
-| `(**)` | `Float -> Float -> Float` |
-| `logBase` | `Float -> Float -> Float` |
-| `sin` | `Float -> Float` |
-| `cos` | `Float -> Float` |
-| `tan` | `Float -> Float` |
-| `asin` | `Float -> Float` |
-| `acos` | `Float -> Float` |
-| `atan` | `Float -> Float` |
-| `sinh` | `Float -> Float` |
-| `cosh` | `Float -> Float` |
-| `tanh` | `Float -> Float` |
-| `log1p` | `Float -> Float` |
-| `expm1` | `Float -> Float` |
-| `log1pexp` | `Float -> Float` |
-| `log1mexp` | `Float -> Float` |
+| `pi` | `Float`{: .language-freest } |
+| `exp` | `Float -> Float`{: .language-freest } |
+| `log` | `Float -> Float`{: .language-freest } |
+| `sqrt` | `Float -> Float`{: .language-freest } |
+| `(**)` | `Float -> Float -> Float`{: .language-freest } |
+| `logBase` | `Float -> Float -> Float`{: .language-freest } |
+| `sin` | `Float -> Float`{: .language-freest } |
+| `cos` | `Float -> Float`{: .language-freest } |
+| `tan` | `Float -> Float`{: .language-freest } |
+| `asin` | `Float -> Float`{: .language-freest } |
+| `acos` | `Float -> Float`{: .language-freest } |
+| `atan` | `Float -> Float`{: .language-freest } |
+| `sinh` | `Float -> Float`{: .language-freest } |
+| `cosh` | `Float -> Float`{: .language-freest } |
+| `tanh` | `Float -> Float`{: .language-freest } |
+| `log1p` | `Float -> Float`{: .language-freest } |
+| `expm1` | `Float -> Float`{: .language-freest } |
+| `log1pexp` | `Float -> Float`{: .language-freest } |
+| `log1mexp` | `Float -> Float`{: .language-freest } |
 
 ### Numeric conversions
 {: .no_toc}
@@ -126,11 +126,11 @@ their own entry with a description and, where useful, a worked example.
 {: .lib-table}
 | Function | Type |
 |:---------|:-----|
-| `truncate` | `Float -> Int` |
-| `round` | `Float -> Int` |
-| `ceiling` | `Float -> Int` |
-| `floor` | `Float -> Int` |
-| `fromInteger` | `Int -> Float` |
+| `truncate` | `Float -> Int`{: .language-freest } |
+| `round` | `Float -> Int`{: .language-freest } |
+| `ceiling` | `Float -> Int`{: .language-freest } |
+| `floor` | `Float -> Int`{: .language-freest } |
+| `fromInteger` | `Int -> Float`{: .language-freest } |
 
 ## Booleans, characters and strings
 
@@ -140,8 +140,8 @@ their own entry with a description and, where useful, a worked example.
 {: .lib-table}
 | Function | Type |
 |:---------|:-----|
-| `(&&)` | `Bool -> Bool -> Bool` |
-| <code>(&#124;&#124;)</code> | `Bool -> Bool -> Bool` |
+| `(&&)` | `Bool -> Bool -> Bool`{: .language-freest } |
+| <code>(&#124;&#124;)</code> | `Bool -> Bool -> Bool`{: .language-freest } |
 
 ### Characters
 {: .no_toc}
@@ -149,8 +149,8 @@ their own entry with a description and, where useful, a worked example.
 {: .lib-table}
 | Function | Type |
 |:---------|:-----|
-| `ord` | `Char -> Int` |
-| `chr` | `Int -> Char` |
+| `ord` | `Char -> Int`{: .language-freest } |
+| `chr` | `Int -> Char`{: .language-freest } |
 
 ### Strings
 {: .no_toc}
@@ -158,7 +158,7 @@ their own entry with a description and, where useful, a worked example.
 {: .lib-table}
 | Function | Type |
 |:---------|:-----|
-| `(^^)` | `String -> String -> String` |
+| `(^^)` | `String -> String -> String`{: .language-freest } |
 
 ### Showing and reading values
 {: .no_toc}
@@ -166,10 +166,10 @@ their own entry with a description and, where useful, a worked example.
 {: .lib-table}
 | Function | Type |
 |:---------|:-----|
-| `show` | `forall a:*T . a -> String` |
-| `readBool` | `String -> Bool` |
-| `readInt` | `String -> Int` |
-| `readChar` | `String -> Char` |
+| `show` | `forall a:*T . a -> String`{: .language-freest } |
+| `readBool` | `String -> Bool`{: .language-freest } |
+| `readInt` | `String -> Int`{: .language-freest } |
+| `readChar` | `String -> Char`{: .language-freest } |
 
 ## General-purpose functions
 
@@ -335,8 +335,8 @@ Extracts the second element from a pair, discarding the first.
 {: .lib-table}
 | Function | Type |
 |:---------|:-----|
-| `error` | `forall a:*T . String -> a` |
-| `undefined` | `forall a:*T . a` |
+| `error` | `forall a:*T . String -> a`{: .language-freest } |
+| `undefined` | `forall a:*T . a`{: .language-freest } |
 
 ## Channels and concurrency
 
@@ -747,15 +747,15 @@ endpoint with `hCloseIn`.
 {: .lib-table}
 | Function | Type | Description |
 |:---------|:-----|:------------|
-| `stdout` | `OutStreamProvider` | Standard output stream. Prints to the console. |
-| `putChar` | `Char -> ()` | Prints a character to `stdout`. Behaves the same as `hPutChar_ c stdout`, where `c` is the character to be printed. |
-| `putStr` | `String -> ()` | Prints a string to `stdout`. Behaves the same as `hPutStr_ s stdout`, where `s` is the string to be printed. |
-| `putStrLn` | `String -> ()` | Prints a string to `stdout`, followed by the newline character `\n`. Behaves as `hPutStrLn_ s stdout`, where `s` is the string to be printed. |
-| `print` | `forall a:*T . a -> ()` | Prints the string representation of a given value to `stdout`, followed by the newline character `\n`. Behaves the same as `hPrint_ @t v stdout`, where `v` is the value to be printed and `t` its type. |
-| `stderr` | `OutStreamProvider` | Standard error stream. Prints to the console. |
-| `stdin` | `InStreamProvider` | Standard input stream. Reads from the console. |
-| `getChar` | `Char` | Reads a single character from `stdin`. |
-| `getLine` | `String` | Reads a single line from `stdin`. |
+| `stdout` | `OutStreamProvider`{: .language-freest } | Standard output stream. Prints to the console. |
+| `putChar` | `Char -> ()`{: .language-freest } | Prints a character to `stdout`. Behaves the same as `hPutChar_ c stdout`, where `c` is the character to be printed. |
+| `putStr` | `String -> ()`{: .language-freest } | Prints a string to `stdout`. Behaves the same as `hPutStr_ s stdout`, where `s` is the string to be printed. |
+| `putStrLn` | `String -> ()`{: .language-freest } | Prints a string to `stdout`, followed by the newline character `\n`. Behaves as `hPutStrLn_ s stdout`, where `s` is the string to be printed. |
+| `print` | `forall a:*T . a -> ()`{: .language-freest } | Prints the string representation of a given value to `stdout`, followed by the newline character `\n`. Behaves the same as `hPrint_ @t v stdout`, where `v` is the value to be printed and `t` its type. |
+| `stderr` | `OutStreamProvider`{: .language-freest } | Standard error stream. Prints to the console. |
+| `stdin` | `InStreamProvider`{: .language-freest } | Standard input stream. Reads from the console. |
+| `getChar` | `Char`{: .language-freest } | Reads a single character from `stdin`. |
+| `getLine` | `String`{: .language-freest } | Reads a single line from `stdin`. |
 
 ## File types
 
