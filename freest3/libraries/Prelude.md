@@ -40,7 +40,7 @@ their own entry with a description and, where useful, a worked example.
 {: .lib-table}
 | Function | Type |
 |:---------|:-----|
-| `(+)`{:.freest} | `Int -> Int -> Int`{:.freest} |
+| `(+)`{:.freest .highlight} | `Int -> Int -> Int`{:.freest .highlight} |
 | `(-)` | `Int -> Int -> Int` |
 | `(*)` | `Int -> Int -> Int` |
 | `(/)` | `Int -> Int -> Int` |
