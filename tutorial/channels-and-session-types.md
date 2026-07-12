@@ -353,10 +353,12 @@ The table below summarises what we have seen on session type operations.
 | `!type T` | `?type T` | Type exchange |
 | `+{l: T, ..}` | `&{l: T, ..}` | Choice |
 | `Close` | `Wait` | Channel closing |
-| Input | Output | |
-| Negative | Positive | |
-| Pattern matching available | Chaining available | |
-| Blocking operations | Nonblocking operations | |
+| Input | Output | a |
+| Negative | Positive | b |
+| Pattern matching available | Chaining available | c |
+| Blocking operations | Nonblocking operations | d |
+
+By 'chaining' we mean composing output operations with the inverse function application `|>`.
 
 
 ## Unbounded protocols
