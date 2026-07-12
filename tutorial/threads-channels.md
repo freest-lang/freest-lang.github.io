@@ -21,7 +21,7 @@ parent: Tutorial
 {:toc}
 </details>
 
-## Creating threads and threads
+## Creating threads and channels
 
 The previous section have used the `forkWith` combinator to accomplish two distinct things:
 * Create a new channel and
@@ -58,7 +58,7 @@ master n c d =
     let d = select More d
     in case c of (&More c) -> print n ; master (n - 1) c d
 ```
-Notice the non-exaustive pattern matching in each of the two equations for `master`: if it writes `X` on the right, then `X` goes around the network, through `forwader`s, and only `X` may appear on the left.
+Notice the non-exaustive pattern matching in each of the two equations for `master`: if the `master` writes `X` on the right, then `X` goes around the network, through `forwader`s, and only `X` may appear on the left.
 
 Now how do we setup a circular network, composed of `m-1` `forwarder`s and one `master`? We need
 * an operation to create channel, and
@@ -72,7 +72,7 @@ let (c1, d1) = channel @Forward
 in ...
 ```
 
-To fork a new thread use function `fork`. Fork receive a linear thunk, `t : `,creates a thread running `t ()` and returns `()`. Thunks to be used with fork are usually written `(\_ -1-> ...)` with `_` of type `()`. The function is linear; the client rests assured that the function shall be used once only. For example, one of the forwarders is created with `fork (\_ -1-> forward c2 d2)`.
+To fork a new thread use function `fork`. Fork receives a linear thunk, `t`,creates a thread running `t ()` and returns `()`. Thunks to be used with fork are usually written `(\_ -1-> ...)` with `_` of type `()`. The function is linear; the client rests assured that the function shall be used once only. For example, one of the forwarders is created with `fork (\_ -1-> forward c2 d2)`.
 
 Putting everything together we have:
 ```freest
