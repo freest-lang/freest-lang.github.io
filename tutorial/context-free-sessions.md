@@ -2,7 +2,7 @@
 # Feel free to add content and custom Front Matter to this file.
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
-title: Types and their types
+title: Context-free sessions
 layout: default
 nav_order: 8
 parent: Tutorial
