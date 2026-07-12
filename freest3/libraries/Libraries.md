@@ -6,5 +6,6 @@ title: Libraries
 layout: default
 nav_order: 5
 has_children: true
+parent: FreeST3
 has_toc: false # avoid table of contents in the end of the page
 ---
