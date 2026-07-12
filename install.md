@@ -33,8 +33,6 @@ git clone --branch fopss26 --depth 1 https://github.com/freest-lang/freest.git
 ```
 
 <!-- how to install -->
-To install run `cd freest && stack install`. This will install `freest` and
-    `freesti` (FreeST's interactive environment).
+To install run `cd freest && stack install`. This will install `freest`.
 
-Please be sure that Stack's install folder is part of your system's path, or else you will not be able to 
-    use either executable.
+Please be sure that Stack's install folder is part of your system's path, or else you will not be able to use the executable.
