@@ -6,6 +6,7 @@ title: List
 layout: default
 nav_order: 2
 parent: Libraries
+grand_parent: FreeST3
 ---
 
 # List

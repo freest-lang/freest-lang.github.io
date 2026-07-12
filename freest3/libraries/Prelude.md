@@ -6,6 +6,7 @@ title: Prelude
 layout: default
 nav_order: 1
 parent: Libraries
+grand_parent: FreeST3
 ---
 
 # Prelude
