@@ -40,6 +40,7 @@ From primitive types, other types can be built. **Tuple** is the first type
     constructor we study. A tuple can have two elements `(Int, String)` or as
     many you want `(Bool, Int, (Int, Char), String)`.
 
+
 ## Functions, functions everywhere
 
 In FreeST, much like in every other functional language, everything is a function (or a composition 
@@ -105,35 +106,30 @@ Not all functions can (or should) be described using a single expression. To pre
     becoming a limitation, we use `let` expressions which lets (pun intended) us store values in
     variables for later use. 
 ```freest
-betterDivision : Int -> Int -> (Int, Int)
-betterDivision n div =
+improvedDivision : Int -> Int -> (Int, Int)
+improvedDivision n div =
     let quotient = n / div
-        remainder = mod n div in
-    (quotient, remainder)
+        remainder = mod n div
+    in (quotient, remainder)
 ```
 
-Function `betterDivision` simply divides a number by another and returns both the quotient and the
+Function `improvedDivision` simply divides a number by another and returns both the quotient and the
     remainder. We could write a single expression `(n / div, mod n div)`, but naming each part with
     a `let` makes clear what is what.
 
-<!-- pair pattern matching with `let` -->
 Furthermore, it's through `let` expressions that we can 'open' pairs to access their elements 
     (instead of relying on `fst` and `snd`).
 ```freest
-main : ()
-main = 
-    let (quotient, rest) = betterDivision 3 2 in
-    ()
+let (quotient, remainder) = improvedDivision 3 2 in quotient * remainder
 ```
 
 <!-- if statements -->
-For conditional branching, `if` statements are provided. Note that both the `then` and `else` 
-    branches must be present, so you can't write just the `then` branch.
+For conditional branching, `if` statements are provided. Note that both the `then` and `else` branches must be present, so you can't write just the `then` branch. Here's a function that returns the absolute value of an integer.
+
 ```freest
--- Returns the absolute value of an integer
 abs' : Int -> Int
 abs' x = 
-    if x > 0
+    if x >= 0
     then x
     else -x
 ```
@@ -144,34 +140,32 @@ abs' x =
 <!-- partial application of functions -->
 <!-- main is the program's default entry point (but you can pass another one in the command line) -->
 
-## Recursion, recursion, recursion, ...
-We want to write a function `sumFirstN` that calculates the sum of the first `n` natural numbers.
-    Functions such as `sumFirstN` which require some form of *iteration* are translated to using
-    *loops*. FreeST does not have any type of loop syntax, so how can we write function 
-    `sumFirstN`? The answer is **recursion**.
+## Running scripts in FreeST
 
-Trivially, the recursive definition of `sumFirstN` is: `sumFirstN 0 == 0` and `sumFirstN n == n + sumFirstN (n-1)`. In FreeST it translates to:
+A FreeST script is a list of declarations, as for example, `improvedDivision` and `abs'`. To run code one has to place a (non evaluated) expression inside a declaration. For example:
 ```freest
-sumFirstN : Int -> Int
-sumFirstN n =
-    if n <= 0
-    then 0
-    else n + sumFirstN (n - 1)
+main = print $
+  let divisor = 2
+      (quotient, remainder) = improvedDivision 3 divisor
+  in quotient * divisor + remainder
+```
+But `main` is just another name. And since we are nor using it, we may as well use an wildcard:
+```freest
+_ = print $
+  let divisor = 2
+      (quotient, remainder) = improvedDivision 3 divisor
+  in quotient * divisor + remainder
 ```
 
-If you need to propagate parameters forward while in recursion, you can do it by changing the 
-    function's signature to have them. An example is a variation of the `sumFirstN` function 
-    that accumulates the sum forward and returns it in the end (when `n` is 0):
+The list of declarations in a script is evaluated in order, so that
 ```freest
-sumFirstN' : Int -> Int -> Int
-sumFirstN' n curr =
-    if curr == n
-    then curr 
-    else curr + sumFirstN' n (curr + 1)
+_ = print 1
+_ = print 2
 ```
+would print `1` followed by `2` on the console.
 
-However, every time we can, we prefer to write `sumFirstN` instead of `sumFirstN'` because of 
-    simplicity and readability.
+<!-- Channels are *buffered*. The output operations (`send`, `sendType`, `select` and `close`) are nonblocking. The input operations (`receive`, `receiveType`, `case` and `Wait`) may block is the buffer isf empty. -->
+
 
 ## User-defined types
 
@@ -181,7 +175,7 @@ f : (Int -> Int) -> Int -> (Int, Int)
 f g x = (x, g x)
 ```
 
-What is this? What are its parameters? What is the purpose of function `f`? Maybe it helps `calcFunY`, but perhaps it is not enough. The biggest problem continues to be the **confusing signature**.
+What is this? What are its parameters? What is the purpose of function `f`? Maybe it helps `calcFunY`, but perhaps it is not enough. The biggest problem continues to be the confusing signature.
 
 Preventing confusing signatures can be done if we create higher-level types that stand in for those we use, but that bear a clearer meaning. We start by creating a couple of type *abbreviations*:
 ```freest
@@ -207,18 +201,14 @@ type Circle = (Point, Radius)
 
 Source code becomes more readable and provides more context to functions when we create and use these names.
 
-## User-defined data types
-
 User-defined types do a lot to improve readability and code organization, but sometimes it is not enough. Remember type `Circle` above. We want to add other shapes such as `Rectangle` and `Triangle`. With just types we write:
 ```freest
-type Rectangle, Triangle : *T
 type Rectangle = (Point, Point)
 type Triangle = (Point, Point, Point)
 ```
 
-For now there are no issues. Next we want to write a function `calcArea` that takes a shape and calculates its area accordingly. What is the signature of such a function? It either receives a `Circle`, a `Rectangle` or a `Triangle`, so it in fact has to be split among three different functions. Good programming practices teach us that it is best to use a super type from which all shapes derive from. We create a new *datatype* `Shape` where all different shapes are represented by different constructors each with their set of parameters.
+For now there are no issues. Next we want to write a function `calcArea` that takes a shape and calculates its area accordingly. What is the signature of such a function? It either receives a `Circle`, a `Rectangle` or a `Triangle`, so it in fact has to be split among three different functions. But there is a better way. We create a new **datatype** `Shape` where all different shapes are represented by different constructors each with their set of parameters.
 ```freest
-type Shape: *T
 data Shape = Circle Point Radius
            | Rectangle Point Point
            | Triangle Point Point Point
@@ -227,26 +217,72 @@ data Shape = Circle Point Radius
 An `area` function then takes advantage of the `Shape` data type and a `case` expression to calculate each case separately.
 ```freest
 area : Shape -> Float
-area shape =
-    case shape of {
-        Circle p r -> ...
-        Rectangle p1 p2 -> ...
-        Triangle p1 p2 p3 -> ...
-    }
-```
-
-A more compact definition uses *pattern matching*:
-```freest
-area' : Shape -> Float
-area' (Circle _ r) = pi *. r *. r
-area' (Rectangle (x1, y1) (x2, y2)) = absF (x2 -. x1) *. absF (y2 -. y1)
-area' (Triangle (x1, y1) (x2, y2) (x3, y3)) =
+area (Circle _ r) =
+    pi *. r *. r
+area (Rectangle (x1, y1) (x2, y2)) =
+    absF (x2 -. x1) *. absF (y2 -. y1)
+area (Triangle (x1, y1) (x2, y2) (x3, y3)) =
     absF (x1 *. (y2 -. y3) +. x2 *. (y3 -. y1) +. x3 *. (y1 -. y2)) /. 2.0
 ```
+Notice the floating point operations `*.`, `+.` and `absF`.
 
-Data structures can also be recursive (in the same way as types). A binary tree of integers is defined as:
+Pattern-matching is our preferred style of programming. Alternatively, on can use the `case` expression to destruct a datatype:
 ```freest
-data IntBinaryTree = Leaf | Node Int IntBinaryTree IntBinaryTree
+area' : Shape -> Float
+area' shape =
+    case shape of
+        Circle p r -> pi *. r *. r
+        Rectangle (x1, y1) (x2, y2) -> absF (x2 -. x1) *. absF (y2 -. y1)
+        Triangle (x1, y1) (x2, y2) (x3, y3) -> absF (x1 *. (y2 -. y3) +. x2 *. (y3 -. y1) +. x3 *. (y1 -. y2)) /. 2.0
+```
+
+Write
+```freest
+_ = print (area' aTriangle -. area aTriangle <. 0.0001)
+```
+and expect `True` on the console.
+
+
+## Recursion, recursion, recursion, ...
+We want to write a function `sumUpTo` that calculates the sum of the first `n` natural numbers.
+    Functions such as `sumUpTo` which require some form of *iteration* are translated to using
+    *loops*. FreeST does not have any type of loop syntax, so how can we write function 
+    `sumUpTo`? The answer is **recursion**.
+
+Trivially, the recursive definition of `sumUpTo` is: `sumUpTo 0 == 0` and `sumUpTo n == n + sumUpTo (n-1)`. In FreeST it translates to:
+```freest
+sumUpTo : Int -> Int
+sumUpTo n =
+    if n <= 0
+    then 0
+    else n + sumUpTo (n - 1)
+```
+
+<!-- If you need to propagate parameters forward while in recursion, you can do it by changing the function's signature to have them. An example is a variation of the `sumUpTo` function that accumulates the sum forward and returns it in the end (when `n` is 0):
+```freest
+sumUpTo' : Int -> Int -> Int
+sumUpTo' n curr =
+    if curr == n
+    then curr 
+    else curr + sumUpTo' n (curr + 1)
+``` -->
+
+
+## Mutual recursion
+
+Mutual recursive functions must be introduced with keyword mutual. The `even` and `odd` functions on *natural numbers* can de defined as follows.
+```freeest
+mutual
+  even : Int -> Bool
+  even 0 = True
+  even n = odd (n - 1)
+  odd : Int -> Bool
+  odd n = not (even n)
+```
+
+Data structures can also be recursive. A binary tree of integers is defined as:
+```freest
+data IntBinaryTree = Leaf | Node IntBinaryTree Int IntBinaryTree
 ```
 
 <!-- TODO -->

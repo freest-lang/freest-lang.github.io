@@ -36,8 +36,8 @@ Channels behave according to predefined **protocols**. A protocol is just a type
 | `?T` | receive value of type `T` |
 | `!type T` | send a type `T` |
 | `?type T` | receive a type `T` |
-| `+{l: T, ..}` | select a choice |
-| `&{l: T, ..}` | offer a collection of choices |
+| `+{l: T, ...}` | select a choice |
+| `&{l: T, ...}` | offer a collection of choices |
 | `Close` | close the channel |
 | `Wait` | wait for the channel to be closed |
 
@@ -228,27 +228,6 @@ print $ onePlusOne $ forkWith adder
 ```
 
 
-## Running scripts in FreeST
-
-A FreeST script is a list of declarations, as for example, `adder` and `onePlusOne`. To run the above code one has to place it inside a declaration. For example:
-```freest
-main = forkWith adder |> onePlusOne |> print
-```
-But `main` is just another name. And since we are nor using it, we may as well use an wildcard:
-```freest
-_ = forkWith adder |> onePlusOne |> print
-```
-
-The list of declarations in a script is evaluated in order, so that
-```freest
-_ = forkWith adder |> onePlusOne |> print
-_ = forkWith adder |> onePlusOne |> print
-```
-would print `2` twice.
-
-Channels are *buffered*. The output operations (`send`, `sendType`, `select` and `close`) are nonblocking. The input operations (`receive`, `receiveType`, `case` and `Wait`) may block is the buffer isf empty.
-
-
 <!-- ## A word on the semicolon expression operator
 
 Expression `receive c in wait c'` is of type `()`, an *unrestricted* type. And that is the reason why it can de discarded in expression `receive c in wait c' ; x`.
@@ -352,12 +331,12 @@ The table below summarises what we have seen on session type operations.
 | --- | --- | --- |
 | `!T` | `?T` | Value exchange |
 | `!type T` | `?type T` | Type exchange |
-| `+{l: T, ..}` | `&{l: T, ..}` | Choice |
+| `+{l: T, ...}` | `&{l: T, ...}` | Choice |
 | `Close` | `Wait` | Channel closing |
 | Input | Output |  |
 | Negative | Positive |  |
 | Pattern matching available | Chaining available |  |
-| Blocking operations | Nonblocking operations |  |
+| Blocking operation | Nonblocking operation |  |
 
 By 'chaining' we mean the composition of output operations with the inverse function application `|>`.
 
