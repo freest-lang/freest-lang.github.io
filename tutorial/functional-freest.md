@@ -245,7 +245,7 @@ and expect `True` on the console.
 
 ## Datatype and type declarations
 
-Keyword `data` introduces a new type, different from all others; `type` may introduce a type abbreviation as well as new type (if the name of the type appears on the right; we discuss this in the next section). `data` is nominal; `type` is structural. This means that types `T` and `U` can never be equivalent, regardeless of what the ellipsis stand for:
+Keyword `data` introduces a new type, different from all others; `type` may introduce a type abbreviation as well as a new type (if the name of the type appears on the right; we discuss this in the next section). `data` is nominal; `type` is structural. This means that types `T` and `U` can never be equivalent, regardeless of what the ellipsis stand for:
 ```freest
 data T = ...
 data U = ...
@@ -273,10 +273,8 @@ We want to write a function `sumUpTo` that calculates the sum of the first `n` n
 Trivially, the recursive definition of `sumUpTo` is: `sumUpTo 0 == 0` and `sumUpTo n == n + sumUpTo (n-1)`. In FreeST it translates to:
 ```freest
 sumUpTo : Int -> Int
-sumUpTo n =
-    if n <= 0
-    then 0
-    else n + sumUpTo (n - 1)
+sumUpTo n | n <= 0 = 0
+          | otherwise = sumUpTo (n - 1)
 ```
 
 <!-- If you need to propagate parameters forward while in recursion, you can do it by changing the function's signature to have them. An example is a variation of the `sumUpTo` function that accumulates the sum forward and returns it in the end (when `n` is 0):
