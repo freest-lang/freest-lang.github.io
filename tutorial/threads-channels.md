@@ -53,12 +53,10 @@ The `master` takes an extra parameter, `n`, a non-negative number describing the
 master : Int -> Forward -> Dual Forward -1-> ()
 master 0 c d =
     let d = d |> select Done |> close
-    in case c of
-        (&Done Wait) -> ()
+    in case c of (&Done Wait) -> ()
 master n c d = 
     let d = select More d
-    in case c of
-        (&More c) -> print n ; master (n - 1) c d
+    in case c of (&More c) -> print n ; master (n - 1) c d
 ```
 Notice the non-exaustive pattern matching in each of the two equations for `master`: if it writes `X` on the right, then `X` goes around the network, through `forwader`s, and only `X` may appear on the left.
 
@@ -66,7 +64,7 @@ Now how do we setup a circular network, composed of `m-1` `forwarder`s and one `
 * an operation to create channel, and
 * another to create threads.
 
-To create a new thread we use expression `channel @T`, where `T` is a channel type. For example `channel @Forward` returns a channel type, pair `(Forward, Dual Forward)` composed of a two endpoints, the first of type `Forward`, the second of type `Dual Forward`. The endpoints are destructed by means of a `let` expressions. To create three channels write:
+To create a new thread we use expression `channel @T`, where `T` is a channel endpoint type. For example `channel @Forward` returns a channel type, pair `(Forward, Dual Forward)` composed of a two endpoints, the first of type `Forward`, the second of type `Dual Forward`. The endpoints are destructed by means of a `let` expressions. To create three channels write:
 ```freest
 let (c1, d1) = channel @Forward
     (c2, d2) = channel @Forward
@@ -74,7 +72,7 @@ let (c1, d1) = channel @Forward
 in ...
 ```
 
-To fork a new thread use function `fork`. Fork receive a linear thunk, `t : `,creates a thread running `t ()` and returns `()`. Thunks to be used with fork are usually written `(\_ -1-> ...)` with `_` of type `()`. For example, one of the forwarders is created with `fork (\_ -1-> forward c2 d2)`.
+To fork a new thread use function `fork`. Fork receive a linear thunk, `t : `,creates a thread running `t ()` and returns `()`. Thunks to be used with fork are usually written `(\_ -1-> ...)` with `_` of type `()`. The function is linear; the client rests assured that the function shall be used once only. For example, one of the forwarders is created with `fork (\_ -1-> forward c2 d2)`.
 
 Putting everything together we have:
 ```freest
@@ -85,15 +83,10 @@ circle =
         (c3, d3) = channel @Forward
     in fork (\_ -1-> forward c2 d2) ;
        fork (\_ -1-> forward c1 d3) ;
-       master 10 c3 d1
+       master 5 c3 d1
 ```
 which prints
 ```bash
-10
-9
-8
-7
-6
 5
 4
 3
