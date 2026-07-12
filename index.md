@@ -18,7 +18,7 @@ nav_order: 1
   powered by context-free session types
 </div>
 <br/>
-[Install]({{ site.url }}{{ site.baseurl }}\install){: .btn .mr-0 } [Libraries]({{ site.url }}{{ site.baseurl }}\libraries\Prelude){: .btn .mr-0 } [Publications]({{ site.url }}{{ site.baseurl }}\publications){: .btn .mr-0 } [Team]({{ site.url }}{{ site.baseurl }}\team){: .btn .mr-0 } [Try it online!](http://rss.di.fc.ul.pt/tryit/FreeST){: .btn .mr-0 }
+[Install]({{ site.url }}{{ site.baseurl }}\install){: .btn .mr-0 } [Tutorial]({{ site.url }}{{ site.baseurl }}\Tutorial){: .btn .mr-0 } [Libraries]({{ site.url }}{{ site.baseurl }}\libraries\Prelude){: .btn .mr-0 } [Publications]({{ site.url }}{{ site.baseurl }}\publications){: .btn .mr-0 } [Team]({{ site.url }}{{ site.baseurl }}\team){: .btn .mr-0 } [Try it online!](http://rss.di.fc.ul.pt/tryit/FreeST){: .btn .mr-0 }
 {: .text-center }
 
 FreeST is a typed concurrent programming language where processes communicate
