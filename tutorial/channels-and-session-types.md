@@ -347,18 +347,19 @@ _ = forkWith render |> pairRenderer |> print
 ## A summary of the basic elements of interaction
 
 The table below summarises what we have seen on session type operations.
+
 | `S` | `Dual S` | Operation |
 | --- | --- | --- |
 | `!T` | `?T` | Value exchange |
 | `!type T` | `?type T` | Type exchange |
 | `+{l: T, ..}` | `&{l: T, ..}` | Choice |
 | `Close` | `Wait` | Channel closing |
-| Input | Output | a |
-| Negative | Positive | b |
-| Pattern matching available | Chaining available | c |
-| Blocking operations | Nonblocking operations | d |
+| Input | Output |  |
+| Negative | Positive |  |
+| Pattern matching available | Chaining available |  |
+| Blocking operations | Nonblocking operations |  |
 
-By 'chaining' we mean composing output operations with the inverse function application `|>`.
+By 'chaining' we mean the composition of output operations with the inverse function application `|>`.
 
 
 ## Unbounded protocols
