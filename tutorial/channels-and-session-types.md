@@ -347,7 +347,7 @@ _ = forkWith render |> pairRenderer |> print
 ## A summary of the basic elements of interaction
 
 The table below summarises what we have seen on session type operations.
-| `S` | `Dual S` | |
+| `S` | `Dual S` | Operation |
 | --- | --- | --- |
 | `!T` | `?T` | Value exchange |
 | `!type T` | `?type T` | Type exchange |
@@ -355,7 +355,7 @@ The table below summarises what we have seen on session type operations.
 | `Close` | `Wait` | Channel closing |
 | Input | Output | |
 | Negative | Positive | |
-| Pattern matching available | Chaining (`|>`) available | |
+| Pattern matching available | Chaining (|>) available | |
 | Blocking operations | Nonblocking operations | |
 
 
