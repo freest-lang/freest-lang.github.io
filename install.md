@@ -22,17 +22,15 @@ nav_order: 2
 
 ## Pre-requisites
 <!-- pre-requisites to install -->
-Before installing FreeST you need two things: Haskell and Stack. You can see how to install them at 
-    [Haskell's official website](https://www.haskell.org/download/) (they recommend using GHCup).
+Before installing FreeST you need two things: Haskell and Stack. Check how to install them at [Haskell's official website](https://www.haskell.org/download/) (GHCup recomended).
 
 ## Download and install FreeST
-<!-- where to download -->
+
 Download FreeST by cloning the repository:
 ```bash
 git clone --branch fopss26 --depth 1 https://github.com/freest-lang/freest.git
 ```
 
-<!-- how to install -->
 To install run `cd freest && stack install`. This will install `freest`.
 
 Please be sure that Stack's install folder is part of your system's path, or else you will not be able to use the executable.
