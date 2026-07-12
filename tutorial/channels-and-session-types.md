@@ -28,7 +28,7 @@ parent: Tutorial
 
 Channels are how FreeST threads communicate with each other. Each channel is made of **two endpoints** (usulaly abbreviated as channel ends). Threads use the endpoints to write to or read from channels.
 
-### Session types and duality
+## Session types and duality
 
 Channels behave according to predefined **protocols**. A protocol is just a type, a type of a special nature, a **session type**. Protocols are built from eight **basic elements of interaction**:
 
@@ -181,7 +181,7 @@ onePlusOne c =
 ```
 
 
-### Pattern matching on session input operations
+## Pattern matching on session input operations
 
 Pattern matchings provides for concise and readable code. Apart from the conventional pattern matching on datatypes and literals, FreeST supports
 pattern matching on all input (also know as negative) operations. We have discussed two so far: receiving a message and waiting for a channel to be closed.
@@ -222,7 +222,8 @@ or
 print $ onePlusOne $ forkWith adder
 ```
 
-### Running scripts in FreeST
+
+## Running scripts in FreeST
 
 A FreeST script is a list of declarations, as for example, `adder` and `onePlusOne`. To run the above code one has to place it inside a declaration. For example:
 ```freest
@@ -234,14 +235,14 @@ _ = forkWith adder |> onePlusOne |> print
 ```
 
 
-### A word on the semicolon expression operator
+## A word on the semicolon expression operator
 
 Expression `receive c in wait c'` is of type `()`, an *unrestricted* type. And that is the reason why it can de discarded in expression `receive c in wait c' ; x`.
 
 The type of the semicolon operator is `forall (a : *T) (b : 1T) -*-> a -*-> b -*-> b`. [To be Completed]
 
 
-### Selecting and offering choices
+## Selecting and offering choices
 
 We have seen how to exchange values on channels and how to close channels. We now look at how we select and offer choices on channels. Imagine channel offering three choices after which it waits for the channel to be closed, in all cases. The channel can be written `&{Green: Wait, Yellow: Wait, Red: Wait}`, a semaphore as seen from the point of view of the reader.
 
@@ -281,7 +282,7 @@ _ = forkWith selectGreen |> showSemaphore |> print
 and expect to read `"Green"` on the console.
 
 
-### Exchanging types
+## Exchanging types
 
 The last pair of dual session operators provide for exchanging types on channels. This is closely related to conventional (universal and existential) polymorphism, but applied to session types. Exchanging types allow writing protocols on which subsequent actions depend on the type exchanged.
 
@@ -525,128 +526,3 @@ aTree = Node (Node Leaf 1 Leaf) 2 (Node (Node Leaf 3 Leaf) 4 Leaf)
 _ = forkWith (marshall aTree) |> unmarshall |> print
 ```
 Expect `Node (Node Leaf 1 Leaf) 2 (Node (Node Leaf 3 Leaf) 4 Leaf)` on the console (the "out" and the "in" trees coincide).
-
-## Old stuff
-The sequential composition operator of session types - the semicolon - allows for a convenient protocol composition and decomposition.
-
-Imagine a simple protocol to conduct an integer predicate. Again, as seen from the side of the client, the protocol outputs an integer and then inputs the result in the form of a boolean value. The type can be written as follows.
-```freest
-type IntPred = !Int ; ?Bool
-```
-
-We can then write a function to consume such a protocol, a function that receives an `IntPred`. But the function must work on part of the protocol of some channel. At the very least, the channel must be closed. The function could then receive a channel end of type `IntPred ; Close`. But we may want to proceed with some extra communications before closing the channel. Taking advantage of polymorphism, we let the function accept a channel end of type `IntPred ; a`, consume the `IntPred` part, and return the unused part of the channel end, at type `a`. For example a function that invokes the predicate on a given integer `n` and prints the result can be written as follows.
-```freest
-invokeIntPred : Int -> forall a . IntPred ; a -> a
-invokeIntPred n c =
-  let (x, c) = c |> send n |> receive in
-  print @Bool x;
-  c
-```
-
-Functions that accept a channel end of type `T ; a` and return the same channel end, this time at time `a` are quite common in FreeST. The channel may then be used in the continuation.
-
-Let us now look at a function that produces an `IntPred`, that is to say that consumes a channel end of type `dualof IntPred`. The function receives a predicate, a channel end of type `dualof IntPred ; a` and a returns the channel at type `a`, for `a` a linear session type.
-
-```freest
-serveIntPred : (Int -> Bool) -> forall a . dualof IntPred ; a -> a
-serveIntPred p c =
-  let (x, c) = receive c in
-  send (p x) c
-```
-
-We now play the same game, this time for binary integer operations. The type of the protocol is
-```freest
-type IntBinOp = !Int ; !Int ; ?Int
-```
-
-A consumer of this type invokes the operator with two given integer values, prints the result, and returns the unused part of the channel end.
-```freest
-invokeIntBinOp : Int -> Int -> forall a . IntBinOp ; a -> a
-invokeIntBinOp n m c =
-  let (x, c) = c |> send n |> send m |> receive in
-  print @Int x ;
-  c
-```
-Similarly to `serveIntPred`, the server side for binary integer operators can be written as follows.
-```freest
-serveIntBinOp : (Int -> Int -> Int) -> forall a . dualof IntBinOp ; a -> a
-serveIntBinOp f c =
-  let (x, c) = receive c in
-  let (y, c) = receive c in
-  send (f x y) c
-```
-
-We can now compose these four protocols in many different ways. We can compose three `IntPred` in a row, or perhaps an `IntPred` followed by a `IntBinOp`, or even an `IntPred` followed by a `dualof IntBinOp`. In the end, channels must be closed, so that we propose as an example a consumer for type `IntPred ; IntBinOp ; Close`.
-```freest
-invoke : IntPred ; IntBinOp ; Close -> ()
-invoke c =
-  c |> invokeIntPred 3 @(IntBinOp ; Close) |> invokeIntBinOp 4 5 @Close |> close
-```
-For the other end of the channel we may write:
-```freest
-serve : dualof IntPred ; dualof IntBinOp ; Wait -> ()
-serve c =
-  c |>
-  serveIntPred (>=0) @(dualof IntBinOp ; Wait) |>
-  serveIntBinOp (+) @Wait |>
-  wait
-```
-Functions `invoke` and `serve` can be run in different threads while communicating on a channel featuring type `IntPred ; IntBinOp ; Close` on the `invoke` side.
-
-Regular session types are good, but context-free session types are a lot **more powerful**. With context-free session types you can correcty serialize a binary tree of integers using a single channel. We start by defining a conventional datatype for a binary tree of integer values and the corresponding type for a channel that consumes a tree channel.
-```
-data Tree = Node Tree Int Tree | Leaf
-
-type TreeChannel = +{ Node: TreeChannel ;  !Int ; TreeChannel
-                    , Leaf: Skip
-                    }
-```
-
-<!-- combining session types with Skip -->
-Notice how instead of using `Close`, we use `Skip`. If `Close` was used we would not be able to compose a singleton tree (a tree with an integer only) as it would correspond to type `Close ; !Int ; Close`, which doesn't get past the first `Close` because no interaction is possible on a closed channel.
-
-The `TreeChannel` is then able to describe binary tree serialization without allowing for missing or unnecessary subtrees, given that it specifically describes the sending of a left and a right subtree.
-
-<!-- polymorphic recursion -->
-We write a function `sendTree` that sends any `Tree` through a `TreeChannel`. Naively we write this:
-```
-sendTree : Tree -> TreeChannel -> Skip
-sendTree Leaf c =
-  c |> select Leaf
-sendTree (Node lt n rt) c =
-  c |> select Node
-    |> sendTree lt
-    |> send n
-    |> sendTree rt
-```
-
-And we are greeted by a plethra of errors. The fact is that we where supposed to return the continuation channel, and not `Skip`. But what is this mistery continuation, and how do we type it? The answer is through **polymorphism**.
-```
-sendTree : Tree -> TreeChannel ; a -> a
-sendTree Leaf c =
-  c |> select Leaf
-sendTree (Node lt i rt) c =
-  c |> select Node
-    |> sendTree @T lt
-    |> send i
-    |> sendTree @U rt
-```
-
-Using polymorphism we can type a generic channel that begins with `TreeChannel` and continues off to some other type `a`. The next challenge is: which types do we pass to the recursive calls of `sendTree` (marked as `T` and `U`)? To find these types, we look at the type of the channel at the point of each recursive call. In the case of `T`, after we did `select Node`, channel end `c` is of type `TreeChannel ; !Int ; TreeChannel ; a` and function `sendTree` consumes a `TreeChannel`. Because `T` is the type of the continuation channel, it must be equal to `!Int ; TreeChannel; a`. In the case of `U`, after the `send` call, `c` is of type `TreeChannel; a`, hence the continuation is `a` alone.
-<!--
-Where is the continuation channel? Remember that in context-free session types `Skip` is the neutral element, therefore, after we consume `TreeChannel` we are left with `Skip`.
--->
-
-The full implementation of `sendTree` is:
-```
-sendTree : Tree -> TreeChannel ; a -> a
-sendTree Leaf c =
-  c |> select Leaf
-sendTree (Node lt i rt) c =
-  c |> select Node
-    |> sendTree @(!Int ; TreeChannel ; a) lt
-    |> send i
-    |> sendTree @a rt
-```
-
-We leave the `receiveTree` function up to you to try. Use `sendTree` as a template and remember to use the dual channel operations.
