@@ -43,18 +43,25 @@ Channels behave according to predefined **protocols**. A protocol is just a type
 | `Close` | close the channel |
 | `Wait` | wait for the channel to be closed |
 
-The two endpoints of a channel are usually held by two different threads. These threads do not observe the the endpoint equaly. In fact they must follow different protocols. Imagine that both threads see the endpoint at type `!Int`. Then, to conform to the procotol, both threads must write on the channel. In order for communication to proceed smoothly one of the threads must wirte an integer value and the other must read the value, that is, one thread must see the channel as `?Int` and the other as `!Int`. These two types are said to by **dual** to each other. In fact, the eight basic elements of interaction come in dual pairs as follows:
+The two endpoints of a channel are usually held by two different threads. These threads do not observe the endpoint equaly. In fact they must follow different protocols. Imagine that both threads see the endpoint at type `!Int`. Then, to conform to the procotol, both threads must write on the channel. In order for communication to proceed smoothly one of the threads must wirte an integer value and the other must read the value, that is, one thread must see the channel as `?Int` and the other as `!Int`. These two types are said to by **dual** to each other. In fact, the eight basic elements of interaction come in dual pairs as follows:
 
-| `S` | `Dual S` |
+| `S` | `Dual S` |`
 | --- | --- |
 | `!T` | `?T` |
-| `?T` | `!T` |
 | `!type T` | `?type T` |
-| `?type T` | `!type T` |
 | `+{l: T, ..}` | `&{l: T, ..}` |
-| `&{l: T, ..}` | `+{l: T, ..}` |
 | `Close` | `Wait` |
+
+Duality is symmetic so that one should also expect the below laws:
+
+| `S` | `Dual S` |`
+| --- | --- |
+| `?T` | `!T` |
+| `?type T` | `!type T` |
+| `&{l: T, ..}` | `+{l: T, ..}` |
 | `Wait` | `Close` |
+
+Type operator `Dual` converts a session type in its dual.
 
  The elements of interaction may be composed by means of sequential composition and recursion. We start with sequential composition and leave recursion for later. The sequential composition of (session) types is denote by the semicolon binary operator. Is `T` and `U` are session types, then type `T ; U` denotes the type that first preforms `T` and then `U`.
 
@@ -235,11 +242,11 @@ _ = forkWith adder |> onePlusOne |> print
 ```
 
 
-## A word on the semicolon expression operator
+<!-- ## A word on the semicolon expression operator
 
 Expression `receive c in wait c'` is of type `()`, an *unrestricted* type. And that is the reason why it can de discarded in expression `receive c in wait c' ; x`.
 
-The type of the semicolon operator is `forall (a : *T) (b : 1T) -*-> a -*-> b -*-> b`. [To be Completed]
+The type of the semicolon operator is `forall (a : *T) (b : 1T) -*-> a -*-> b -*-> b`. [To be Completed] -->
 
 
 ## Selecting and offering choices
