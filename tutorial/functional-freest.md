@@ -292,7 +292,7 @@ aTree = Node (Node Leaf 1 Leaf) 2 (Node Leaf 3 Leaf)
 _ = print (treeSum aTree)
 ```
 
-Types can also be recursive. We shall them in good use together with session types. For now let us think of a function that takes an infinite number of parameters.
+Types can also be recursive. We shall see them in good use together with session types. For now let us think of a function that takes an infinite number of parameters.
 ```freest
 type IntSink = Int -> IntSink
 ```
