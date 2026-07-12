@@ -24,8 +24,6 @@ parent: Tutorial
 {:toc}
 </details>
 
-## Channels, protocols and session types
-
 Channels are how FreeST threads communicate with each other. Each channel is made of **two endpoints** (usulaly abbreviated as channel ends). Threads use the endpoints to write to or read from channels.
 
 ## Session types and duality
@@ -45,7 +43,7 @@ Channels behave according to predefined **protocols**. A protocol is just a type
 
 The two endpoints of a channel are usually held by two different threads. These threads do not observe the endpoint equaly. In fact they must follow different protocols. Imagine that both threads see the endpoint at type `!Int`. Then, to conform to the procotol, both threads must write on the channel. In order for communication to proceed smoothly one of the threads must wirte an integer value and the other must read the value, that is, one thread must see the channel as `?Int` and the other as `!Int`. These two types are said to by **dual** to each other. In fact, the eight basic elements of interaction come in dual pairs as follows:
 
-| `S` | `Dual S` |`
+| `S` | `Dual S` |
 | --- | --- |
 | `!T` | `?T` |
 | `!type T` | `?type T` |
@@ -54,7 +52,7 @@ The two endpoints of a channel are usually held by two different threads. These 
 
 Duality is symmetic so that one should also expect the below laws:
 
-| `S` | `Dual S` |`
+| `S` | `Dual S` |
 | --- | --- |
 | `?T` | `!T` |
 | `?type T` | `!type T` |
