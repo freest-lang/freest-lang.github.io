@@ -289,8 +289,18 @@ To run, try this code. Expect to read `6` on the console
 ```freest
 aTree : IntBinaryTree
 aTree = Node (Node Leaf 1 Leaf) 2 (Node Leaf 3 Leaf)
-
 _ = print (treeSum aTree)
+```
+
+Types can also be recursive. We shall them in good use together with session types. For now let us think of a function that takes an infinite number of parameters.
+```
+type IntSink = Int -> IntSink
+```
+
+This type can never be consumed in its intirety, in finite time. The best we can do is to consume it partially. Function `partialConsume` does exactly this: feeds five Ints and returns the resulting function, again of type `IntSink`.
+```freest
+partialConsume : IntSink -> IntSink
+partialConsume f = f 1 2 3 4 5
 ```
 
 <!-- If you need to propagate parameters forward while in recursion, you can do it by changing the function's signature to have them. An example is a variation of the `sumUpTo` function that accumulates the sum forward and returns it in the end (when `n` is 0):
