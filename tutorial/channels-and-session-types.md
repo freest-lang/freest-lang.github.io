@@ -50,7 +50,7 @@ The two endpoints of a channel are usually held by two different threads. These 
 | `+{l: T, ..}` | `&{l: T, ..}` |
 | `Close` | `Wait` |
 
-Duality is symmetic so that one should also expect the below laws:
+Duality is symmetric so that one should also expect the below laws:
 
 | `S` | `Dual S` |
 | --- | --- |
@@ -59,7 +59,7 @@ Duality is symmetic so that one should also expect the below laws:
 | `&{l: T, ..}` | `+{l: T, ..}` |
 | `Wait` | `Close` |
 
-Type operator `Dual` converts a session type in its dual.
+Type operator `Dual` converts a session type in its dual, and can be used in FreeST code.
 
  The elements of interaction may be composed by means of sequential composition and recursion. We start with sequential composition and leave recursion for later. The sequential composition of (session) types is denote by the semicolon binary operator. Is `T` and `U` are session types, then type `T ; U` denotes the type that first preforms `T` and then `U`.
 
@@ -333,6 +333,22 @@ _ = forkWith render |> pairRenderer |> print
 ```
 
 [TODO: `receiveType` and `sendType`]
+
+
+## A summary of the basic elements of interaction
+
+The table below summarises what we have seen on session type operations.
+| `S` | `Dual S` | |
+| --- | --- | --- |
+| `!T` | `?T` | Value exchange |
+| `!type T` | `?type T` | Type exchange |
+| `+{l: T, ..}` | `&{l: T, ..}` | Choice |
+| `Close` | `Wait` | Channel closing
+| --- | --- |
+| Input | Output | |
+| Negative | Positive | |
+| Pattern matching available | Chaining (`|>`) available
+| Blocking operations | Nonblocking operations
 
 
 ## Unbounded protocols
