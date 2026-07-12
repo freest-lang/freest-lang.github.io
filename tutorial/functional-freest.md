@@ -285,7 +285,7 @@ sumUpTo' n curr =
 ## Mutual recursion
 
 Mutual recursive functions must be introduced with keyword mutual. The `even` and `odd` functions on *natural numbers* can de defined as follows.
-```freeest
+```freest
 mutual
   even : Int -> Bool
   even 0 = True
