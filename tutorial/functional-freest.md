@@ -270,11 +270,27 @@ Trivially, the recursive definition of `sumUpTo` is: `sumUpTo 0 == 0` and `sumUp
 sumUpTo : Int -> Int
 sumUpTo n | n <= 0 = 0
           | otherwise = sumUpTo (n - 1)
-          
+
 ```
+
 Data structures can also be recursive. A binary tree of integers is defined as:
 ```freest
 data IntBinaryTree = Leaf | Node IntBinaryTree Int IntBinaryTree
+```
+
+Recursive data structures are naturally consumed by recursive functions. Here is a function that consumes a tree, while producing the sum of the values in the tree..
+```freest
+treeSum : IntBinaryTree -> Int
+treeSum Leaf         = 0
+treeSum (Node l x r) = treeSum l + x + treeSum r
+```
+
+To run, try this code. Expect to read `6` on the console
+```freest
+aTree : IntBinaryTree
+aTree = Node (Node Leaf 1 Leaf) 2 (Node Leaf 3 Leaf)
+
+_ = print (treeSum aTree)
 ```
 
 <!-- If you need to propagate parameters forward while in recursion, you can do it by changing the function's signature to have them. An example is a variation of the `sumUpTo` function that accumulates the sum forward and returns it in the end (when `n` is 0):
