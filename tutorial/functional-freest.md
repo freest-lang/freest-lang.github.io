@@ -175,11 +175,10 @@ f : (Int -> Int) -> Int -> (Int, Int)
 f g x = (x, g x)
 ```
 
-What is this? What are its parameters? What is the purpose of function `f`? Maybe it helps `calcFunY`, but perhaps it is not enough. The biggest problem continues to be the confusing signature.
+What is this? What are its parameters? What is the purpose of function `f`? Maybe it helps `calcFunY`, but perhaps it is not enough. A major problem continues to be the confusing signature.
 
-Preventing confusing signatures can be done if we create higher-level types that stand in for those we use, but that bear a clearer meaning. We start by creating a couple of type *abbreviations*:
+Confusing signatures can be avoided by defining names for types. We start by creating a couple of type *abbreviations*:
 ```freest
-type Function, Point : *T
 type Function = Int -> Int
 type Point = (Int, Int)
 ```
@@ -193,7 +192,6 @@ calcFunY fun x = (x, fun x)
 User-defined types can be used in any place a normal type can, so you can write a type
     that uses another of your types:
 ```freest
-type Radius, Point, Circle : *T
 type Radius = Float
 type Point = (Float, Float)
 type Circle = (Point, Radius)
@@ -207,14 +205,14 @@ type Rectangle = (Point, Point)
 type Triangle = (Point, Point, Point)
 ```
 
-For now there are no issues. Next we want to write a function `calcArea` that takes a shape and calculates its area accordingly. What is the signature of such a function? It either receives a `Circle`, a `Rectangle` or a `Triangle`, so it in fact has to be split among three different functions. But there is a better way. We create a new **datatype** `Shape` where all different shapes are represented by different constructors each with their set of parameters.
+For now there are no issues. Next we want to write a function `area` that takes a shape and calculates its area accordingly. What is the signature of such a function? It either receives a `Circle`, a `Rectangle` or a `Triangle`, so it in fact has to be split among three different functions. But there is a better way. We create a new **datatype** `Shape` where all different shapes are represented by different constructors each with their set of parameters.
 ```freest
 data Shape = Circle Point Radius
            | Rectangle Point Point
            | Triangle Point Point Point
 ```
 
-An `area` function then takes advantage of the `Shape` data type and a `case` expression to calculate each case separately.
+The `area` function then takes advantage of the `Shape` datatype to calculate each case separately.
 ```freest
 area : Shape -> Float
 area (Circle _ r) =
@@ -226,7 +224,7 @@ area (Triangle (x1, y1) (x2, y2) (x3, y3)) =
 ```
 Notice the floating point operations `*.`, `+.` and `absF`.
 
-Pattern-matching is our preferred style of programming. Alternatively, on can use the `case` expression to destruct a datatype:
+Pattern-matching is our preferred style of programming. Alternatively, one can use a `case` expression to destruct a datatype:
 ```freest
 area' : Shape -> Float
 area' shape =
@@ -238,7 +236,7 @@ area' shape =
 
 Write
 ```freest
-_ = print (area' aTriangle -. area aTriangle <. 0.0001)
+_ = print (area aTriangle -. area' aTriangle <. 0.0001)
 ```
 and expect `True` on the console.
 
@@ -265,10 +263,7 @@ data U = D
 
 ## Recursion, recursion, recursion, ...
 
-We want to write a function `sumUpTo` that calculates the sum of the first `n` natural numbers.
-    Functions such as `sumUpTo` which require some form of *iteration* are translated to using
-    *loops*. FreeST does not have any type of loop syntax, so how can we write function 
-    `sumUpTo`? The answer is **recursion**.
+We want to write a function `sumUpTo` that calculates the sum of the first `n` natural numbers. Functions such as `sumUpTo` which require some form of *iteration* are translated to using *loops*. FreeST does not have any type of loop syntax, so how can we write function `sumUpTo`? The answer is **recursion**.
 
 Trivially, the recursive definition of `sumUpTo` is: `sumUpTo 0 == 0` and `sumUpTo n == n + sumUpTo (n-1)`. In FreeST it translates to:
 ```freest
