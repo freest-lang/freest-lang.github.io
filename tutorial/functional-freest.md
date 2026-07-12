@@ -293,7 +293,7 @@ _ = print (treeSum aTree)
 ```
 
 Types can also be recursive. We shall them in good use together with session types. For now let us think of a function that takes an infinite number of parameters.
-```
+```freest
 type IntSink = Int -> IntSink
 ```
 
