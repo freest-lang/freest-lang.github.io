@@ -74,7 +74,7 @@ let (c1, d1) = channel @Forward
 in ...
 ```
 
-To fork a new thread use function `fork`. Fork receive a linear thunk, `t`,creates a thread running `t ()` and returns `()`. Thunks to be used with fork are usually written `(\_ -1-> ...)` with `_` of type `()`. For example, one of the forwarders is created with `fork (\_ -1-> forward c2 d2)`.
+To fork a new thread use function `fork`. Fork receive a linear thunk, `t : `,creates a thread running `t ()` and returns `()`. Thunks to be used with fork are usually written `(\_ -1-> ...)` with `_` of type `()`. For example, one of the forwarders is created with `fork (\_ -1-> forward c2 d2)`.
 
 Putting everything together we have:
 ```freest
@@ -101,3 +101,12 @@ which prints
 1
 ```
 on the console.
+
+Equipped with `channel` and `fork` we can figure out the behaviour of `forkWith`:
+```freest
+forkWith @a f =
+  let (x, y) = channel @a in
+  fork (\_  -1-> f y);
+  x
+```
+The discussion of its type is postponed for later.
