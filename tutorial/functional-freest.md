@@ -270,6 +270,11 @@ Trivially, the recursive definition of `sumUpTo` is: `sumUpTo 0 == 0` and `sumUp
 sumUpTo : Int -> Int
 sumUpTo n | n <= 0 = 0
           | otherwise = sumUpTo (n - 1)
+          
+```
+Data structures can also be recursive. A binary tree of integers is defined as:
+```freest
+data IntBinaryTree = Leaf | Node IntBinaryTree Int IntBinaryTree
 ```
 
 <!-- If you need to propagate parameters forward while in recursion, you can do it by changing the function's signature to have them. An example is a variation of the `sumUpTo` function that accumulates the sum forward and returns it in the end (when `n` is 0):
@@ -294,10 +299,6 @@ mutual
   odd n = not (even n)
 ```
 
-Data structures can also be recursive. A binary tree of integers is defined as:
-```freest
-data IntBinaryTree = Leaf | Node IntBinaryTree Int IntBinaryTree
-```
 
 <!-- TODO -->
 <!-- how to document code using `-- |` and `-- #` -->

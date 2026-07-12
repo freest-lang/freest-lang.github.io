@@ -22,7 +22,7 @@
     // NOTE: dualof/match/with are not in the current Lexer.x but are used
     // pervasively in the docs as FreeST surface syntax; included so they
     // highlight. Drop them here if the lexer is the sole source of truth.
-    'keyword': /\b(?:case|channel|data|dualof|else|exists|forall|if|import|in|let|match|module|mutual|of|rec|receiveType|select|sendType|then|type|where|with)\b/,
+    'keyword': /\b(?:case|channel|data|dualof|else|exists|forall|if|import|in|let|match|module|mutual|of|otherwise|rec|receiveType|select|sendType|then|type|where|with)\b/,
 
     // Built-in (session / functional) type constructors.
     'builtin': /\b(?:Char|Close|Dual|Float|Int|Skip|Void|Wait)\b/,
