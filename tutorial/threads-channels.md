@@ -21,7 +21,7 @@ parent: Tutorial
 {:toc}
 </details>
 
-## Creating threads
+## Creating threads and threads
 
 The previous section have used the `forkWith` combinator to accomplish two distinct things:
 * Create a new channel and
@@ -95,6 +95,9 @@ which prints
 ```
 on the console.
 
+
+## Revisiting `forkWith`
+
 Equipped with `channel` and `fork` we can figure out the behaviour of `forkWith`:
 ```freest
 forkWith @a f =
@@ -103,3 +106,41 @@ forkWith @a f =
   x
 ```
 The discussion of its type is postponed for a later section.
+
+
+## The buffered nature of channels
+
+Channels are buffered. This means that output operations never block and input operations block only when the buffer is empty.
+
+If we have a output-only channel endpoint (hence, an input-only at the other end), then we can have *intra*-thread communication via communication channels.
+Take a simple channel endpoint that outputs two integer values before being closed. Remeber that `Close` is an output type.
+```freest
+type SendIntInt = !Int ; !Int ; Close
+```
+
+Consuming `sendIntInt` is easy, taking advantage of the `|>` operator.
+```freest
+writeInts : SendIntInt -> ()
+writeInts c = c |> send 1 |> send 2 |> close
+```
+
+To consume `Dual sendIntInt` we take advantage of pattern matching. The function returns the sum of the two numbers read from the channel.
+```freest
+readInts : Dual SendIntInt -> Int
+readInts (?x ; ?y ; Wait) = x + y
+```
+
+To run each function in a different thread we use `forkWith` as before:
+```freest
+_ = forkWith writeInts |> readInts |> print
+```
+
+But because `sendIntInt` is *output only* we may run the two functions in the same thread, as long as we run `writeInts` prior to `readInts`:
+```freest
+_ = let (x, y) = channel @SendIntInt
+    in writeInts x ;
+       print $ readInts y
+```
+Expect to read `3` on the console.
+
+Now suppose that we replace `Close` by `Wait` in the `sendIntInt` type. The two consumers are easy to derive: exchange `close` and `wait`. The result is however catastrophic. The (only) thread waits indefinitly by itself. A *deadlock*.
