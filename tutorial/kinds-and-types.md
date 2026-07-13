@@ -86,16 +86,16 @@ Proper kinds came equipped with a subkind relation (diagram above) and so do hig
 FreeST come equipped with a rich collection of types. Conventional functional types:
 * `Int`, `Float`, `Char`, `Bool`, all of kind `*T`,
 * Arrow types, `-1->` and `-*->`; the latter can be abbreviated to `->`,
-* Tuple types, `(T1, ..., Tn)`; the kind of such a type is the least upper bound of the kinds of types `T1` to `Tn`. For example, `(!Int, Int) : 1T`. Types `T1` to `Tn` must be proper types.
+* Tuple types, `(U1, ..., Un)`; the kind of such a type is the least upper bound of the kinds of types `U1` to `Un`. For example, `(!Int, Int) : 1T`. Types `U1` to `Un` must be proper types.
 
 Session and channel types include:
 * `Close` and `Wait` of kind `1C`,
 * `(!)` and `(?)` of kind `1T -> 1S`,
-* `+{l1:T1,...,ln:Tn}`, taking the upper bound of the kinds of types `T1` to `Tn`, provided these are all session types,
-* `!type a . T` and `?type a . T`, where type variable `a` may occur free in `T`, takes the kind of `T`,
-* `T ; U` taking the upper bound of the kinds of types `T` and `U`, provided both are session types,
+* `+{l1:U1,...,ln:Un}`, taking the upper bound of the kinds of types `U1` to `Un`, provided these are all session types,
+* `!type a . U` and `?type a . U`, where type variable `a` may occur free in `U`, takes the kind of `U`,
+* `U ; V` taking the upper bound of the kinds of types `U` and `V`, provided both are session types,
 * `Skip` of kind `1S`,
-* `Dual T`, taking the kind of type `T`, provided it is a session type.
+* `Dual U`, taking the kind of type `U`, provided it is a session type.
 
 Type `Skip` is uninhabited: there is no value, no channel endpoint, of type `Skip`. It turns out however to be quite handy when working with non-tail-recursive types.
 
@@ -107,12 +107,12 @@ For example, the counter abstract data type may take the type `(exists a, (a, a 
 
 Datatype names and type names:
 * `X` in `data X = ...`, taking the least upper bound of the kinds of the datatype constructors in `...`,
-* `X` in `type X = T`, taking the type of `T` (with some care if `X` is recursive).
+* `X` in `type X = U`, taking the type of `U` (with some care if `X` is recursive).
 
 Higher order types:
 * Type variables `a`, taking the kind provided or inferred at its introduction point,
-* Type application `T U` taking the kind `k2` if `T : k1 -> k2` and `U : k1`,
-* Type abstraction `\(a:k1) -> T` of kind `k1 -> k2` where `k2` is the kind of `T`.
+* Type application `U V` taking the kind `k2` if `U : k1 -> k2` and `V : k1`,
+* Type abstraction `\(a:k1) -> U` of kind `k1 -> k2` where `k2` is the kind of `U`.
 
 Most of the times programmers write type abstractions together with datatype or type declarations. For example:
 ```freest
