@@ -9,14 +9,17 @@ permalink: /tutorial/
 
 # Tutorial
 
-FreeST is a programming language. Here's some of its characteristics:
+FreeST is a functional programming language for safe concurrency, powered by
+context-free session types. Here are the ideas that shape it:
 
-* *Functional*, meaning that computation is driven by function application;
-* *Concurrent*, meaning that a program is a collection of threads running on the same machine;
-* *Message passing*, meaning that threads communicate by exchanging messages on communication channels (shared memory is not supported, but you may want to simulate it with message passing);
-* Featuring *buffered channels*, meaning that channels are endowed with buffers to store messages in transit;
-* *Eager*, or call-by-value, meaning that expressions are evaluated before being passed to functions;
-* *State changing*, or impure, meaning that some primitive operations change the state of the world (create new channels, fork new threads);
-* Built on *context-free session types*, meaning that one can sequentially compose two given session types;
-* *Impredicative*, based on system F, meaning that FreeST is endowed with a quite powerful type system, but it also means that type inference is undecidable. The type checker does its best at inferring local types, but you may have to help it;
-* Featuring *Higher-Order Polymorphism*, meaning that FreeST supports type abstraction and application, that one can talk of channels conveying elements of an arbitrary type.
+* **Functional** — computation is driven by function application.
+* **Eager** — call-by-value: expressions are evaluated before being passed to functions.
+* **State-changing** — some primitive operations change the state of the world (create new channels, fork new threads).
+* **Concurrent** — a program is a collection of threads running on the same machine.
+* **Message passing** — threads communicate by exchanging messages on channels; shared memory is not supported, but you can simulate it with message passing.
+* **Buffered channels** — channels carry buffers that hold messages in transit.
+* **Linear** — channel endpoints (and other linear resources) must be used exactly once, which is what keeps communication safe.
+* **Context-free session types** — channel protocols are themselves types, and can be composed sequentially.
+* **Statically typed** — well-typed programs are guaranteed to follow their communication protocols, with no mismatched or missing messages.
+* **Impredicative (System F)** — a type system powerful enough that type inference is undecidable; the checker infers local types where it can, but you may occasionally have to help it.
+* **Higher-order polymorphism** — type abstraction and application, so channels can convey values of an arbitrary type.
