@@ -2,13 +2,13 @@
 # Feel free to add content and custom Front Matter to this file.
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
-title: Types and their types
+title: Types and their kinds
 layout: default
 nav_order: 8
 parent: Tutorial
 ---
 
-# Types and their types
+# Types and their kinds
 {: .no_toc }
 
 <!-- collapsible TOC (check https://just-the-docs.github.io/just-the-docs/docs/navigation-structure/#top) -->
