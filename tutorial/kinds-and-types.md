@@ -180,11 +180,28 @@ fork  : forall (a : *T) -*-> (() -*-> a) -*-> ()
 fork' : forall (a : *T) -*-> (() -1-> a) -*-> ()
 ```
 
-This story ends here because `fork` is primitive, but one can think of scenarios where this problem would cascade
+This story ends here because `fork` is primitive, but one can think of scenarios where this problem would cascade thought many more functions.
 
-
-The unrestricted arrows could have been written `->`, as usual. We have used the heavy syntax because arrow multiplicity is what we want to discuss.
-
+The code of the two versions of `forkWith` are exactly the same, only the signatures vary. The same happens with `fork`. This calls for **multiplicity polymorphism**. There is one only version of each functions. Their type signatures are as follows:
 ```freeest
 forall #m -*-> forall (a : 1C) -*-> (Dual a -m-> ()) -*-> a
+fork : forall #m -*-> forall (a : *T) -*-> (() -m-> a) -*-> ()
+```
+
+Type `forall #m -*-> T` introduces multiplicity polymorphism. The variable name, `m` in this case, must be preceed by a sharp symbol, `#`, so that it can be distinguished from a type variable. In the body we use `-m->`, not `-#m->`. The syntax is otherwise similar to type polymorphism.
+
+For a further example, consider function composition `f . g`, `f` after `g`. In a programming language without multiplicities in arrows we would expect:
+```freest
+(.) : forall a b c -> (b -> c) -> (a -> b) -> a -> c
+```
+Remember that `->` abbreviates `-*->`, so that this type signature is highly restrictive: it applies to two unrestricted function? What if one or more of the functions are linear? Can we write a type for `(.)` as we did for `forkWith` and `fork`?
+
+The problem here is that `(.)` accepts *two* functions ad that the kind of `f . g` depends on the kinds of *both* `f` and `g`. If both are `*`, then `(.)` is `*`. If both are `1`, then  `(.)` is `1`. More generaly, if at least one of `f` or `g` are `1`, then `(.)` is `1`. Remembering that `*` is a submultiplicity of `1`, written `* <: 1`, we are looking for the *least upper bound* of the two multiplicities. The least upper bound of multiplicities `m` and `n` is written `m+n`. We are now in a position to write the type of `(.)`, or better, we can ask `freest -i`:
+
+```freest
+$ freest -i
+The FreeST Compiler, version 5.0, https://freest-lang.github.io/, :h for help
+Ok, no modules loaded.
+freest> :t (.)
+(.) : forall #m #n -*-> forall (a : 1T) (b : 1T) (c : 1T) -*-> (b -m-> c) -*-> (a -n-> b) -m-> a -m+n-> c
 ```
