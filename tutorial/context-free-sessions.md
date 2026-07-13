@@ -4,7 +4,7 @@
 
 title: Context-free sessions
 layout: default
-nav_order: 8
+nav_order: 7
 parent: Tutorial
 ---
 
@@ -162,7 +162,7 @@ unmars @a @b (&Node c) =
   in (Node l x r, c)
 ```
 
-*** Note:***
+***Note:***
 This is a point where the current version of FreeST needs an hand. Not so much on the second parameter (the `b`) but on the first (the `a`).
 
 Complete the exercise with the customary test:
