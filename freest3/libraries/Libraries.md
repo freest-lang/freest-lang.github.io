@@ -9,3 +9,9 @@ has_children: true
 parent: FreeST3
 has_toc: false # avoid table of contents in the end of the page
 ---
+
+# Libraries
+
+The libraries bundled with **FreeST 3**. Alongside the implicitly included
+**Prelude**, this version ships modules for working with **lists** (`List`) and
+**files** (`File`).
