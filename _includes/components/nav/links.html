@@ -36,14 +36,7 @@
       </button>
       {%- endif -%}
       
-      {%- if nav_children.size >= 1 -%}
-        <!-- The space added before the href link below is added on purpose to avoid activating the parent node. -->
-        <!-- It breaks the navLink() function (from just-the-docs.js) and makes it so that only the correct child -->
-        <!--   node gets activated. -->
-        <a href=" {{ nav_children[0].url | relative_url }}" class="nav-list-link">{{ node.title }}</a>
-      {%- else -%}
-        <a href="{{ node.url | relative_url }}" class="nav-list-link">{{ node.title }}</a>
-      {%- endif -%}
+      <a href="{{ node.url | relative_url }}" class="nav-list-link">{{ node.title }}</a>
 
       {%- if nav_children.size >= 1 -%}
         {%- if node.child_nav_order == 'desc' or node.child_nav_order == 'reversed' -%}
