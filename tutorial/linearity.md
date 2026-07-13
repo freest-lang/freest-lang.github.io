@@ -5,7 +5,7 @@
 title: Linearity
 layout: default
 nav_order: 3
-parent: Freest5
+parent: Tutorial
 ---
 
 # Linearity

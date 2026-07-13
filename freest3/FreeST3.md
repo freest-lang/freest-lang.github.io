@@ -2,9 +2,9 @@
 # Feel free to add content and custom Front Matter to this file.
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
-title: Get started
+title: FreeST3
 layout: default
-nav_order: 4
+nav_order: 7
 has_children: true
 has_toc: false # avoid table of contents in the end of the page
 ---

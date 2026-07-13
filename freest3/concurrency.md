@@ -5,7 +5,7 @@
 title: Concurrency
 layout: default
 nav_order: 5
-parent: Get started
+parent: FreeST3
 ---
 
 # Concurrency

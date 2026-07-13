@@ -2,13 +2,17 @@
 # Feel free to add content and custom Front Matter to this file.
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
-title: Download
+title: Install
 layout: default
-nav_order: 2
+nav_order: 1
+parent: FreeST3
 ---
 
-# Download
+# Ready, set, install!
 {: .no_toc }
+
+<!-- TODO -->
+<!-- some intro text here -->
 
 <!-- collapsible TOC (check https://just-the-docs.github.io/just-the-docs/docs/navigation-structure/#top) -->
 <details open markdown="block">
@@ -19,6 +23,25 @@ nav_order: 2
 - TOC
 {:toc}
 </details>
+
+
+## Pre-requisites
+<!-- pre-requisites to install -->
+Before installing FreeST you need two things: Haskell and Stack. You can see how to install them at 
+    [Haskell's official website](https://www.haskell.org/download/) (they recommend using GHCup).
+
+
+
+## Download and install FreeST
+<!-- where to download -->
+Download FreeST's latest version [here]({{ site.url }}{{ site.baseurl }}\download).
+
+<!-- how to install -->
+To install, first unzip the folder and then run `stack install` inside it. This will install `freest` and
+    `freesti` (FreeST's interactive environment).
+
+Please be sure that Stack's install folder is part of your system's path, or else you will not be able to 
+    use either executable.
 
 ## Tools
 ### FreeST Syntax Highlighting for Visual Studio Code 

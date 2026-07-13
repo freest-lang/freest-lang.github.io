@@ -5,7 +5,7 @@
 title: Shared channels
 layout: default
 nav_order: 6
-parent: Get started
+parent: FreeST3
 ---
 
 # Shared channels

@@ -5,7 +5,7 @@
 title: Modules
 layout: default
 nav_order: 7
-parent: Get started
+parent: FreeST3
 ---
 
 # Modules

@@ -22,7 +22,7 @@
     // NOTE: dualof/match/with are not in the current Lexer.x but are used
     // pervasively in the docs as FreeST surface syntax; included so they
     // highlight. Drop them here if the lexer is the sole source of truth.
-    'keyword': /\b(?:case|channel|data|dualof|else|exists|forall|if|import|in|let|match|module|mutual|of|rec|receiveType|select|sendType|then|type|where|with)\b/,
+    'keyword': /\b(?:case|channel|data|dualof|else|exists|forall|if|import|in|let|match|module|mutual|of|otherwise|rec|receiveType|select|sendType|then|type|where|with)\b/,
 
     // Built-in (session / functional) type constructors.
     'builtin': /\b(?:Char|Close|Dual|Float|Int|Skip|Void|Wait)\b/,
@@ -63,7 +63,13 @@
       'pre > code.language-freest',
       'pre > code.language-fst',
       'div.language-freest pre code',
-      'div.language-fst pre code'
+      'div.language-fst pre code',
+      // Inline code explicitly tagged as FreeST, e.g. `x`{: .language-freest }.
+      'code.language-freest',
+      'code.language-fst',
+      // Reference-table cells (see .lib-table in custom.scss): every signature
+      // in a Function/Type/Description cell is highlighted like a code line.
+      '.lib-table td code'
     ].join(', '));
     Array.prototype.forEach.call(blocks, function (code) {
       if (code.getAttribute('data-freest-highlighted')) return;

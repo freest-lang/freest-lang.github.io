@@ -1,11 +1,11 @@
 ---
-title: Freest5
+title: Tutorial
 layout: default
-nav_order: 9
+nav_order: 3
 has_children: true
 has_toc: false
 ---
 
-# Freest5
+# Tutorial
 
 Introduction to Freest5 section.

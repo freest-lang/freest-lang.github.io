@@ -1,3 +1,20 @@
 h1 {
     font-weight: 500;
 }
+
+// --- Library reference pages (Prelude, List, File) ---------------------------
+
+// Highlighted note / lead callout at the top of a reference page.
+.lib-note {
+  border-left: 4px solid #0063a3;          // brand blue, cf. color_schemes/freest.scss
+  background: rgba(0, 99, 163, 0.06);
+  padding: 0.6rem 1rem;
+  border-radius: 0 4px 4px 0;
+  margin: 0 0 2rem;
+}
+.lib-note > :first-child { margin-top: 0; }
+.lib-note > :last-child  { margin-bottom: 0; }
+
+// Reference tables: full width, and keep the signature column on one line.
+.lib-table table { width: 100%; }
+.lib-table td:first-child { white-space: nowrap; }
