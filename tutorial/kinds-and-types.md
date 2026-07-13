@@ -161,14 +161,14 @@ Rather than trying to decree such types as invalid, a not-so-easy endeavour, we 
 
 We have used function `forkWith` quite often, but we have not been very explicit about its type. We know that it is a polymorphic function, that it accepts a channel endpoint type (a type of base kind `C`, call it `T`) and a function from `Dual T` to `()`, and that it returns a value of type `T`.
 So, one possible type for `forkWith` is
-```freeest
+```freest
 forall (a : 1C) -*-> (Dual a -1-> ()) -*-> a
 ```
 where we have chosen a linear function for the `Dual a` to `()` function. That makes a lot of sense. Such a type signals the client that the function is going to be used exactly once, that the runtime system will not fork two threads, each running the given function.
 
-If the linear arrow gives client extra assurance, it also hinders code reusability. Suppose the client is endowed with an unrestricted function, a function of type `Dual a -*-> ()`, that he would like to use to fork a thread, trusting the runtime that the function would nevertheless be used once only. There is really no work around, except perhaps rewriting the code.
+If the linear arrow gives the client extra assurance, it also hinders code reusability. Suppose the client is endowed with an unrestricted function, a function of type `Dual a -*-> ()`, that they would like to use to fork a thread, trusting the runtime that the function would nevertheless be used once only. There is really no workaround, except perhaps rewriting the code.
 
-So we could setup two signatures for the *same* underlying function.
+So we could set up two signatures for the *same* underlying function.
 ```freest
 forkWith  : forall (a : 1C) -*-> (Dual a -*-> ()) -*-> a
 forkWith' : forall (a : 1C) -*-> (Dual a -1-> ()) -*-> a
@@ -180,23 +180,23 @@ fork  : forall (a : *T) -*-> (() -*-> a) -*-> ()
 fork' : forall (a : *T) -*-> (() -1-> a) -*-> ()
 ```
 
-This story ends here because `fork` is primitive, but one can think of scenarios where this problem would cascade thought many more functions.
+This story ends here because `fork` is primitive, but one can think of scenarios where this problem would cascade through many more functions.
 
-The code of the two versions of `forkWith` are exactly the same, only the signatures vary. The same happens with `fork`. This calls for **multiplicity polymorphism**. There is one only version of each functions. Their type signatures are as follows:
-```freeest
-forall #m -*-> forall (a : 1C) -*-> (Dual a -m-> ()) -*-> a
+The code of the two versions of `forkWith` is exactly the same, only the signatures vary. The same happens with `fork`. This calls for **multiplicity polymorphism**. There is only one version of each function. Their type signatures are as follows:
+```freest
+forkWith : forall #m -*-> forall (a : 1C) -*-> (Dual a -m-> ()) -*-> a
 fork : forall #m -*-> forall (a : *T) -*-> (() -m-> a) -*-> ()
 ```
 
-Type `forall #m -*-> T` introduces multiplicity polymorphism. The variable name, `m` in this case, must be preceed by a sharp symbol, `#`, so that it can be distinguished from a type variable. In the body we use `-m->`, not `-#m->`. The syntax is otherwise similar to type polymorphism.
+Type `forall #m -*-> T` introduces multiplicity polymorphism. The variable name, `m` in this case, must be preceded by a sharp symbol, `#`, so that it can be distinguished from a type variable. In the body we use `-m->`, not `-#m->`. The syntax is otherwise similar to type polymorphism.
 
 For a further example, consider function composition `f . g`, `f` after `g`. In a programming language without multiplicities in arrows we would expect:
 ```freest
 (.) : forall a b c -> (b -> c) -> (a -> b) -> a -> c
 ```
-Remember that `->` abbreviates `-*->`, so that this type signature is highly restrictive: it applies to two unrestricted function? What if one or more of the functions are linear? Can we write a type for `(.)` as we did for `forkWith` and `fork`?
+Remember that `->` abbreviates `-*->`, so that this type signature is highly restrictive: it applies to two unrestricted functions. What if one or more of the functions are linear? Can we write a type for `(.)` as we did for `forkWith` and `fork`?
 
-The problem here is that `(.)` accepts *two* functions ad that the kind of `f . g` depends on the kinds of *both* `f` and `g`. If both are `*`, then `(.)` is `*`. If both are `1`, then  `(.)` is `1`. More generaly, if at least one of `f` or `g` are `1`, then `(.)` is `1`. Remembering that `*` is a submultiplicity of `1`, written `* <: 1`, we are looking for the *least upper bound* of the two multiplicities. The least upper bound of multiplicities `m` and `n` is written `m+n`. We are now in a position to write the type of `(.)`, or better, we can ask `freest -i`:
+The problem here is that `(.)` accepts *two* functions and that the kind of `f . g` depends on the kinds of *both* `f` and `g`. If both are `*`, then `(.)` is `*`. If both are `1`, then `(.)` is `1`. More generally, if at least one of `f` or `g` is `1`, then `(.)` is `1`. Remembering that `*` is a submultiplicity of `1`, written `* <: 1`, we are looking for the *least upper bound* of the two multiplicities. The least upper bound of multiplicities `m` and `n` is written `m+n`. We are now in a position to write the type of `(.)`, or better, we can ask `freest -i`:
 
 ```bash
 $ freest -i
