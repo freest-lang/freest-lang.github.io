@@ -169,7 +169,6 @@ Complete the exercise with the customary test:
 ```freest
 aTree : Tree Int
 aTree = Node (Node Leaf 1 Leaf) 2 (Node (Node Leaf 3 Leaf) 4 Leaf)
-
 _ = forkWith (marshall aTree) |> unmarshall |> print
 ```
 Expect `Node (Node Leaf 1 Leaf) 2 (Node (Node Leaf 3 Leaf) 4 Leaf)` on the console (the "out" and the "in" trees coincide).
