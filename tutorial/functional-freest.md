@@ -38,7 +38,7 @@ FreeST has the following primitive types:
 
 From primitive types, other types can be built. **Tuple** is the first type
     constructor we study. A tuple can have two elements `(Int, String)` or as
-    many you want `(Bool, Int, (Int, Char), String)`.
+    many as you want `(Bool, Int, (Int, Char), String)`.
 
 
 ## Functions, functions everywhere
@@ -63,10 +63,8 @@ plus x y = x + y            -- body
 ```
 
 <!-- function body -->
-<!-- lack of return statement -->
-The function's body consists of the name of the function, the variables described in the signature
-    followed by the logic itself. Note that there is **no return** statement, this is because the 
-    entire expression is the return itself.
+The function's body consists of the name of the function, the variables described in the signature,
+    followed by the logic itself.
 
 <!-- TODO: wild argument `_` -->
 
@@ -80,7 +78,7 @@ plus x y = x + y
 minus x y = x - y
 ```
 
-Functions in FreeST can have their signature and body separated, however we incentivize to **not** 
+Functions in FreeST can have their signature and body separated; however, we encourage you **not** to
     write code like this:
 ```freest
 plus : Int -> Int -> Int
@@ -94,7 +92,7 @@ plus x y = x + y
 <!-- for multiple returns, use tuples -->
 At first glance, functions can't have more than one return type. However, functions might need to 
     return two or more values. How do we do this? We take advantage of **tuples** to encapsulate
-    multiple return values inside a single one. To exemplify, Function `makeTwins` takes an integer 
+    multiple return values inside a single one. To exemplify, function `makeTwins` takes an integer 
     and returns it and its twin (a copy!) within a tuple.
 ```freest
 makeTwins : Int -> (Int, Int)
@@ -103,7 +101,7 @@ makeTwins x = (x, x)
 
 <!-- `let` expressions -->
 Not all functions can (or should) be described using a single expression. To prevent this from 
-    becoming a limitation, we use `let` expressions which lets (pun intended) us store values in
+    becoming a limitation, we use the `let` expression, which lets (pun intended) us store values in
     variables for later use. 
 ```freest
 improvedDivision : Int -> Int -> (Int, Int)
@@ -115,7 +113,7 @@ improvedDivision n div =
 
 Function `improvedDivision` simply divides a number by another and returns both the quotient and the
     remainder. We could write a single expression `(n / div, mod n div)`, but naming each part with
-    a `let` makes clear what is what.
+    a `let` makes it clear what is what.
 
 Furthermore, it's through `let` expressions that we can 'open' pairs to access their elements 
     (instead of relying on `fst` and `snd`).
@@ -124,7 +122,7 @@ let (quotient, remainder) = improvedDivision 3 2 in quotient * remainder
 ```
 
 <!-- if statements -->
-For conditional branching, `if` statements are provided. Note that both the `then` and `else` branches must be present, so you can't write just the `then` branch. Here's a function that returns the absolute value of an integer.
+For conditional branching, `if` expressions are provided. Note that both the `then` and `else` branches must be present, so you can't write just the `then` branch. Here's a function that returns the absolute value of an integer.
 
 ```freest
 abs' : Int -> Int
@@ -142,14 +140,14 @@ abs' x =
 
 ## Running scripts in FreeST
 
-A FreeST script is a list of declarations, as for example, `improvedDivision` and `abs'`. To run code one has to place a (non evaluated) expression inside a declaration. For example:
+A FreeST script is a list of declarations, as for example, `improvedDivision` and `abs'`. To run code one has to place a (non-evaluated) expression inside a declaration. For example:
 ```freest
 main = print $
   let divisor = 2
       (quotient, remainder) = improvedDivision 3 divisor
   in quotient * divisor + remainder
 ```
-But `main` is just another name. And since we are nor using it, we may as well use an wildcard:
+But `main` is just another name. And since we are not using it, we may as well use a wildcard:
 ```freest
 _ = print $
   let divisor = 2
@@ -169,13 +167,13 @@ would print `1` followed by `2` on the console.
 
 ## User-defined types
 
-You're a novice programmer into this fictitious new project and you come across this function:
+You're a novice programmer working on this fictitious new project and you come across this function:
 ```freest
 f : (Int -> Int) -> Int -> (Int, Int)
 f g x = (x, g x)
 ```
 
-What is this? What are its parameters? What is the purpose of function `f`? Maybe it helps `calcFunY`, but perhaps it is not enough. A major problem continues to be the confusing signature.
+What is this? What are its parameters? What is the purpose of function `f`? Giving it a descriptive name such as `calcFunY` helps, but it is not enough: a major problem continues to be the confusing signature.
 
 Confusing signatures can be avoided by defining names for types. We start by creating a couple of type *abbreviations*:
 ```freest
@@ -205,7 +203,7 @@ type Rectangle = (Point, Point)
 type Triangle = (Point, Point, Point)
 ```
 
-For now there are no issues. Next we want to write a function `area` that takes a shape and calculates its area accordingly. What is the signature of such a function? It either receives a `Circle`, a `Rectangle` or a `Triangle`, so it in fact has to be split among three different functions. But there is a better way. We create a new **datatype** `Shape` where all different shapes are represented by different constructors each with their set of parameters.
+For now there are no issues. Next we want to write a function `area` that takes a shape and calculates its area accordingly. What is the signature of such a function? It either receives a `Circle`, a `Rectangle` or a `Triangle`, so it in fact has to be split into three different functions. But there is a better way. We create a new **datatype** `Shape` where all different shapes are represented by different constructors, each with its own set of parameters.
 ```freest
 data Shape = Circle Point Radius
            | Rectangle Point Point
@@ -222,9 +220,9 @@ area (Rectangle (x1, y1) (x2, y2)) =
 area (Triangle (x1, y1) (x2, y2) (x3, y3)) =
     absF (x1 *. (y2 -. y3) +. x2 *. (y3 -. y1) +. x3 *. (y1 -. y2)) /. 2.0
 ```
-Notice the floating point operations `*.`, `+.` and `absF`.
+Notice the floating-point operations `*.`, `+.` and `absF`.
 
-Pattern-matching is our preferred style of programming. Alternatively, one can use a `case` expression to destruct a datatype:
+Pattern-matching is our preferred style of programming. Alternatively, one can use a `case` expression to deconstruct a datatype:
 ```freest
 area' : Shape -> Float
 area' shape =
@@ -243,7 +241,7 @@ and expect `True` on the console.
 
 ## Datatype and type declarations
 
-Keyword `data` introduces a new type, different from all others; `type` may introduce a type abbreviation as well as a new type (if the name of the type appears on the right; we discuss this in the next section). `data` is nominal; `type` is structural. This means that types `T` and `U` can never be equivalent, regardeless of what the ellipsis stand for:
+Keyword `data` introduces a new type, different from all others; `type` may introduce a type abbreviation as well as a new type (if the name of the type appears on the right; we discuss this in the next section). `data` is nominal; `type` is structural. This means that types `T` and `U` can never be equivalent, regardless of what the ellipsis stands for:
 ```freest
 data T = ...
 data U = ...
@@ -252,7 +250,7 @@ data U = ...
 On the other hand, `V` and `W` are equivalent types. They are both equivalent to `Int` and all three may be interchangeably used in code.
 ```freest
 type V = Int
-type W = int
+type W = Int
 ```
 
 Datatype constructors cannot be reused. The declarations below are *not* valid.
@@ -263,13 +261,13 @@ data U = D
 
 ## Recursion, recursion, recursion, ...
 
-We want to write a function `sumUpTo` that calculates the sum of the first `n` natural numbers. Functions such as `sumUpTo` which require some form of *iteration* are translated to using *loops*. FreeST does not have any type of loop syntax, so how can we write function `sumUpTo`? The answer is **recursion**.
+We want to write a function `sumUpTo` that calculates the sum of the first `n` natural numbers. Functions such as `sumUpTo` require some form of *iteration*. How can we write it? The answer is **recursion**.
 
 Trivially, the recursive definition of `sumUpTo` is: `sumUpTo 0 == 0` and `sumUpTo n == n + sumUpTo (n-1)`. In FreeST it translates to:
 ```freest
 sumUpTo : Int -> Int
 sumUpTo n | n <= 0 = 0
-          | otherwise = sumUpTo (n - 1)
+          | otherwise = n + sumUpTo (n - 1)
 
 ```
 
@@ -278,7 +276,7 @@ Data structures can also be recursive. A binary tree of integers is defined as:
 data IntBinaryTree = Leaf | Node IntBinaryTree Int IntBinaryTree
 ```
 
-Recursive data structures are naturally consumed by recursive functions. Here is a function that consumes a tree, while producing the sum of the values in the tree..
+Recursive data structures are naturally consumed by recursive functions. Here is a function that consumes a tree while producing the sum of the values in the tree.
 ```freest
 treeSum : IntBinaryTree -> Int
 treeSum Leaf         = 0
@@ -297,7 +295,7 @@ Types can also be recursive. We shall see them in good use together with session
 type IntSink = Int -> IntSink
 ```
 
-This type can never be consumed in its intirety, in finite time. The best we can do is to consume it partially. Function `partialConsume` does exactly this: feeds five Ints and returns the resulting function, again of type `IntSink`.
+This type can never be consumed in its entirety, in finite time. The best we can do is to consume it partially. Function `partialConsume` does exactly this: feeds five Ints and returns the resulting function, again of type `IntSink`.
 ```freest
 partialConsume : IntSink -> IntSink
 partialConsume f = f 1 2 3 4 5
@@ -315,7 +313,7 @@ sumUpTo' n curr =
 
 ## Mutual recursion
 
-Mutual recursive functions must be introduced with keyword mutual. The `even` and `odd` functions on *natural numbers* can de defined as follows.
+Mutually recursive functions must be introduced with the keyword `mutual`. The `even` and `odd` functions on *natural numbers* can be defined as follows.
 ```freest
 mutual
   even : Int -> Bool
