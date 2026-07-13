@@ -7,7 +7,7 @@ has_toc: false
 permalink: /tutorial/
 ---
 
-# Tutorial
+# The FreeST programming language
 
 FreeST is a functional programming language for safe concurrency, powered by
 context-free session types. Here are the ideas that shape it:
