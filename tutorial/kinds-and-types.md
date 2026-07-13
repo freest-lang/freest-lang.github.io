@@ -159,7 +159,7 @@ Rather than trying to decree such types as invalid, a not-so-easy endeavour, we 
 
 ## Multiplicity polymorphism
 
-We have used function `forkWith` quite often, but we have not been very explicit about its type. We know that it is a polymorphic function, that it accepts a channel endpoint type (a type of base kind `C`, call it `T`) and a function from ` Dual T` to `()`, and that it returns a value of type `T`.
+We have used function `forkWith` quite often, but we have not been very explicit about its type. We know that it is a polymorphic function, that it accepts a channel endpoint type (a type of base kind `C`, call it `T`) and a function from `Dual T` to `()`, and that it returns a value of type `T`.
 So, one possible type for `forkWith` is
 ```freeest
 forall (a : 1C) -*-> (Dual a -1-> ()) -*-> a
@@ -198,7 +198,7 @@ Remember that `->` abbreviates `-*->`, so that this type signature is highly res
 
 The problem here is that `(.)` accepts *two* functions ad that the kind of `f . g` depends on the kinds of *both* `f` and `g`. If both are `*`, then `(.)` is `*`. If both are `1`, then  `(.)` is `1`. More generaly, if at least one of `f` or `g` are `1`, then `(.)` is `1`. Remembering that `*` is a submultiplicity of `1`, written `* <: 1`, we are looking for the *least upper bound* of the two multiplicities. The least upper bound of multiplicities `m` and `n` is written `m+n`. We are now in a position to write the type of `(.)`, or better, we can ask `freest -i`:
 
-```freest
+```bash
 $ freest -i
 The FreeST Compiler, version 5.0, https://freest-lang.github.io/, :h for help
 Ok, no modules loaded.
