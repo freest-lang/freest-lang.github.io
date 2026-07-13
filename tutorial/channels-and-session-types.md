@@ -239,9 +239,9 @@ We have seen how to exchange values on channels and how to close channels. We no
 A function that consumes one such channel endpoint and returns an appropriate string, needs to take a different action depending on the choice found at the front of the queue. The easiest way to deconstruct an `&` type is to use pattern matching.
 ```freest
 showSemaphore : &{Green: Wait, Yellow: Wait, Red: Wait} -> String
-showSemaphore (&Green s)  = wait s ; "Green"
-showSemaphore (&Yellow s) = wait s ; "Yellow"
-showSemaphore (&Red s)    = wait s ; "Red"
+showSemaphore (&Green  Wait) = "Green"
+showSemaphore (&Yellow Wait) = "Yellow"
+showSemaphore (&Red    Wait) = "Red"
 ```
 
 If pattern matching is not an option, one can always try a `case` expression:
