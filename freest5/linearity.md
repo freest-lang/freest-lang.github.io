@@ -59,6 +59,28 @@ Linear variable `f` of type `Int -1-> Int -1-> Int`, bound at
 ```
 The highlighted region `x y = f x y` is the partial application `linBinApply h`, that is, the function `\x y -> f x y`. Its type, `Int -*-> Int -1-> Int`, is unrestricted (the second `-*->`), yet its body captures the linear value `h`. Making this function unrestricted would allow duplicating or discarding `h`, hence the error.
 
+However, note that the linearity of functions, and their partial applications, derives not from types, but rather is dictated by how linear resources are captured and used inside the function.
+
+Consider function ``foo1``, which is quite similar to the example above:
+```freest
+foo1 : (Int -1-> Int) -> Int -1-> Int
+foo1 f x = (f 1) + x
+```
+As we've seen, the partial application of ``foo1`` must be considered linear, since it captures a linear variable.
+We can however make some changes to the function's definition, so that the type of the partial application is unrestricted instead:
+```freest
+foo2 : (Int -1-> Int) -> Int -> Int
+foo2 f = let y = f 1 in (\x -> y + x)
+```
+By allowing the partial application to evaluate and consume the linear resource, it no longer captures the linear resource, and thus, the partial application can then be discarded or duplicated.
+```freest
+_ = 
+    let x = foo2 idL in (x, x)
+    where
+        idL : Int -1-> Int
+        idL x = x
+```
+
 
 ## Linear functions, as opposed to functions with linear parameters
 
