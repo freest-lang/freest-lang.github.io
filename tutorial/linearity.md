@@ -103,9 +103,9 @@ linFunc x = let _ = extract linVar in x
 If we take `lvar` to be a linear resource and `extract` a function that somehow consumes this linear resource, then `linFunc` must be defined as linear, since otherwise, `lvar` could be discarded or duplicated.
 We refer to this flavour of linearity, which is present in FreeST, as Walker's style (cf. Advanced Topics in Types and Programming Languages, chapter 1, David Walker).
 
-However, we find it important for the reader to appreciate the difference between defining functions as either unrestricted or linear, à là Walker as we've just discussed, from defining functions that take unrestricted or linear parameters, as inspired by linear logic and present instead in systems such as Linear Haskell.
+However, we find it important for the reader to appreciate the difference between defining functions as either unrestricted or linear, *à là Walker* as we've just discussed, from defining functions that take unrestricted or linear parameters, as inspired by linear logic and present instead in systems such as *Linear Haskell*.
 
-In systems inspired by linear logic, the constraint is not on the function value itself but on how its bound variable may be used within the body.
+In these systems, the constraint is not on the function value itself, but on how its bound variable may be used within the body.
 This is expressed in the literature by a different kind of arrow, which we call the linear arrow, which states the argument is used exactly once in the body of the function.
 The linear arrow is commonly written in the literature using the *lollipop* symbol i.e., `T1 ⊸ T2`, but also with explicit annotations i.e., `T1 %1 -> T2`, where `%1` indicates the linearity of the arrow, in the case of Linear Haskell.
 
@@ -118,7 +118,7 @@ Obviously, the `dup` function is rejected, because the use of the bound variable
 Note that the multiplicity i.e., being unrestricted or linear, of the argument is of no consequence here: we may define a function that takes an unrestricted argument and uses it only once.
 In order to "fix" this function, and thus make it well-typed, the linear arrow `%1 ->` should be swapped with a "normal" arrow `->`.
 
-The difference between the two styles becomes more apparent once we realise these aim to control orthogonal aspects: Walker's style imposes restrictions on the use of the function itself, whereas linear logic inspired systems impose restrictions on the use of bound variables inside the body of the function.
+The difference between the two styles becomes more apparent once we realise these aim to control orthogonal aspects: Walker's style imposes restrictions on the use of the function itself, whereas systems inspired by linear logic impose restrictions on the use of bound variables inside the body of the function.
 
 ```haskell
 id1 :: Int %1 -> Int
@@ -140,7 +140,7 @@ Both `id1` and `id2` are well-typed: `id1` ensures the argument is used only onc
 
 Most programming languages can use and reuse values at will. FreeST treats values differently according to their **multiplicity**. The multiplicity of a value (and hence of its type) governs the number of times the value must be used in any run of the program. Currently FreeST distinguishes two multiplicities: **linear** and **unrestricted**, written `1` and `*`. The former describes a value that must be exactly once, latter a value that may be used any number of times, zero included.
 
-Unrestricted values are the values one finds in most programming languages. Linear Haskell features linear values, albeit of a slightly different nature. Rust features values that may used zero or once.
+Unrestricted values are the values one finds in most programming languages. Linear Haskell features linear values, albeit of a slightly different nature. Rust features values that may be used zero or once.
 
 Let us start with the conventional unrestricted values. All constants are unrestricted, hence the following program compiles and prints `10`. Notice that value `n` id used twice
 ```freest
