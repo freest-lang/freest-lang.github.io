@@ -21,7 +21,7 @@ parent: Tutorial
 {:toc}
 </details>
 
-## Creating threads and channels
+## Creating threads and channels, separately
 
 The previous section has used the `forkWith` combinator to accomplish two distinct things:
 * Create a new channel and
