@@ -149,7 +149,7 @@ type B = C
 type C = A
 ```
 The situation gets a lot more complex when context-free session types come into play:
-```
+```freest
 type Forever : 1S -> 1S
 type Forever a = a ; Forever a
 ```
