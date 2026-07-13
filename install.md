@@ -7,7 +7,7 @@ layout: default
 nav_order: 2
 ---
 
-# Download
+# Install FreeST
 {: .no_toc }
 
 <!-- collapsible TOC (check https://just-the-docs.github.io/just-the-docs/docs/navigation-structure/#top) -->

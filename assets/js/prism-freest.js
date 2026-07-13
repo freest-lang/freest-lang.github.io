@@ -63,7 +63,13 @@
       'pre > code.language-freest',
       'pre > code.language-fst',
       'div.language-freest pre code',
-      'div.language-fst pre code'
+      'div.language-fst pre code',
+      // Inline code explicitly tagged as FreeST, e.g. `x`{: .language-freest }.
+      'code.language-freest',
+      'code.language-fst',
+      // Reference-table cells (see .lib-table in custom.scss): every signature
+      // in a Function/Type/Description cell is highlighted like a code line.
+      '.lib-table td code'
     ].join(', '));
     Array.prototype.forEach.call(blocks, function (code) {
       if (code.getAttribute('data-freest-highlighted')) return;
