@@ -90,11 +90,20 @@ FreeST come equipped with a rich collection of types. Conventional functional ty
 
 Session and channel types include:
 * `Close` and `Wait` of kind `1C`,
-* `Skip` of kind `1S`,
 * `(!)` and `(?)` of kind `1T -> 1S`,
 * `+{l1:T1,...,ln:Tn}`, taking the upper bound of the kinds of types `T1` to `Tn`, provided these are all session types,
+* `!type a . T` and `?type a . T`, where type variable `a` may occur free in `T`, takes the kind of `T`,
 * `T ; U` taking the upper bound of the kinds of types `T` and `U`, provided both are session types,
+* `Skip` of kind `1S`,
 * `Dual T`, taking the kind of type `T`, provided it is a session type.
+
+Type `Skip` is uninhabited: there is no value, no channel endpoint, of type `Skip`. It turns out however to be quite handy when working with non-tail-recursive types.
+
+Universal and existential types:
+* Type `forall a -> U`, where `a` may occur free in `U`, takes the kind `1T` or `*T` depending on the multiplicity of type `U`.
+* Type `(exists a, U)`, where `a` may occur free in `U`, takes the kind `1T` or `*T` depending on the multiplicity of type `U`.
+
+For example, the counter abstract data type may take the type `(exists a, (a, a -> Int, a -> a))`, where `a` represents the type of the internal representation of the counter, `a -> Int` represents *get* operation, and `a -> a` the *inc* operation on the counter.
 
 Datatype names and type names:
 * `X` in `data X = ...`, taking the least upper bound of the kinds of the datatype constructors in `...`,
@@ -120,7 +129,7 @@ type App' = \(a : 1T -> *T) -> \(b : 1T) -> a b
 Here the kind signature is required.
 
 There is one final type, `Void`. In fact there is a family of `Void` types, one for each different kind.
-* `Void @T` takes the kind of `T`.
+* `Void @k` takes kind `k`.
 
 `Void` (of any kind) is not inhabited. It can be used for *divergent* functions, as for example, a server that forever reads integer values from a shared channel and echoes them:
 ```freest
@@ -139,5 +148,9 @@ type C = A
 ```
 The situation gets a lot more complex when context-free session types come into play:
 ```
+type Forever : 1S -> 1C
 type Forever a = a ; Forever a
 ```
+Should this type be considered valid? If one applies `Forever` to `Skip`, that is `Forever Skip`, we get a type equivalent to `Skip ; Forever Skip` which, by the monoidal rules is equivalent to `Forever Skip`. We are back to square one without ever producing an observable action. In this case, `Forever Skip` is not much different from type `X` above.
+
+Rather than trying to decree such types as invalid, a not so easy endeavour, we welcome them all and declare all equal to `Void @k` for an appropriate kind `k`. So for, example, we have `Forever ≡ Void @(1S -> 1C)`.
