@@ -8,4 +8,4 @@ has_toc: false
 
 # Tutorial
 
-Introduction to Freest5 section.
+An introduction to FreeST 5.

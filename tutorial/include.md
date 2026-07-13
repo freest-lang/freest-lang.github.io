@@ -11,7 +11,7 @@ parent: Tutorial
 # Including as in the 70's
 {: .no_toc }
 
-<!-- collapsible TOC (check https://just-the-docs.github.io/just-the-docs/docs/navigation-structure/#top)
+<!-- collapsible TOC (check https://just-the-docs.github.io/just-the-docs/docs/navigation-structure/#top) -->
 <details open markdown="block">
   <summary>
     Table of contents
@@ -19,7 +19,7 @@ parent: Tutorial
   {: .no_toc .text-delta }
 - TOC
 {:toc}
-</details> -->
+</details>
 
 ## Splitting a program across files
 

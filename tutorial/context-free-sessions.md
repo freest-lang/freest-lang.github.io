@@ -4,7 +4,7 @@
 
 title: Context-free sessions
 layout: default
-nav_order: 6
+nav_order: 5
 parent: Tutorial
 ---
 

@@ -156,3 +156,35 @@ type Forever a = a ; Forever a
 Should this type be considered valid? If one applies `Forever` to `Skip`, that is `Forever Skip`, we get a type equivalent to `Skip ; Forever Skip` which, by the monoidal rules, is equivalent to `Forever Skip`. We are back to square one without ever producing an observable action. In this case, `Forever Skip` is not much different from type `X` above.
 
 Rather than trying to decree such types as invalid, a not-so-easy endeavour, we welcome them all and declare all equal to `Void @k` for an appropriate kind `k`. So, for example, we have `Forever ≡ Void @(1S -> 1S)`.
+
+## Multiplicity polymorphism
+
+We have used function `forkWith` quite often, but we have not been very explicit about its type. We know that it is a polymorphic function, that it accepts a channel endpoint type (a type of base kind `C`, call it `T`) and a function from ` Dual T` to `()`, and that it returns a value of type `T`.
+So, one possible type for `forkWith` is
+```freeest
+forall (a : 1C) -*-> (Dual a -1-> ()) -*-> a
+```
+where we have chosen a linear function for the `Dual a` to `()` function. That makes a lot of sense. Such a type signals the client that the function is going to be used exactly once, that the runtime system will not fork two threads, each running the given function.
+
+If the linear arrow gives client extra assurance, it also hinders code reusability. Suppose the client is endowed with an unrestricted function, a function of type `Dual a -*-> ()`, that he would like to use to fork a thread, trusting the runtime that the function would nevertheless be used once only. There is really no work around, except perhaps rewriting the code.
+
+So we could setup two signatures for the *same* underlying function.
+```freest
+forkWith  : forall (a : 1C) -*-> (Dual a -*-> ()) -*-> a
+forkWith' : forall (a : 1C) -*-> (Dual a -1-> ()) -*-> a
+```
+
+But `forkWith`, we have seen, calls `fork` and passes the incoming function as is to `fork`. We would need two different fork functions:
+```freest
+fork  : forall (a : *T) -*-> (() -*-> a) -*-> ()
+fork' : forall (a : *T) -*-> (() -1-> a) -*-> ()
+```
+
+This story ends here because `fork` is primitive, but one can think of scenarios where this problem would cascade
+
+
+The unrestricted arrows could have been written `->`, as usual. We have used the heavy syntax because arrow multiplicity is what we want to discuss.
+
+```freeest
+forall #m -*-> forall (a : 1C) -*-> (Dual a -m-> ()) -*-> a
+```
