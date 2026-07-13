@@ -11,4 +11,4 @@ has_toc: false # avoid table of contents in the end of the page
 
 # Libraries
 
-This section documents FreeST's standard libraries. Chief among them is the **Prelude**, which is included implicitly into every program, so the functions and combinators it provides are available without any `INCLUDE` pragma of your own.
+This section documents FreeST's standard libraries. The **Prelude** is included implicitly into every program, so the functions and combinators it provides are available without any `INCLUDE` pragma of your own.
