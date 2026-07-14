@@ -78,14 +78,20 @@ So type `TreeC` is not a proper type, it is a function that expects a type of ki
        *C
 ```
 
-Proper kinds come equipped with a subkind relation (diagram above) and so do higher-order kinds. This is the standard contravariant/covariant rule for subtyping function types.
+Proper kinds come equipped with a subkind relation (diagram above) and so do higher-order kinds. For a function kind, subkinding follows the standard contravariant/covariant rule for subtyping function types:
+```
+k1' <: k1    k2 <: k2'
+----------------------
+k1 -> k2 <: k1' -> k2'
+```
+That is, subkinding is *contravariant* in the domain and *covariant* in the codomain. For example, `1T -> *S <: *T -> 1S`, since `*T <: 1T` in the domain and `*S <: 1S` in the codomain.
 
 
 ## Types
 
 FreeST comes equipped with a rich collection of types. Conventional functional types:
 * `Int`, `Float`, `Char`, `Bool`, all of kind `*T`,
-* Arrow types, `-1->` and `-*->`; the latter can be abbreviated to `->`,
+* Arrow types, `-1->` and `-*->` of kinds `1T` and `*T` respectively; the latter can be abbreviated to `->`,
 * Tuple types, `(U1, ..., Un)`; the kind of such a type is the least upper bound of the kinds of types `U1` to `Un`. For example, `(!Int, Int) : 1T`. Types `U1` to `Un` must be proper types.
 
 Session and channel types include:
