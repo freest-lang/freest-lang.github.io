@@ -91,16 +91,16 @@ That is, subkinding is *contravariant* in the domain and *covariant* in the codo
 
 FreeST comes equipped with a rich collection of types. Conventional functional types:
 * `Int`, `Float`, `Char`, `Bool`, all of kind `*T`,
-* Arrow types, `-1->` and `-*->` of kinds `1T` and `*T` respectively; the latter can be abbreviated to `->`,
-* Tuple types, `(U1, ..., Un)`; the kind of such a type is the least upper bound of the kinds of types `U1` to `Un`. For example, `(!Int, Int) : 1T`. Types `U1` to `Un` must be proper types.
+* Arrow types, `(-m->)`, of kind `1T -> 1T -> m T`, where `m` is a multiplicity (`*`, `1` or a variable); `(-*->)` can be abbreviated to `(->)`,
+* Tuple types, `(U1, ..., Un)`; the base kind of such a type is `T` and its multiplicity is the least upper bound of the multiplicities of `U1` to `Un`, which must be proper types. For example, `(Int, Int) : *T` and `(!Int, Int) : 1T`.
 
 Session and channel types include:
 * `Close` and `Wait` of kind `1C`,
 * `(!)` and `(?)` of kind `1T -> 1S`,
-* `+{l1:U1,...,ln:Un}`, taking the least upper bound of the kinds of types `U1` to `Un`, provided these are all session types,
-* `!type a . U` and `?type a . U`, where type variable `a` may occur free in `U`, takes the kind of `U`,
-* `U ; V` taking the least upper bound of the kinds of types `U` and `V`, provided both are session types,
-* `Skip` of kind `1S`,
+* `+{l1:U1,...,ln:Un}` and `&{l1:U1,...,ln:Un}` of multiplicity `1` and taking same base kind as the least upper bound of the kinds of `U1` to `Un`, provided these are all session types. For example, `+{A: Skip, B: Close} : 1S`
+* `!type a . U` and `?type a . U`, where type variable `a` may occur free in `U`, have multiplicity `1` and the base kind of `U`,
+* `U ; V` taking the kind of `U` if it has base kind `C` (absorbs the continuation, for example `Close; !Int : 1S`), otherwise taking the least upper bound of the kinds of types `U` and `V`, provided both are session types,
+* `Skip` of kind `*S`,
 * `Dual U`, taking the kind of type `U`, provided it is a session type.
 
 Type `Skip` is uninhabited: there is no value, no channel endpoint, of type `Skip`. It turns out however to be quite handy when working with non-tail-recursive types.
@@ -110,8 +110,8 @@ Datatype names and type names:
 * `X` in `type X = U`, taking the kind of `U` (with some care if `X` is recursive).
 
 Universal and existential types:
-* Type `forall a -> U`, where `a` may occur free in `U`, takes the kind `1T` or `*T` depending on the multiplicity of type `U`.
-* Type `(exists a, U)`, where `a` may occur free in `U`, takes the kind `1T` or `*T` depending on the multiplicity of type `U`.
+* Type `forall a -m-> U`, where `m` is a multiplicity (`*`, `1` or a variable) and `a` may occur free in `U`, takes the kind `m T`.
+* Type `(exists a, U)`, where `a` may occur free in `U`, takes the base kind `T` and the multiplicity of type `U`.
 
 For example, the counter abstract data type may take the type `(exists a, (a, a -> Int, a -> a))`, where `a` represents the type of the internal representation of the counter, `a -> Int` represents *get* operation, and `a -> a` the *inc* operation on the counter.
 
@@ -194,7 +194,7 @@ forkWith : forall #m -*-> forall (a : 1C) -*-> (Dual a -m-> ()) -*-> a
 fork : forall #m -*-> forall (a : *T) -*-> (() -m-> a) -*-> ()
 ```
 
-Type `forall #m -*-> T` introduces multiplicity polymorphism. The variable name, `m` in this case, must be preceded by a sharp symbol, `#`, so that it can be distinguished from a type variable. In the body we use `-m->`, not `-#m->`. The syntax is otherwise similar to type polymorphism.
+Type `forall #m -> T` introduces multiplicity polymorphism. The variable name, `m` in this case, must be preceded by a sharp symbol, `#`, so that it can be distinguished from a type variable. In the body we use `-m->`, not `-#m->`. The syntax is otherwise similar to type polymorphism.
 
 For a further example, consider function composition `f . g`, `f` after `g`. In a programming language without multiplicities in arrows we would expect:
 ```freest
