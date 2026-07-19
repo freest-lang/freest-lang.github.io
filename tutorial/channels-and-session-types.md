@@ -76,10 +76,15 @@ writeFive' : !Int ; Close -> ()
 writeFive' c =
   close (send 5 c)
 ```
-Do not forget that we first do `send` and only then `close`. If one is looking for a forward reading then we may use the *reverse function application* operator `|>` to get:
+Pointfree programming offers another variant, where `(.)` is the function composition operator:
 ```freest
 writeFive'' : !Int ; Close -> ()
-writeFive'' c =
+writeFive'' = close . send 5
+```
+Do not forget that we first do `send` and only then `close`. If one is looking for a forward reading then we may use the *reverse function application* operator `|>` to get:
+```freest
+writeFive''' : !Int ; Close -> ()
+writeFive''; c =
   c |> send 5 |> close
 ```
 This is our preferred style. The `|>` operator is included in the Prelude and defined as `(|>) x f = f x`; it is *reverse* function application: ordinary application is `\f -> \x -> f x`, whereas here we have `\x -> \f -> f x`. We defer the study of its type to section "Multiplicity polymorphism".

@@ -31,10 +31,10 @@ A channel is created. A thread is forked. One of the channel's two endpoints is 
 
 But there may be cases where one would like to separate the two operations, either because we want two threads to share more than one channel, or because we need a cyclic thread network.
 
-Consider a toy example of a circular network whose nodes exchange messages as follows: each thread receives a message from the thread on its left and forwards it to the thread on its right. Because we want our network to terminate we need:
+Consider a token ring whose nodes exchange messages as follows: each thread receives a message from the thread on its left and relays it to the thread on its right. Because we want our network to terminate we need:
 * Two kinds of messages: `Done` to terminate, `More` to continue;
-* Simple `forwarder`s, from left to right;
-* A distinguished forwarder that decides when enough messages have been exchanged, call it `master`.
+* Simple `relay` nodes;
+* A distinguished node that decides when enough messages have been exchanged, call it `root`.
 
 The type of the messages exchanged is as follows
 ```freest
@@ -43,24 +43,24 @@ type Forward = &{Done: Wait, More: Forward}
 
 Forwarders are easy to write: read from the left (using pattern matching), write on the right (using reverse function application `|>`):
 ```freest
-forward : Forward -> Dual Forward -1-> ()
-forward (&Done Wait) d = d |> select Done |> close
-forward (&More c)    d = d |> select More |> forward c
+relay : Forward -> Dual Forward -1-> ()
+relay (&Done Wait) d = d |> select Done |> close
+relay (&More c)    d = d |> select More |> relay c
 ```
 
-The `master` takes an extra parameter, `n`, a non-negative number describing the number of rounds. Rather than read-write, the `master` behaves as write-read. When enough messages have been exchanged (when `n` is zero), `master` selects `Done`, waits for the message to go around the network and reads a `Done`. Otherwise, `master` selects `More`, waits for the message to go around the network, reads a `More`, and recurs.
+The `root` takes an extra parameter, `n`, a non-negative number describing the number of rounds. Rather than read-write, the `root` behaves as write-read, thus breaking circularity. When enough messages have been exchanged (when `n` is zero), `root` selects `Done`, waits for the message to go around the network and reads a `Done`. Otherwise, `root` selects `More`, waits for the message to go around the network, reads a `More`, and recurs.
 ```freest
-master : Int -> Forward -> Dual Forward -1-> ()
-master 0 c d =
+root : Int -> Forward -> Dual Forward -1-> ()
+root 0 c d =
     let d = d |> select Done |> close
     in case c of (&Done Wait) -> ()
-master n c d = 
+root n c d = 
     let d = select More d
-    in case c of (&More c) -> print n ; master (n - 1) c d
+    in case c of (&More c) -> print n ; root (n - 1) c d
 ```
-Notice the non-exhaustive pattern matching in each of the two equations for `master`: if the `master` writes `X` on the right, then `X` goes around the network, through `forwarder`s, and only `X` may appear on the left.
+Notice the non-exhaustive pattern matching in each of the two equations for `root`: if the `root` writes `X` on the right, then `X` goes around the network, through `relay`s, and only `X` may appear on the left.
 
-Now how do we set up a circular network, composed of `m-1` `forwarder`s and one `master`? We need
+Now how do we set up a circular network, composed of `m-1` `relay`s and one `root`? We need
 * an operation to create a channel, and
 * another to create threads.
 
@@ -72,7 +72,7 @@ let (c1, d1) = channel @Forward
 in ...
 ```
 
-To fork a new thread use function `fork`. Fork receives a linear thunk, `t`, creates a thread running `t ()` and returns `()`. Thunks to be used with fork are usually written `(\_ -1-> ...)` with `_` of type `()`. The function is linear; the client rests assured that the function shall be used once only. For example, one of the forwarders is created with `fork (\_ -1-> forward c1 d2)`.
+To fork a new thread use function `fork`. Fork receives a linear thunk, `t`, creates a thread running `t ()` and returns `()`. Thunks to be used with fork are usually written `(\_ -1-> ...)` with `_` of type `()`. The function is linear; the client rests assured that the function shall be used once only. For example, one of the relays is created with `fork (\_ -1-> relay c1 d2)`.
 
 Putting everything together we have:
 ```freest
@@ -81,9 +81,9 @@ circle =
     let (c1, d1) = channel @Forward
         (c2, d2) = channel @Forward
         (c3, d3) = channel @Forward
-    in fork (\_ -1-> forward c1 d2) ;  -- ch1 → ch2
-       fork (\_ -1-> forward c2 d3) ;  -- ch2 → ch3
-       master 5 c3 d1                  -- ch3 → ch1  (closes the ring 1→2→3→1)
+    in fork (\_ -1-> relay c1 d2) ;  -- ch1 → ch2
+       fork (\_ -1-> relay c2 d3) ;  -- ch2 → ch3
+       root 5 c3 d1                  -- ch3 → ch1  (closes the ring 1→2→3→1)
 ```
 which prints
 ```bash
@@ -107,6 +107,36 @@ forkWith @a f =
 ```
 The discussion of its type is postponed for a later section.
 
+
+## Understanding termination of a FreeST program
+
+The rule is simple: a program terminates when its main thread completes its execution.
+
+All examples seen so far were carefully crafted so that the main thread waits for the last thread to complete. Recall the function that writes number five on an appropriate channel and then closes the channel:
+```freest
+writeFive : !Int ; Close -> ()
+writeFive = sendAndClose 5
+```
+
+On the other channel endpoint we have:
+```freest
+readInt : ?Int ; Wait -> ()
+readInt c =
+  let (x, c') = receive c in print x ; wait c'
+```
+and we decided to fork thread `writeFive` and continue with `readInt`.
+```freest
+_ = forkWith writeFive |> readInt
+```
+This allowed thread `writeFive` to write its integer and close the channel. Recall that `send` and `close` are non-blocking operations, so that thread `writeFive` may complete without the cooperation of the main thread. The latter however, now running `readInt`, receives a value and waits for the channel to be closed. Because thread  writes first and closes then, we expect to read `5` from the console.
+
+Now consider the reverse situation: fork `readInt` and continue with `writeFive`:
+```freest
+_ = forkWith readInt |> writeFive
+```
+In this case, we *may* not see `5` (or any other value) on the console. After forking, the main thread, performs its two non blocking operations and terminates. Thread `readInt` may not have time to read and print a value from the buffer.
+
+All the examples in the preceeding section were carefully crafted so that the main thread always `wait`s for its child thread, and not the other way round.
 
 ## The buffered nature of channels
 
