@@ -108,9 +108,9 @@ forkWith @a f =
 The discussion of its type is postponed for a later section.
 
 
-## Understanding termination of a FreeST program
+## Understanding program termination in FreeST
 
-The rule is simple: a program terminates when its main thread completes its execution.
+The rule is simple: a program terminates when its main thread completes its execution. All remaining threads, if any, shall be silently terminated, even if having work to do.
 
 All examples seen so far were carefully crafted so that the main thread waits for the last thread to complete. Recall the function that writes number five on an appropriate channel and then closes the channel:
 ```freest
@@ -136,7 +136,7 @@ _ = forkWith readInt |> writeFive
 ```
 In this case, we *may* not see `5` (or any other value) on the console. After forking, the main thread, performs its two non blocking operations and terminates. Thread `readInt` may not have time to read and print a value from the buffer.
 
-All the examples in the preceeding section were carefully crafted so that the main thread always `wait`s for its child thread, and not the other way round.
+All the examples in the preceeding section were carefully crafted so that the main thread always `wait`s for its child thread, and not the other way round. In addition the clied threads perform no work after sending the `close` message.
 
 
 ## The buffered nature of channels
