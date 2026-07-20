@@ -154,3 +154,48 @@ The shared protocol of the ["Cake or Disappointment?"](#cake-or-disappointment) 
 Rather than an online store, we discuss a simple, yet useful a abstraction, that of a *reference cell*. Reference cells should answer on shared channels. Clients seek read or write operations. These operations are of different natures. We could try a solution similar to the cake store, featuring two operations, `Read` and `Write`. The problem is that the former should be followed by a receive (`?`) operation and the latter by a send (`!`) operation, something that shared channels do not allow.
 
 The uniform, stateless, nature of shared channels point into another direction: we use the shared reference to initiate a cell operation. The former runs on a shared channel, the latter runs on a linear channel. Clients read from the shared channel a linear channel on which they can perform the desired operation, read or write.
+
+The type of reference cell of values of type `a` is a shared channel from which channels for conducting cell operations (`CellOp a`) can be read.
+```freest
+type CellRef : *T -> 1C
+type CellRef a = *?(CellOp a)
+```
+
+Cell operations are `Read` or `Write`, followed by the appropriate read or write operation (`?a` or `!a`). In any case, the channel must be closed.
+```freest
+type CellOp : *T -> 1C
+type CellOp a = +{Read: ?a, Write: !a} ; Close
+```
+Notice that both `CellRef` and `CellOp` are type operators that expect unrestricted values (`*`). That is because the values are to be read and write an arbitary number of types. Notice further that they are of base kind `C`; that allows creating channels of both types.
+
+*Session is initiation* requires the collaboration of the two parties: the reference cell and its clients. We start with the latter. In fact, all clients need to to is to read from the cell reference a cell operation channel. To read from a shared channel we use function `receive_`:
+```freest
+receive_ : forall (a : 1T) -> *?a -> a
+```
+Unlike is linear counterpart, `receive`, this function returns the value read from the channel. The channel itself need not be returned by the function: it can be reused as often as need.
+
+Given `CellRef`, to write a value `x` the cell, one first `receive_` a `CellOp` on which one selects `Write`, sends `x` and closes the chennel:
+```freest
+write : forall (a : *T) -> a -> CellRef a -> ()
+write x s = receive_ s |> select Write |> sendAndClose x
+```
+
+The read operation is similar:
+```freest
+read : forall (a : *T) -> CellRef a -> a
+read s = receive_ s |> select Read |> receiveAndClose
+```
+
+We now address the server side of session initiation. The server *accepts* a request for a `CellOp` on a `CellRef` channel. Function `accept` creates a `CellRef` channel, sends one endpoint on `CellOp` and returns the other endpoint:
+```freest
+accept : forall (a : 1C) -> *!a -> Dual a
+```
+
+The cell server accepts a connection from some client, and dispatches on the client operation: `Write` or `Read`:
+```freest
+cell : forall (a : *T) -> a -> Dual (CellRef a) -> ()
+cell n c =
+  case accept c of
+    &Write s -> cell (receiveAndWait s) c
+    &Read  s -> sendAndWait n s ; cell n c
+```
