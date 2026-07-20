@@ -145,3 +145,12 @@ To wait until `n` child threads have signalled completion through the join chann
 await : Int -> Dual ForkJoin -> ()
 await n c = times @() n (\_ -> case c of &Over _ -> ())
 ```
+
+
+## Session initiation
+
+The shared protocol of the ["Cake or Disappointment?"](#cake-or-disappointment) section was extremelly simple: all the channel could convey was a `Cake` or a `Disappointment` option. What if we aim at more sophisticated protocols? (imagine an online store with *your* shopping cart).
+
+Rather than an online store, we discuss a simple, yet useful a abstraction, that of a *reference cell*. Reference cells should answer on shared channels. Clients seek read or write operations. These operations are of different natures. We could try a solution similar to the cake store, featuring two operations, `Read` and `Write`. The problem is that the former should be followed by a receive (`?`) operation and the latter by a send (`!`) operation, something that shared channels do not allow.
+
+The uniform, stateless, nature of shared channels point into another direction: we use the shared reference to initiate a cell operation. The former runs on a shared channel, the latter runs on a linear channel. Clients read from the shared channel a linear channel on which they can perform the desired operation, read or write.
