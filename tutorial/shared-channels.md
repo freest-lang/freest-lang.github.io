@@ -77,27 +77,69 @@ _ = let (s, c) = channel @CakeStore in
 ```
 Let us analyse the possible outputs of the above program. One is
 ```bash
-Boé got cake!
 Ami got disappointment
+Boé got cake!
 ```
 Another is:
 ```bash
-Ami got disappointment
-Boé got cake!
+Boé got disappointment!
+Ami got cake
 ```
-But there are more. The program terminates when `cakeLover "Boé" c` terminates, so there will always be a Boé message. But whether you'll read an Ami message, depends on the interleaving of the various operations in the three threads.
+But there are may others. The program terminates when thread `cakeLover "Boé" c` terminates, so there will always be a Boé message. But whether you'll read an Ami message or not, depends on the interleaving of the various operations in the three threads.
 
 
 ## Fork-join
 
-We have seen examples of programs with three threads and they all terminated as expected. But that need be the case. What do you expect to read on the console after running this code?
+Let us leave the case store for a while.
+Not all the programs we have seen terminate as expected. What do you expect to read on the console after running this code?
 ```freest
 main =
-    fork (\_ -> print 'A') ;
-    fork (\_ -> print 'B') ;
-    fork (\_ -> print 'B') ;
+    fork (\_ -> putChar 'A') ;
+    fork (\_ -> putChar 'B') ;
+    fork (\_ -> putChar 'B') ;
     ()
 ```
-The precise answer is any sequence of three distinct letter, of sizes 0 to 3. Yes, no output is a possible answer. It happens when `main` terminates before any of the three print threads did not had a chance to `print`.
+The precise answer is any sequence of distinct letters taken from the set {`A`, `B`, `C`}, of sizes 0 to 3. Yes, no output is a possible answer. It happens when `main` terminates before any of the three print threads managed to `print`.
 
-If reading the three letters on the console is intended, then `main` must wait for the three threads to terminate. Interthread communication is by message passing alone, and so we need a channel, a channel with three writers and one reader, that is a *shared* channel.
+If reading the three letters on the console is intended, then `main` must wait for the three threads to terminate. Since inter thread communication is by message passing alone, we need a channel, a channel with three writers and one reader, that is a *shared* channel.
+
+The fork-join pattern is a solution to this problem. if comes with three ingredients: a `ForkJoin` channel type
+```freest
+type ForkJoin
+```
+a `join` operation for child channels to communicate task completion:
+```freest
+join : ForkJoin -> ()
+```
+and a `await` operation for the parent thread to wait for a given number of children:
+```freest
+await : Int -> Dual ForkJoin -> ()
+```
+
+Using fork-join is easy. The parent threads creates a `ForkJoin` channel, distributes one end to each of its children (while forking them) and `awaits` the completion:
+```freest
+_ =
+    let (w, r) = channel @ForkJoin in
+    fork (\_ -> putChar 'A'; join w) ;
+    fork (\_ -> putChar 'B'; join w) ;
+    fork (\_ -> putChar 'C'; join w) ;
+    await 3 r
+```
+We are now guaranteed to read three distinct charactes on the console, even if we cannot antecipate their order.
+
+It is instructive to study the implementation of the fork-join primitves. A `ForkJoin` channel is a channel on which threads can `select Over` an unbounded number of times.
+```freest
+type ForkJoin = *+{Over}
+```
+
+To signal completion of a child thread to the parent waiting on the join channel, we `select Over` on a `ForkJoin` channel. The operation returns the continuation channel, of type `ForkJoin`. The semicolon operator discard the (unrestricted) channel and returns `()`.
+```freest
+join : ForkJoin -> ()
+join c = select Over c ; ()
+```
+
+To wait until `n` child threads have signalled completion through the join channel, we use the `await` primitive which receives `n` `Over` labels, by making use of the `times` operation in the Prelude.
+```freest
+await : Int -> Dual ForkJoin -> ()
+await n c = times @() n (\_ -> case c of &Over _ -> ())
+```
