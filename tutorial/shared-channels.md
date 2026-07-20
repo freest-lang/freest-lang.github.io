@@ -27,17 +27,13 @@ All the examples we have seen so far feature inter-tread communication via chann
 
 But someone must take the last cake in the cake in the store. Here's the scenario taken from Kokke, Morris, Wadler: Towards Races in Linear Logic. Log. Methods Comput. Sci. 16(4) (2020).
 
-***Ami and Bo´e are working from home one morning when they each get a
+Ami and Boé are working from home one morning when they each get a
 craving for a slice of cake. Being denizens of the web, they quickly find the
 nearest store which does home deliveries. Unfortunately for them, they both
 order their cake at the *same* store, which has only one slice left. After that,
-all it can deliver is disappointment.***
+all it can deliver is disappointment.
 
-**Ami and Bo´e are working from home one morning when they each get a
-craving for a slice of cake. Being denizens of the web, they quickly find the
-nearest store which does home deliveries. Unfortunately for them, they both
-order their cake at the *same* store, which has only one slice left. After that,
-all it can deliver is disappointment.**
+
 
 ## Fork-join
 
