@@ -21,6 +21,24 @@ parent: Tutorial
 {:toc}
 </details>
 
+## Cake or disappointment?
+
+All the examples we have seen so far feature inter-tread communication via channels, whose endpoints are held by exactly one thread. This scheme makes sures that there are unexpected messages on buffers: senders write what is supposed to be written, and receivers read exactly values of the expected type. Compounded with the use of the `forkWith` primitive to create new threads and new channels, programs are expected not to deadlock.
+
+But someone must take the last cake in the cake in the store. Here's the scenario taken from Kokke, Morris, Wadler: Towards Races in Linear Logic. Log. Methods Comput. Sci. 16(4) (2020).
+
+***Ami and Bo´e are working from home one morning when they each get a
+craving for a slice of cake. Being denizens of the web, they quickly find the
+nearest store which does home deliveries. Unfortunately for them, they both
+order their cake at the *same* store, which has only one slice left. After that,
+all it can deliver is disappointment.***
+
+**Ami and Bo´e are working from home one morning when they each get a
+craving for a slice of cake. Being denizens of the web, they quickly find the
+nearest store which does home deliveries. Unfortunately for them, they both
+order their cake at the *same* store, which has only one slice left. After that,
+all it can deliver is disappointment.**
+
 ## Fork-join
 
 We have seen examples of programs with three threads and they all terminated as expected. But that need be the case. What do you expect to read on the console after running this code?
