@@ -191,7 +191,7 @@ We now address the server side of session initiation. The server *accepts* a req
 accept : forall (a : 1C) -> *!a -> Dual a
 ```
 
-The cell server accepts a connection from some client, and dispatches on the client operation: `Write` or `Read`:
+The cell server accepts a connection from some client, and dispatches on the client operation: `Write` or `Read`. The Prelude functions ``receiveAndWait` and `sendAndWait` complete the consumption of the `CellOp` channel. The function then recurs, either with the value received or with the old value.
 ```freest
 cell : forall (a : *T) -> a -> Dual (CellRef a) -> ()
 cell n c =
@@ -199,3 +199,19 @@ cell n c =
     &Write s -> cell (receiveAndWait s) c
     &Read  s -> sendAndWait n s ; cell n c
 ```
+
+To test the cell and its clients we could try forking a few `write` and `read` threads, but we must make sure they all complete their tasks before the main thread ends. For that we use the fork-join pattern again.
+The below program forks three `read` threads and two `write` clients. Expect to read any sequence of numbers `0`, `5` and `6`, possibly duplicated ou triplicated.
+```freest
+_ =
+  let c      = forkWith (cell 0)
+      (j, a) = channel @ForkJoin in
+  fork (\_ -> c |> read |> print ; join j) ;
+  fork (\_ -> c |> read |> print ; join j) ;
+  fork (\_ -> c |> write 5       ; join j) ;
+  fork (\_ -> c |> write 6       ; join j) ;
+  fork (\_ -> c |> read |> print ; join j) ;
+  await 5 a
+```
+
+<!-- Many programming offer channels of the *multiple producer, single consumer* (mpsc) sort. But in session types there is no notion of producer and consumer. This means that we may have two `cell` threads reading on the same channel. In this case we cannot use `ForkWith`. -->
