@@ -87,6 +87,8 @@ Ami got cake
 ```
 But there are may others. The program terminates when thread `cakeLover "Boé" c` terminates, so there will always be a Boé message. But whether you'll read an Ami message or not, depends on the interleaving of the various operations in the three threads.
 
+There are different solutions to this problem. A simple one uses the fork-join pattern discussed in the next section. It requires an extra, separated, channel to communicate task completion. Another refactors the program, so that the same channel that conveys cakes or disappointments also signals task completion. We postpone this solution until a later section.
+
 
 ## Fork-join
 
@@ -96,10 +98,10 @@ Not all the programs we have seen terminate as expected. What do you expect to r
 main =
     fork (\_ -> putChar 'A') ;
     fork (\_ -> putChar 'B') ;
-    fork (\_ -> putChar 'B') ;
+    fork (\_ -> putChar 'C') ;
     ()
 ```
-The precise answer is any sequence of distinct letters taken from the set {`A`, `B`, `C`}, of sizes 0 to 3. Yes, no output is a possible answer. It happens when `main` terminates before any of the three print threads managed to `print`.
+The precise answer is any sequence of distinct letters taken from the set {`A`, `B`, `C`}, of sizes 0 to 3. Yes, no output is a possible answer. It happens when `main` terminates before any of the three `putChar` threads managed to write their character.
 
 If reading the three letters on the console is intended, then `main` must wait for the three threads to terminate. Since inter thread communication is by message passing alone, we need a channel, a channel with three writers and one reader, that is a *shared* channel.
 
