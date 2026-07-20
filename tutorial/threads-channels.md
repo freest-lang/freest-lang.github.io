@@ -138,6 +138,7 @@ In this case, we *may* not see `5` (or any other value) on the console. After fo
 
 All the examples in the preceeding section were carefully crafted so that the main thread always `wait`s for its child thread, and not the other way round.
 
+
 ## The buffered nature of channels
 
 Channels are buffered. This means that output operations never block and input operations block only when the buffer is empty.
