@@ -214,4 +214,46 @@ _ =
   await 5 a
 ```
 
-<!-- Many programming offer channels of the *multiple producer, single consumer* (mpsc) sort. But in session types there is no notion of producer and consumer. This means that we may have two `cell` threads reading on the same channel. In this case we cannot use `ForkWith`. -->
+
+## Multiple producer, multiple consumer
+
+Many programming offer channels of the *multiple producer, single consumer* (mpsc) sort. But in session types there is no notion of producer or consumer. This means that we may have two more than one threads reading on the same channel (in fact zero or more).
+
+Let us think of a remote predicate evaluator. To make things more precise, think of the `gz`, greater than zero, predicate. As before, we need a shared channel, on which sessions may be initiated. Let us call the shared channel `PredEvalService` and the linear channel `PredEvalSession`.
+```freest
+type PredEvalSession : 1C
+type PredEvalSession = !Int ; ?Bool ; Close
+
+type PredEvalService : *C
+type PredEvalService = *?PredEvalSession
+```
+As before these are two types of base kinds `C` (meaning that channels can be created from the types). Session is linear, `1`, and service is shared, `*`.
+
+Clients interact on `PredEvalService`. They `receive_` a session on which they provide an integer and wait for the result, before closing the channel:
+```freest
+client : Int -> PredEvalService -> Bool
+client n s =
+  receive_ s |> send n |> receiveAndClose
+```
+
+The `gz` function performs session initiation via a call to `accept`. It then receives an integer and returns the corresponding boolean, before waiting for the channel to be closed.
+```freest
+gz : Dual PredEvalService -> ()
+gz s =
+  let(x, c) = receive (accept s) in sendAndWait (x > 0) c
+```
+
+We may now put several copies of `gz` and `client` running in parallel. Again, we make use of the fork-join pattern to make sure all threads are given a chance to terminate.
+```freest
+_ =
+  let (c, s) = channel @PredEvalService
+      (j, a) = channel @ForkJoin in
+  fork (\_ -> s |> gz                   ; join j) ;
+  fork (\_ -> c |> client 5    |> print ; join j) ;
+  fork (\_ -> c |> client (-1) |> print ; join j) ;
+  fork (\_ -> s |> gz                   ; join j) ;
+  fork (\_ -> s |> gz                   ; join j) ;
+  fork (\_ -> c |> client 0    |> print ; join j) ;
+  await 6 a
+```
+The console shoud read `True`, `False`, `False`, in any order. The code above is brittle. Because each `gz` server serves one client only, one must have the same number of clients and servers. Any deviation from this pattern would leave a thread blocked indefinitely while waiting to read from a channel endpoint, `s` or `c`.
