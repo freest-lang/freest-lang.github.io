@@ -4,7 +4,7 @@
 
 title: Types and their kinds
 layout: default
-nav_order: 8
+nav_order: 9
 parent: Tutorial
 ---
 

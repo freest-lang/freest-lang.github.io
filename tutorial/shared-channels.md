@@ -37,14 +37,14 @@ The crucial difference between this example and those seen so far is that Ami an
 
 Not any channel endpoint can be shared. If two threads share a channel of type `!Int ; !Char` and they do not synchronise, chances are that the `Char` message may arrive at the destination before the `Int` message. The only channels that can be shared are *stateless*, channels whose contents do not change over time, and in particular that cannot be explicitly closed. Intuitively, one such channel can be understood as `!Int ; !Int ; ...`.
 
-For channels that forever send values of type `U` we use a type of the form `*!U`. For a channel that forever selects label `l` or `m`, we write `+{l,m}`. The table below summarises the unrestricted types.
+For channels that forever send values of type `U` we use a type of the form `*!U`. For a channel that forever selects label `l` or `m`, we write `*+{l,m}`. The table below summarises the unrestricted types.
 
 | Type | Description |
 | --- | --- |
 | `*!U` | Forever send `U` |
 | `*?U` | Forever receive `U` |
-| `+{l1,...,ln}` | Forever send one of the `l1`,...,`ln` labels |
-| `&{l1,...,ln}` | Forever receive one of the `l1`,...,`ln` labels |
+| `*+{l1,...,ln}` | Forever send one of the `l1`,...,`ln` labels |
+| `*&{l1,...,ln}` | Forever receive one of the `l1`,...,`ln` labels |
 
 All shared types are of kind `*C`, meaning that a) they can be shared (`*`) and b) that they can be used to create channels (`C`).
 

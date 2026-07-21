@@ -239,7 +239,7 @@ The type of the semicolon operator is `forall (a : *T) (b : 1T) -*-> a -*-> b -*
 
 ## Selecting and offering choices
 
-We have seen how to exchange values on channels and how to close channels. We now look at how we select and offer choices on channels. Imagine a channel offering three choices after which it waits for the channel to be closed, in all cases. The channel can be written `&{Green: Wait, Yellow: Wait, Red: Wait}`, a semaphore as seen from the point of view of the reader.
+We have seen how to exchange values on channels and how to close channels. We now look at how we select and offer choices on channels. Imagine a channel offering three choices after which it waits for the channel to be closed, in all cases. The channel can be written `&{Green: Wait, Yellow: Wait, Red: Wait}`, a traffic light as seen from the point of view of the reader.
 
 A function that consumes one such channel endpoint and returns an appropriate string, needs to take a different action depending on the choice found at the front of the queue. The easiest way to deconstruct an `&` type is to use pattern matching.
 ```freest
@@ -259,7 +259,7 @@ showColour' s = case s of
 ```
 Notice that `s` is once again rebound in each case, under the same name.
 
-The dual of the semaphore type, that is the type of the other channel endpoint, is `+{Green: Close, Yellow: Close, Red: Close}`. To consume one such channel endpoint, we take advantage of expression `select Green` (in this case):
+The dual of the traffic light type, that is the type of the other channel endpoint, is `+{Green: Close, Yellow: Close, Red: Close}`. To consume one such channel endpoint, we take advantage of expression `select Green` (in this case):
 ```freest
 selectGreen : +{Green: Close, Yellow: Close, Red: Close} -> ()
 selectGreen c = c |> select Green |> close
