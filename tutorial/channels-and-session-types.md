@@ -243,16 +243,16 @@ We have seen how to exchange values on channels and how to close channels. We no
 
 A function that consumes one such channel endpoint and returns an appropriate string, needs to take a different action depending on the choice found at the front of the queue. The easiest way to deconstruct an `&` type is to use pattern matching.
 ```freest
-showSemaphore : &{Green: Wait, Yellow: Wait, Red: Wait} -> String
-showSemaphore (&Green  Wait) = "Green"
-showSemaphore (&Yellow Wait) = "Yellow"
-showSemaphore (&Red    Wait) = "Red"
+showColour : &{Green: Wait, Yellow: Wait, Red: Wait} -> String
+showColour (&Green  Wait) = "Green"
+showColour (&Yellow Wait) = "Yellow"
+showColour (&Red    Wait) = "Red"
 ```
 
 If pattern matching is not an option, one can always try a `case` expression:
 ```freest
-showSemaphore' : &{Green: Wait, Yellow: Wait, Red: Wait} -> String
-showSemaphore' s = case s of
+showColour' : &{Green: Wait, Yellow: Wait, Red: Wait} -> String
+showColour' s = case s of
   &Green s  -> wait s ; "Green"
   &Yellow s -> wait s ; "Yellow"
   &Red s    -> wait s ; "Red"
@@ -272,7 +272,7 @@ selectGreen' = close . select Green
 
 Putting the two functions together in a FreeST script we may write:
 ```freest
-_ = forkWith selectGreen |> showSemaphore |> print
+_ = forkWith selectGreen |> showColour |> print
 ```
 and expect to read `"Green"` on the console.
 
