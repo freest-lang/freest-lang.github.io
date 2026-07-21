@@ -272,9 +272,9 @@ selectGreen' = close . select Green
 
 Putting the two functions together in a FreeST script we may write:
 ```freest
-_ = forkWith selectGreen |> showColour |> print
+_ = forkWith selectGreen |> showColour |> putStrLn
 ```
-and expect to read `"Green"` on the console.
+and expect to read `Green` on the console.
 
 
 ## Exchanging types
