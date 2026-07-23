@@ -91,10 +91,10 @@ An output stream, in turn, is described by the type `OutStream`. It offers a cho
 type OutStream : 1C
 type OutStream = +{ PutStr   : !String ; OutStream
                   , PutStrLn : !String ; OutStream
-                  , Done     : Wait
+                  , Stop     : Wait
                   }
 ```
-The type is recursive: after each write the channel is again an `OutStream`, so you may write as many times as you like. When you are done, you select `Done` and wait for the other end to close.
+The type is recursive: after each write the channel is again an `OutStream`, so you may write as many times as you like. When you are done, you select `Stop` and wait for the other end to close.
 
 Rather than selecting and sending by hand, the Prelude provides one combinator per operation. Each writes to the stream and returns the continuation, so calls chain nicely with `|>`:
 ```freest
@@ -125,30 +125,33 @@ _ =  let (j, a) = channel @ForkJoin in
   await 2 a
 ```
 
+What about the put and the print operations described in the table in the [*input and output*](io.md#input-and-output) section? Each of this operations grabs a session, puts its operand and stops. For example, `putStr` can be defined as follows:
+```freest
+putStr : String -> ()
+putStr x = stdout |> receive_ |> hPutStr x |> hCloseOut
+```
+
 The endpoint from `receive_ stdout` is linear (`OutStream : 1C`): forgetting the final `hCloseOut`, or using the channel twice, is a type error.
 
-A word on cooperative threading. The guarantee we just described is one of *safety*: every thread that obtains the `stdout` session follows the `OutStream` protocol faithfully, so the characters written by one `put2Chars` can never be interleaved with those of another. What the type system does *not* guarantee is *liveness* — that a thread which grabs the stream will eventually give it back. The shared server behind `stdout` hands out one `OutStream` session at a time, and only accepts the next request once the current holder selects `Done`; meanwhile every other thread sits blocked inside its own `receive_ stdout`. Programs must therefore use `stdout` in a *cooperative* manner. Nothing preempts a running thread and since writing to a stream uses only non-blocking operations, a thread that acquires `stdout` and then loops forever, or simply never reaches `hCloseOut`, holds the stream hostage and starves everyone else. Releasing the stream promptly, by consuming the session all the way to `Done`, is the programmer's responsibility, not the type checker's.
+A word on cooperative threading. The guarantee we just described is one of *safety*: every thread that obtains the `stdout` session follows the `OutStream` protocol faithfully, so the characters written by one `put2Chars` can never be interleaved with those of another. What the type system does *not* guarantee is *liveness* — that a thread which grabs the stream will eventually give it back. The shared server behind `stdout` hands out one `OutStream` session at a time, and only accepts the next request once the current holder selects `Stop`; meanwhile every other thread sits blocked inside its own `receive_ stdout`. Programs must therefore use `stdout` in a *cooperative* manner. Nothing preempts a running thread and since writing to a stream uses only non-blocking operations, a thread that acquires `stdout` and then loops forever, or simply never reaches `hCloseOut`, holds the stream hostage and starves everyone else. Releasing the stream promptly, by consuming the session all the way to `Stop`, is the programmer's responsibility, not the type checker's.
 
-<!-- 
-## Reading input
 
-Input mirrors output. An input stream offers to read a character, read a line, test
-for the end of input, and close:
+## stdin is just another channel
+
+<!-- Input mirrors output. An input stream offers to read a character, read a line, test for the end of input, and close:
 ```freest
 type InStream : 1C
-type InStream = +{ GetChar: ?Char   ; InStream
-                 , GetLine: ?String ; InStream
-                 , IsEOF  : ?Bool   ; InStream
-                 , Done   : Wait
+type InStream = +{ GetChar : ?Char   ; InStream
+                 , GetLine : ?String ; InStream
+                 , IsEOF   : ?Bool   ; InStream
+                 , Stop    : Wait
                  }
 ```
-and the Prelude provides the matching combinators, each returning the value read
-together with the continuation channel:
+and the Prelude provides the matching combinators, each returning the value read together with the continuation channel:
 ```freest
-hGetChar    : InStream -> (Char, InStream)
+hGetChar    : InStream -> (Char,   InStream)
 hGetLine    : InStream -> (String, InStream)
-hIsEOF      : InStream -> (Bool, InStream)
-hGetContent : InStream -> (String, InStream)
+hIsEOF      : InStream -> (Bool,   InStream)
 hCloseIn    : InStream -> ()
 ```
 As with output, the console's standard input is a *provider*, `stdin : *?InStream`,
