@@ -42,18 +42,18 @@ The two endpoints of a channel are usually held by two different threads. These 
 
 | `S` | `Dual S` |
 | --- | --- |
-| `!T` | `?T` |
-| `!type T` | `?type T` |
-| `+{l: T, ...}` | `&{l: T, ...}` |
+| `!T` | `?(Dual T)` |
+| `!type a.T` | `?type a.(Dual T)` |
+| `+{l: T, ...}` | `&{l: Dual T, ...}` |
 | `Close` | `Wait` |
 
 Duality is symmetric so that one should also expect the below laws:
 
 | `S` | `Dual S` |
 | --- | --- |
-| `?T` | `!T` |
-| `?type T` | `!type T` |
-| `&{l: T, ...}` | `+{l: T, ...}` |
+| `?T` | `!(Dual T)` |
+| `?type a.T` | `!type a.(Dual T)` |
+| `&{l: T, ...}` | `+{l: Dual T, ...}` |
 | `Wait` | `Close` |
 
 Type operator `Dual` converts a session type into its dual, and can be used in FreeST code.
@@ -331,9 +331,9 @@ The table below summarises what we have seen on session type operations.
 
 | `S` | `Dual S` | Operation |
 | --- | --- | --- |
-| `!T` | `?T` | Value exchange |
-| `!type T` | `?type T` | Type exchange |
-| `+{l: T, ...}` | `&{l: T, ...}` | Choice |
+| `!T` | `?(Dual T)` | Value exchange |
+| `!type a.T` | `?type a.Dual T` | Type exchange |
+| `+{l: T, ...}` | `&{l: Dual T, ...}` | Choice |
 | `Close` | `Wait` | Channel closing |
 | Output | Input |  |
 | Positive | Negative |  |
