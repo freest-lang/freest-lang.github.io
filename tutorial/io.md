@@ -82,7 +82,7 @@ Still an output of the form `acbd` is highly probable. What if we'd like to make
 
 What we need here is a means for a thread to "grab" the `stdout`, use it in mutual exclusion, and let it go when no longer needed.
 Because the `stdout` channel is shared, we use [*session initiation*](shared-channels.md#session-initiation). So `stdout` is a shared channel on which one may obtain a session. The session is an output stream.
-```
+```freest
 stdout : *?OutStream
 ```
 
@@ -131,9 +131,19 @@ putStr : String -> ()
 putStr x = stdout |> receive_ |> hPutStr x |> hCloseOut
 ```
 
-The endpoint from `receive_ stdout` is linear (`OutStream : 1C`): forgetting the final `hCloseOut`, or using the channel twice, is a type error.
+The endpoint from obtained by `stdout |> receive_` is linear (of type `OutStream : 1C`): forgetting the final `hCloseOut`, or using the channel twice, is a type error.
 
-A word on cooperative threading. The guarantee we just described is one of *safety*: every thread that obtains the `stdout` session follows the `OutStream` protocol faithfully, so the characters written by one `put2Chars` can never be interleaved with those of another. What the type system does *not* guarantee is *liveness* — that a thread which grabs the stream will eventually give it back. The shared server behind `stdout` hands out one `OutStream` session at a time, and only accepts the next request once the current holder selects `Stop`; meanwhile every other thread sits blocked inside its own `receive_ stdout`. Programs must therefore use `stdout` in a *cooperative* manner. Nothing preempts a running thread and since writing to a stream uses only non-blocking operations, a thread that acquires `stdout` and then loops forever, or simply never reaches `hCloseOut`, holds the stream hostage and starves everyone else. Releasing the stream promptly, by consuming the session all the way to `Stop`, is the programmer's responsibility, not the type checker's.
+Since `putStr` grabs the `stdout` (and similarly for `putChar`, `putStrLn` and `print`), a call to this function cannot interrupt a session on another channer. For example, for the program below:
+```freest
+_ =
+  let (j, a) = channel @ForkJoin in
+  fork (\_ -> put2Chars 'a' 'b' ; join j) ;
+  fork (\_ -> putChar 'x' ; join j) ;
+  await 2 a
+```
+expect outputs `xab` or `abx`, but never `axb`.
+
+**A word on cooperative threading.** The guarantee we just described is one of *safety*: every thread that obtains the `stdout` session follows the `OutStream` protocol faithfully, so the characters written by one `put2Chars` can never be interleaved with those of another. What the type system does *not* guarantee is *liveness* — that a thread which grabs the stream will eventually give it back. The shared server behind `stdout` hands out one `OutStream` session at a time, and only accepts the next request once the current holder selects `Stop`; meanwhile every other thread sits blocked inside its own `receive_ stdout`. Programs must therefore use `stdout` in a *cooperative* manner. Nothing preempts a running thread and since writing to a stream uses only non-blocking operations, a thread that acquires `stdout` and then loops forever, or simply never reaches `hCloseOut`, holds the stream hostage and starves everyone else. Releasing the stream promptly, by consuming the session all the way to `Stop`, is the programmer's responsibility, not the type checker's.
 
 
 ## stdin is just another channel
