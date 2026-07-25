@@ -321,8 +321,7 @@ To put a server and a client together, we proceed as usual.
 ```freest
 _ = forkWith render |> pairRenderer |> print
 ```
-
-[TODO: `receiveType` and `sendType`]
+Expect to read `FreeST 5.0` on the console.
 
 
 ## A summary of the basic elements of interaction
