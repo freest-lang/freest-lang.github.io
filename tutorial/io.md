@@ -39,9 +39,7 @@ The functions for talking to the console are as follows:
 | `getChar` | `() -> Char` | Read a single character from the console |
 | `getLine` | `() -> String` | Read a line from the console |
 
-The `getChar` function returns as soon as a key is pressed; unlike `getLine`, it does not wait for the end of the line.
-
-Notice that the `print` function accepts only unrestricted values (of multiplicity `*`). Printing a linear value would be an unfair way of disposing of it (of a value of multiplicity `1`).
+The `getChar` function returns as soon as a key is pressed; unlike `getLine`, it does not wait for the end of the line. Notice that the `print` function accepts only unrestricted values (of multiplicity `*`). Printing a linear value would be an unfair way of disposing of it (of a value of multiplicity `1`).
 
 A program that greets the user by name reads a line and prints it back:
 ```freest
