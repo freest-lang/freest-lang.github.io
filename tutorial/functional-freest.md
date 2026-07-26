@@ -106,9 +106,9 @@ Not all functions can (or should) be described using a single expression. To pre
 ```freest
 improvedDivision : Int -> Int -> (Int, Int)
 improvedDivision n div =
-    let quotient = n / div
-        remainder = mod n div
-    in (quotient, remainder)
+  let quotient = n / div
+      remainder = mod n div
+  in (quotient, remainder)
 ```
 
 Function `improvedDivision` simply divides a number by another and returns both the quotient and the
@@ -127,9 +127,9 @@ For conditional branching, `if` expressions are provided. Note that both the `th
 ```freest
 abs' : Int -> Int
 abs' x = 
-    if x >= 0
-    then x
-    else -x
+  if x >= 0
+  then x
+  else -x
 ```
 
 <!-- ($) operator -->
@@ -214,11 +214,11 @@ The `area` function then takes advantage of the `Shape` datatype to calculate ea
 ```freest
 area : Shape -> Float
 area (Circle _ r) =
-    pi *. r *. r
+  pi *. r *. r
 area (Rectangle (x1, y1) (x2, y2)) =
-    absF (x2 -. x1) *. absF (y2 -. y1)
+  absF (x2 -. x1) *. absF (y2 -. y1)
 area (Triangle (x1, y1) (x2, y2) (x3, y3)) =
-    absF (x1 *. (y2 -. y3) +. x2 *. (y3 -. y1) +. x3 *. (y1 -. y2)) /. 2.0
+  absF (x1 *. (y2 -. y3) +. x2 *. (y3 -. y1) +. x3 *. (y1 -. y2)) /. 2.0
 ```
 Notice the floating-point operations `*.`, `+.` and `absF`.
 
@@ -226,10 +226,10 @@ Pattern-matching is our preferred style of programming. Alternatively, one can u
 ```freest
 area' : Shape -> Float
 area' shape =
-    case shape of
-        Circle p r -> pi *. r *. r
-        Rectangle (x1, y1) (x2, y2) -> absF (x2 -. x1) *. absF (y2 -. y1)
-        Triangle (x1, y1) (x2, y2) (x3, y3) -> absF (x1 *. (y2 -. y3) +. x2 *. (y3 -. y1) +. x3 *. (y1 -. y2)) /. 2.0
+  case shape of
+    Circle p r -> pi *. r *. r
+    Rectangle (x1, y1) (x2, y2) -> absF (x2 -. x1) *. absF (y2 -. y1)
+    Triangle (x1, y1) (x2, y2) (x3, y3) -> absF (x1 *. (y2 -. y3) +. x2 *. (y3 -. y1) +. x3 *. (y1 -. y2)) /. 2.0
 ```
 
 Write
@@ -305,9 +305,9 @@ partialConsume f = f 1 2 3 4 5
 ```freest
 sumUpTo' : Int -> Int -> Int
 sumUpTo' n curr =
-    if curr == n
-    then curr 
-    else curr + sumUpTo' n (curr + 1)
+  if curr == n
+  then curr 
+  else curr + sumUpTo' n (curr + 1)
 ``` -->
 
 

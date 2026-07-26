@@ -52,11 +52,11 @@ The `root` takes an extra parameter, `n`, a non-negative number describing the n
 ```freest
 root : Int -> Forward -> Dual Forward -1-> ()
 root 0 c d =
-    let d = d |> select Done |> close
-    in case c of (&Done Wait) -> ()
+  let d = d |> select Done |> close
+  in case c of (&Done Wait) -> ()
 root n c d = 
-    let d = select More d
-    in case c of (&More c) -> print n ; root (n - 1) c d
+  let d = select More d
+  in case c of (&More c) -> print n ; root (n - 1) c d
 ```
 Notice the non-exhaustive pattern matching in each of the two equations for `root`: if the `root` writes `X` on the right, then `X` goes around the network, through `relay`s, and only `X` may appear on the left.
 
@@ -78,12 +78,12 @@ Putting everything together we have:
 ```freest
 circle : ()
 circle =
-    let (c1, d1) = channel @Forward
-        (c2, d2) = channel @Forward
-        (c3, d3) = channel @Forward
-    in fork (\_ -1-> relay c1 d2) ;  -- ch1 → ch2
-       fork (\_ -1-> relay c2 d3) ;  -- ch2 → ch3
-       root 5 c3 d1                  -- ch3 → ch1  (closes the ring 1→2→3→1)
+  let (c1, d1) = channel @Forward
+      (c2, d2) = channel @Forward
+      (c3, d3) = channel @Forward
+  in fork (\_ -1-> relay c1 d2) ;  -- ch1 → ch2
+     fork (\_ -1-> relay c2 d3) ;  -- ch2 → ch3
+     root 5 c3 d1                  -- ch3 → ch1  (closes the ring 1→2→3→1)
 ```
 which prints
 ```bash
@@ -168,9 +168,10 @@ _ = forkWith writeInts |> readInts |> print
 
 But because `SendIntInt` is *output only* we may run the two functions in the same thread, as long as we run `writeInts` prior to `readInts`:
 ```freest
-_ = let (x, y) = channel @SendIntInt
-    in writeInts x ;
-       print $ readInts y
+_ =
+  let (x, y) = channel @SendIntInt
+  in writeInts x ;
+     print $ readInts y
 ```
 Expect to read `3` on the console.
 

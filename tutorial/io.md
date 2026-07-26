@@ -121,7 +121,8 @@ put2Chars a b = receive_ stdout |> hPutChar a |> hPutChar b |> hCloseOut
 
 The below code produces `abcd` or `cdab`, but no other interleaving of four letters.
 ```freest
-_ =  let (j, a) = channel @ForkJoin in
+_ =
+  let (j, a) = channel @ForkJoin in
   fork (\_ -> put2Chars 'a' 'b' ; join j) ;
   fork (\_ -> put2Chars 'c' 'd' ; join j) ;
   await 2 a

@@ -75,10 +75,10 @@ foo2 f = let y = f 1 in (\x -> y + x)
 By allowing the partial application to evaluate and consume the linear resource, it no longer captures the linear resource, and thus, the partial application can then be discarded or duplicated.
 ```freest
 _ = 
-    let x = foo2 idL in (x, x)
-    where
-        idL : Int -1-> Int
-        idL x = x
+  let x = foo2 idL in (x, x)
+  where
+    idL : Int -1-> Int
+    idL x = x
 ```
 
 
@@ -146,14 +146,14 @@ Let us start with the conventional unrestricted values. All constants are unrest
 ```freest
 copy : ()
 copy = 
-    let n = 5 in print (n + n)
+  let n = 5 in print (n + n)
 ```
 
 Unrestricted values need not be used at all. The program below still prints `10` but never uses the value in variable `n`.
 ```freest
 discard : ()
 discard = 
-    let n = 5 in print 10
+  let n = 5 in print 10
 ```
 
 Functions may also be unrestricted. They can be copied:
@@ -163,7 +163,7 @@ double x = x + x
 
 copy : ()
 copy = 
-    print (double 5 + double 5)
+  print (double 5 + double 5)
 ```
 or discarded
 ```freest
@@ -172,7 +172,7 @@ double x = x + x
 
 discard : ()
 discard = 
-    print 20
+  print 20
 ```
 In either case, expect to read `20` on the console.
 
@@ -189,7 +189,7 @@ linDouble x = x + x
 
 copy : ()
 copy = 
-    print (linDouble 5 + linDouble 5)
+  print (linDouble 5 + linDouble 5)
 ```
 The compiler complains at the attempt to use the function for the second time:
 ```bash
@@ -207,7 +207,7 @@ linDouble x = x + x
 
 discard : ()
 discard = 
-    print 20
+  print 20
 ```
 greeted by the compiler with an error stating that the value is not used:
 ```bash
@@ -229,7 +229,7 @@ f x y = x + y
 
 partialApplication : ()
 partialApplication = 
-    let f' = f 1 in print (f' 3 + f' 1 + f' 2)
+  let f' = f 1 in print (f' 3 + f' 1 + f' 2)
 ```
 
 In the above example, after partially applying `f` we are left with an unrestricted function `f'` (of type `Int -*-> Int`) which we then use multiple times.
@@ -241,9 +241,9 @@ g x y = x + y
 
 partialUnApplication : ()
 partialUnApplication = 
-    let g1 = g 1
-        g2 = g 2 in
-    print (g1 3 + g2 4)
+  let g1 = g 1
+      g2 = g 2 in
+  print (g1 3 + g2 4)
 ```
 This time, function `g` is used multiple times to create linear functions `g1` and `g2`, each of which is then used exactly once. Expect to read integer `10` on the console.
 

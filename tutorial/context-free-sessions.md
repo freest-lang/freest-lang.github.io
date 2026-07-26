@@ -124,10 +124,10 @@ We are now in a position to write `mars`. We make use of the `where` clause and 
 ```freest
 marshall : forall a -> Tree a -> TreeC a; Close -> ()
 marshall t c = mars t c |> close
-    where
-      mars : forall a b -> Tree a -> TreeC a; b -> b
-      mars Leaf         c = c |> select Leaf
-      mars (Node l x r) c = c |> select Node |> mars l |> send x |> mars r
+  where
+    mars : forall a b -> Tree a -> TreeC a; b -> b
+    mars Leaf         c = c |> select Leaf
+    mars (Node l x r) c = c |> select Node |> mars l |> send x |> mars r
 ```
 The code is extremely compact and lightweight thanks to the `|>` operator and the implicit type parameters.
 

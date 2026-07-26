@@ -70,10 +70,11 @@ cakeLover name (&Disappointment c) = putStrLn (name ++ " got disappointment")
 
 To run a system with a store and two clients, we create a `CakeStore` channel and distribute its two endpoints to the appropriate actors.
 ```freest
-_ = let (s, c) = channel @CakeStore in
-    fork (\_ -> cakeLover "Ami" c);
-    fork (\_ -> cakeStore s);
-    cakeLover "Boé" c
+_ =
+  let (s, c) = channel @CakeStore in
+  fork (\_ -> cakeLover "Ami" c);
+  fork (\_ -> cakeStore s);
+  cakeLover "Boé" c
 ```
 Let us analyse the possible outputs of the above program. One is
 ```bash
@@ -96,10 +97,10 @@ Let us leave the cake store for a while.
 Not all the programs we have seen terminate as expected. What do you expect to read on the console after running this code?
 ```freest
 main =
-    fork (\_ -> putChar 'A') ;
-    fork (\_ -> putChar 'B') ;
-    fork (\_ -> putChar 'C') ;
-    ()
+  fork (\_ -> putChar 'A') ;
+  fork (\_ -> putChar 'B') ;
+  fork (\_ -> putChar 'C') ;
+  ()
 ```
 The precise answer is any sequence of distinct letters taken from the set {`A`, `B`, `C`}, of sizes 0 to 3. Yes, no output is a possible answer. It happens when `main` terminates before any of the three `putChar` threads managed to write their character.
 
@@ -121,11 +122,11 @@ await : Int -> Dual ForkJoin -> ()
 Using fork-join is easy. The parent threads creates a `ForkJoin` channel, distributes one end to each of its children (while forking them) and `awaits` the completion:
 ```freest
 _ =
-    let (w, r) = channel @ForkJoin in
-    fork (\_ -> putChar 'A'; join w) ;
-    fork (\_ -> putChar 'B'; join w) ;
-    fork (\_ -> putChar 'C'; join w) ;
-    await 3 r
+  let (w, r) = channel @ForkJoin in
+  fork (\_ -> putChar 'A'; join w) ;
+  fork (\_ -> putChar 'B'; join w) ;
+  fork (\_ -> putChar 'C'; join w) ;
+  await 3 r
 ```
 We are now guaranteed to read three distinct characters on the console, even if we cannot anticipate their order.
 
@@ -177,13 +178,13 @@ Unlike its linear counterpart, `receive`, this function returns the value read f
 Given `CellRef`, to write a value `x` to the cell, one first `receive_` a `CellOp` on which one selects `Write`, sends `x` and closes the channel:
 ```freest
 write : forall (a : *T) -> a -> CellRef a -> ()
-write x s = receive_ s |> select Write |> sendAndClose x
+write x s = s |> receive_ |> select Write |> sendAndClose x
 ```
 
 The read operation is similar:
 ```freest
 read : forall (a : *T) -> CellRef a -> a
-read s = receive_ s |> select Read |> receiveAndClose
+read s = s |> receive_ |> select Read |> receiveAndClose
 ```
 
 We now address the server side of session initiation. The server *accepts* a request for a `CellOp` on a `CellRef` channel. Function `accept` creates a `CellRef` channel, sends one endpoint on `CellOp` and returns the other endpoint:

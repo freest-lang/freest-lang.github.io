@@ -366,8 +366,8 @@ Then a client that sums the first `n` natural numbers can be written as follows.
 ```freest
 sumTo : Int -> Dual Repeat -> ()
 sumTo n c = case send n c of
-    &More c -> sumTo (n - 1) c
-    &Done c -> close c
+  &More c -> sumTo (n - 1) c
+  &Done c -> close c
 ```
 
 Finally, we put the two processes together as we have done before. Expect to read `55` on the console.
