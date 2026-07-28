@@ -128,7 +128,7 @@ and we decided to fork thread `writeFive` and continue with `readInt`.
 ```freest
 _ = forkWith writeFive |> readInt
 ```
-This allowed thread `writeFive` to write its integer and close the channel. Recall that `send` and `close` are non-blocking operations, so that thread `writeFive` may complete without the cooperation of the main thread. The latter however, now running `readInt`, receives a value and waits for the channel to be closed. Because thread  writes first and closes then, we expect to read `5` from the console.
+This allowed thread `writeFive` to write its integer and close the channel. Recall that `send` and `close` are non-blocking operations, so that thread `writeFive` may complete without the cooperation of the main thread. The latter however, now running `readInt`, receives a value and waits for the channel to be closed. Because thread  prints first and closes then, we expect to read `5` from the console.
 
 Now consider the reverse situation: fork `readInt` and continue with `writeFive`:
 ```freest

@@ -4,7 +4,7 @@
 
 title: Types and their kinds
 layout: default
-nav_order: 9
+nav_order: 10
 parent: Tutorial
 ---
 
@@ -91,7 +91,7 @@ That is, subkinding is *contravariant* in the domain and *covariant* in the codo
 
 FreeST comes equipped with a rich collection of types. Conventional functional types:
 * `Int`, `Float`, `Char`, `Bool`, all of kind `*T`,
-* Arrow types, `(-m->)`, of kind `1T -> 1T -> m T`, where `m` is a multiplicity (`*`, `1` or a variable); `(-*->)` can be abbreviated to `(->)`,
+* Arrow types, `(-m->)`, of kind `1T -> 1T -> mT`, where `m` is a multiplicity (`*`, `1` or a variable); `(-*->)` can be abbreviated to `(->)`,
 * Tuple types, `(U1, ..., Un)`; the base kind of such a type is `T` and its multiplicity is the least upper bound of the multiplicities of `U1` to `Un`, which must be proper types. For example, `(Int, Int) : *T` and `(!Int, Int) : 1T`.
 
 Session and channel types include:
