@@ -228,7 +228,7 @@ We now address the server side of session initiation. The server *accepts* a req
 accept : forall (a : 1C) -> *!a -> Dual a
 ```
 
-The cell server accepts a connection from some client, and dispatches on the client operation: `Write` or `Read`.  Using `receiveAndWait` and `sendAndWait` we can easily consume a `Dual (CellRef a)` channel.
+The cell server accepts a connection from some client, and dispatches on the client operation: `Write` or `Read`. Using `receiveAndWait` and `sendAndWait` we can easily consume a `Dual (CellRef a)` channel.
 
 ```freest
 cell : forall (a : *T) -> a -> Dual (CellRef a) -> ()
@@ -252,10 +252,26 @@ _ =
   await 5 a
 ```
 
+Session initiation requires `receive_` on one channel endpoint and `accept c` on the other. The below table summarises the types and operators involved.
+
+| Negative | Positive | |
+| --- | --- | --- |
+| `receive_ c` | `accept c` | Operator |
+| `*?U` | `*!U` | Parameter type |
+| `U` | `Dual U` | Return type |
+
+The `accept` function is part of the Prelude, but is not difficult to write. It creates a channel, sends one endpoint on the given channel and returns the other endpoint.
+```freest
+accept : forall (a : 1C) -> *!a -> Dual a
+accept @a c =
+  let (x, y) = channel @a in
+  send_ x c;
+  y
+```
 
 ## Running servers
 
-The Prelude contains an handy abbreviation for writing servers that serve clients *sequentially*, one at a time. The function we have in mind is:
+The Prelude contains a handy abbreviation for writing servers that serve clients *sequentially*, one at a time. The function we have in mind is:
 ```freest
 runServer : forall (a : *T) (b : 1C) -> (a -> Dual b -> a) -> a -> *!b -> ()
 ```
