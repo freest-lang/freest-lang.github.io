@@ -114,10 +114,10 @@ The table below summarises what we have seen on unrestricted (shared) channel ty
 
  Each positive type has a corresponding chaining operator:
 
-| Positive type | Chaining operator |
-| --- | --- |
-| `*!U` | `c |> send_ v |> ...` |
-| `*+{l1,...,ln}` | `c |> select_ l |> ...` |
+| Positive type | Chaining operator | Primitive operator |
+| --- | --- | --- |
+| `*!U` | `c |> send_ v |> ...` | `let c = send_ v c in ...` |
+| `*+{l1,...,ln}` | `c |> select_ l |> ...` | `let c = select_ l c in ...` |
 
 Dually, each negative type has a corresponding pattern:
 

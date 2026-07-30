@@ -341,12 +341,12 @@ The table below summarises what we have seen on session type operations.
 
 By 'chaining' we mean the composition of output operations with the inverse function application `|>`. Each positive type has a corresponding chaining operator:
 
-| Positive type | Chaining operator |
-| --- | --- |
-| `!T` | `c |> send v |> ...` |
-| `!type a.T` | `c |> sendType @T |> ...` |
-| `+{l: T, ...}` | `c |> select l |> ...` |
-| `Close` | `c |> close` |
+| Positive type | Chaining operator | Primitive operator |
+| --- | --- | --- |
+| `!T` | `c |> send v |> ...` | `let c' = send v c in ...` |
+| `!type a.T` | `c |> sendType @T |> ...` | `let c' = sendType @T c in ...` |
+| `+{l: T, ...}` | `c |> select l |> ...` | `let c' = select l c in ...` |
+| `Close` | `c |> close` | `close c` |
 
 Dually, each negative type has a corresponding pattern:
 
