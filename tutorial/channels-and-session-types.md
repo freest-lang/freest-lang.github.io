@@ -155,7 +155,7 @@ readInt' : ?Int ; Wait -> Int
 readInt' c =
   let (x, c') = receive c in wait c' ; x
 ```
-Once again, this pattern is so common that the Prelude provides for a combinator `receiveAndWait : ?a; Wait -*-> a`. Then we can use `receiveAndWait` in place of `readInt'` as follows:
+Once again, this pattern is so common that the Prelude provides for a combinator `receiveAndWait : ?a; Wait -> a`. Then we can use `receiveAndWait` in place of `readInt'` as follows:
 ```freest
 readInt'' : ?Int ; Wait -> Int
 readInt'' = receiveAndWait
@@ -234,7 +234,7 @@ print $ onePlusOne $ forkWith adder
 
 Expression `receive c in wait c'` is of type `()`, an *unrestricted* type. And that is the reason why it can de discarded in expression `receive c in wait c' ; x`.
 
-The type of the semicolon operator is `forall (a : *T) (b : 1T) -*-> a -*-> b -*-> b`. [To be Completed] -->
+The type of the semicolon operator is `forall (a : *T) (b : 1T) -> a -> b -> b`. [To be Completed] -->
 
 
 ## Selecting and offering choices
@@ -343,7 +343,7 @@ By 'chaining' we mean the composition of output operations with the inverse func
 
 | Positive type | Operator | Chaining operator |
 | --- | --- | --- |
-| `!T` | `send : forall #m -> forall (a : mT) -*-> a -> (forall (b : 1S) -> !a; b -m-> b)` | `c |> send v |> ...` |
+| `!T` | `send : forall #m -> forall (a : mT) -> a -> (forall (b : 1S) -> !a; b -m-> b)` | `c |> send v |> ...` |
 | `!type a.T` | `sendType @U : !type a.T -> T[U/a]` | `c |> sendType @T |> ...` |
 | `+{l: T, ...}` | `select l : +{l: T, ...} -> T`| `c |> select l |> ...` |
 | `Close` | `close : Close -> ()` | `c |> close` |
@@ -355,9 +355,9 @@ Dually, each negative type has a corresponding pattern:
 | Negative type | Operator | Pattern |
 | --- | --- | --- |
 | `?T` | `receive : forall (a : 1T) (b : 1S) -> ?a; b -> (a, b)` | `?x ; p` |
-| `?type a.T` | `receiveType : (?type (a:k). T) -> (exists (a:k), T)` | `?type a . p` |
+| `?type a.T` | `receiveType : (?type (a : k). T) -> (exists (a : k), T)` | `?type a . p` |
 | `&{l: T, ...}` | `case exp of &l p -> ...` | `&l p` |
-| `Wait` | `wait : Wait -*-> ()` | `Wait` |
+| `Wait` | `wait : Wait -> ()` | `Wait` |
 
 In the case of receive type, we see that the result of a call to `receiveType` is an existential type (this is further developed in [*session existentials and universals*](existentials.md#session-existentials-and-universals)).
 

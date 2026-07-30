@@ -62,6 +62,33 @@ Other alignment to preserve as-is:
 - padding that lines up displayed laws, e.g. ` Wait ; T ≡ Wait` under
   `Close ; T ≡ Close` (one leading space, deliberately not a level)
 
+## Notation in FreeST code snippets
+
+These rules apply to every ` ```freest ` fenced block in the Markdown sources,
+and to prose that quotes a type.
+
+### 1. Abbreviate `-*->` to `->`
+
+Write the unrestricted arrow as its abbreviation `->`, not the full `-*->`,
+except:
+
+- inside verbatim tool output — a `freest -i` transcript, or a compiler error
+  message copied from a real `freest -t` run — where the text must match
+  exactly what the tool prints;
+- when the surrounding prose is explaining the `-*->` notation for the first
+  time, or contrasting it against the linear arrow `-1->` (e.g. two otherwise
+  identical signatures shown side by side, one linear, one unrestricted).
+  Most of `linearity.md`, and the "Multiplicity polymorphism" section of
+  `kinds-and-types.md`, fall under this exception, since contrasting `-*->`
+  against `-1->` is their entire point.
+
+### 2. Space the colon in a kind/type-qualified variable
+
+Write `(a : 1T)`, not `(a:1T)` — a space on both sides of the colon. This
+applies to `forall`-bound variables and type abstractions (`\(a : k) -> U`).
+It does not apply to choice-type labels (`+{l: T, ...}`), which keep their
+own established convention: no space before the colon, one space after.
+
 ## Checking a snippet after editing it
 
 `freest -t <file>.fst` type-checks without running. Re-indenting must not change the result: line:column numbers in messages shift, but the diagnostics themselves must be identical before and after.

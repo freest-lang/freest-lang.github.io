@@ -116,14 +116,14 @@ The table below summarises what we have seen on unrestricted (shared) channel ty
 
 | Positive type | Operator | Chaining operator |
 | --- | --- | --- |
-| `*!U` | `send_ : forall #m (a : m T) -*-> a -*-> *!a -m-> *!a` | `c |> send_ v |> ...` |
+| `*!U` | `send_ : forall #m (a : m T) -> a -> *!a -m-> *!a` | `c |> send_ v |> ...` |
 | `*+{l1,...,ln}` | `select_ l : *+{l1,...,ln}` | `c |> select_ l |> ...` |
 
 Dually, each negative type has a corresponding pattern:
 
 | Negative type | Operator | Pattern |
 | --- | --- | --- |
-| `*?U` | `receive_ : forall (a : 1T) -*-> *?a -*-> a` | `*?x ; p` |
+| `*?U` | `receive_ : forall (a : 1T) -> *?a -> a` | `*?x ; p` |
 | `*&{l1,...,ln}` | `case exp of *&l p -> ...` | `*&l p` |
 
 

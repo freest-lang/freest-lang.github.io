@@ -118,7 +118,7 @@ For example, the counter abstract data type may take the type `(exists a, (a, a 
 Higher-order types:
 * Type variables `a`, taking the kind provided or inferred at its introduction point,
 * Type application `U V` taking the kind `k2` if `U : k1 -> k2` and `V : k1`,
-* Type abstraction `\(a:k1) -> U` of kind `k1 -> k2` where `k2` is the kind of `U`.
+* Type abstraction `\(a : k1) -> U` of kind `k1 -> k2` where `k2` is the kind of `U`.
 
 Most of the times programmers write type abstractions together with datatype or type declarations. For example:
 ```freest
