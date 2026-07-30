@@ -114,17 +114,17 @@ The table below summarises what we have seen on unrestricted (shared) channel ty
 
  Each positive type has a corresponding chaining operator:
 
-| Positive type | Chaining operator | Primitive operator |
+| Positive type | Operator | Chaining operator |
 | --- | --- | --- |
-| `*!U` | `c |> send_ v |> ...` | `let c = send_ v c in ...` |
-| `*+{l1,...,ln}` | `c |> select_ l |> ...` | `let c = select_ l c in ...` |
+| `*!U` | `send_ : forall #m (a : m T) -*-> a -*-> *!a -m-> *!a` | `c |> send_ v |> ...` |
+| `*+{l1,...,ln}` | `select_ l : *+{l1,...,ln}` | `c |> select_ l |> ...` |
 
 Dually, each negative type has a corresponding pattern:
 
-| Negative type | Pattern | Primitive operator |
+| Negative type | Operator | Pattern |
 | --- | --- | --- |
-| `*?U` | `*?x ; p` | `let x = receive_ c in ...` |
-| `*&{l1,...,ln}` | `*&l p` | `case c of *&l -> ...` |
+| `*?U` | `receive_ : forall (a : 1T) -*-> *?a -*-> a` | `*?x ; p` |
+| `*&{l1,...,ln}` | `case exp of *&l p -> ...` | `*&l p` |
 
 
 ## Fork-join

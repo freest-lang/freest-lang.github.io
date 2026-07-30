@@ -341,22 +341,23 @@ The table below summarises what we have seen on session type operations.
 
 By 'chaining' we mean the composition of output operations with the inverse function application `|>`. Each positive type has a corresponding chaining operator:
 
-| Positive type | Chaining operator | Primitive operator |
+| Positive type | Operator | Chaining operator |
 | --- | --- | --- |
-| `!T` | `c |> send v |> ...` | `let c' = send v c in ...` |
-| `!type a.T` | `c |> sendType @T |> ...` | `let c' = sendType @T c in ...` |
-| `+{l: T, ...}` | `c |> select l |> ...` | `let c' = select l c in ...` |
-| `Close` | `c |> close` | `close c` |
+| `!T` | `send : forall #m -> forall (a : mT) -*-> a -> (forall (b : 1S) -> !a; b -m-> b)` | `c |> send v |> ...` |
+| `!type a.T` | `sendType @U : !type a.T -> T[U/a]` | `c |> sendType @T |> ...` |
+| `+{l: T, ...}` | `select l : +{l: T, ...} -> T`| `c |> select l |> ...` |
+| `Close` | `close : Close -> ()` | `c |> close` |
+In the case for send type, notation `T[U/a]` denotes the result of replacing (free) occurrences of type variable `a` by type `U`. For example, `(a, Bool)[Char/`] = (Char, Bool)`.
 
 Dually, each negative type has a corresponding pattern:
 
-| Negative type | Pattern | Primitive operator |
+| Negative type | Operator | Pattern |
 | --- | --- | --- |
-| `?T` | `?x ; p` | `let (x, c') = receive c in ...` |
-| `?type a.T` | `?type a . p` | `let (@a, c') = receiveType c in ...` |
-| `&{l: T, ...}` | `&l p` | `case c of &l c' -> ...` |
-| `Wait` | `Wait` | `wait c` |
-
+| `?T` | `receive : forall (a : 1T) (b : 1S) -> ?a; b -> (a, b)` | `?x ; p` |
+| `?type a.T` | `receiveType : (?type (a:k). T) -> (exists (a:k), T)` | `?type a . p` |
+| `&{l: T, ...}` | `case exp of &l p -> ...` | `&l p` |
+| `Wait` | `wait : Wait -*-> ()` | `Wait` |
+In the case for receive type, we see that the result of a call to `receiveType` is an existential type (this is further developed in [*session existentials and universals*](existentials.md#session-existentials-and-universals)).
 
 ## Unbounded protocols
 
