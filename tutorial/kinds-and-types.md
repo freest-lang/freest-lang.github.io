@@ -98,7 +98,7 @@ Session and channel types include:
 * `Close` and `Wait` of kind `1C`,
 * `(!)` and `(?)` of kind `1T -> 1S`,
 * `+{l1:U1,...,ln:Un}` and `&{l1:U1,...,ln:Un}` of multiplicity `1` and taking same base kind as the least upper bound of the kinds of `U1` to `Un`, provided these are all session types. For example, `+{A: Skip, B: Close} : 1S`
-* `!type a . U` and `?type a . U`, where type variable `a` may occur free in `U`, have multiplicity `1` and the base kind of `U`,
+* `!type a. U` and `?type a. U`, where type variable `a` may occur free in `U`, have multiplicity `1` and the base kind of `U`,
 * `U ; V` taking the kind of `U` if it has base kind `C` (absorbs the continuation, for example `Close; !Int : 1S`), otherwise taking the least upper bound of the kinds of types `U` and `V`, provided both are session types,
 * `Skip` of kind `*S`,
 * `Dual U`, taking the kind of type `U`, provided it is a session type.

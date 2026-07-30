@@ -43,7 +43,7 @@ The two endpoints of a channel are usually held by two different threads. These 
 | `S` | `Dual S` |
 | --- | --- |
 | `!T` | `?T` |
-| `!type a.T` | `?type a.Dual T` |
+| `!type a. T` | `?type a. Dual T` |
 | `+{l: T, ...}` | `&{l: Dual T, ...}` |
 | `Close` | `Wait` |
 
@@ -52,7 +52,7 @@ The dual of a positive type is a negative type, and conversely:
 | `S` | `Dual S` |
 | --- | --- |
 | `?T` | `!T` |
-| `?type a.T` | `!type a.Dual T` |
+| `?type a. T` | `!type a. Dual T` |
 | `&{l: T, ...}` | `+{l: Dual T, ...}` |
 | `Wait` | `Close` |
 
@@ -283,23 +283,23 @@ The last pair of dual session operators provides for exchanging types on channel
 
 Imagine a rendering service that transforms to strings values of different types. Clearly the service cannot know in advance all types in the world, and hence we leave it to the client to supply the function that converts its type to a string. So, in the end, the role of the server is to conduct the (possibly heavy) process of converting a value into a string, given a client-supplied rendering function.
 
-To accept a type on a channel, bind it to type variable `a`, and then continue as `T`, one writes `?type a . T`. With this in mind, the type of the channel the rendering service reads is:
+To accept a type on a channel, bind it to type variable `a`, and then continue as `T`, one writes `?type a. T`. With this in mind, the type of the channel the rendering service reads is:
 ```freest
-?type a . ?(a -1-> String) ; ?a ; !String ; Wait 
+?type a. ?(a -1-> String) ; ?a ; !String ; Wait 
 ```
 Here we have chosen a linear function, `a -1-> String`, as a way of signaling the client that the service will not reuse the function, but we could equally have used an unrestricted function `a -> String`.
 
-The best way to receive a type is to use pattern-matching. The pattern `?type a . p` receives a type, binds it to `a` and continues as pattern `p`. The pattern may then use type variable `a` if needed. Back to our example, the first three operations on the channel are all of input nature, and that calls for a four-level-deep pattern: receive a type `a`, receive a value `f`, receive a value `x`, and continue with channel `c`. Then we apply `x` to `f` and call the Prelude function `sendAndWait` to send `f x` and wait for the channel to be closed.
+The best way to receive a type is to use pattern-matching. The pattern `?type a. p` receives a type, binds it to `a` and continues as pattern `p`. The pattern may then use type variable `a` if needed. Back to our example, the first three operations on the channel are all of input nature, and that calls for a four-level-deep pattern: receive a type `a`, receive a value `f`, receive a value `x`, and continue with channel `c`. Then we apply `x` to `f` and call the Prelude function `sendAndWait` to send `f x` and wait for the channel to be closed.
 
 ```freest
-render : ?type a . ?(a -1-> String) ; ?a ; !String ; Wait -> ()
-render (?type a . ?f ; ?x ; c) =
+render : ?type a. ?(a -1-> String) ; ?a ; !String ; Wait -> ()
+render (?type a. ?f ; ?x ; c) =
   sendAndWait (f x) c
 ```
 
 To interact with `render` we need to choose a type `T`, provide for a function to convert `T` into a string, send a value of type `T`, wait for a string, and close the channel. To send a type `T` we use expression `sendType @T` which returns the continuation channel endpoint. Here's a client that chooses `Char` for `T`. We use the reverse function application operator `|>` to chain all three outputs, and then use the Prelude's function `receiveAndClose` to complete the protocol.
 ```freest
-charRenderer : !type a . !(a -1-> String) ; !a ; ?String ; Close -> String
+charRenderer : !type a. !(a -1-> String) ; !a ; ?String ; Close -> String
 charRenderer c =
   c |> sendType @Char |> send showChar |> send 'F' |> receiveAndClose
   where
@@ -309,7 +309,7 @@ charRenderer c =
 
 Here's a different client that interacts with the renderer by using a pair `(String, Float)`.
 ```freest
-pairRenderer : !type a . !(a -1-> String) ; !a ; ?String ; Close -> String
+pairRenderer : !type a. !(a -1-> String) ; !a ; ?String ; Close -> String
 pairRenderer c =
   c |> sendType @(String, Float) |> send showPair |> send ("FreeST", 5.0) |> receiveAndClose
   where
@@ -331,7 +331,7 @@ The table below summarises what we have seen on session type operations.
 | `S` | `Dual S` | Operation |
 | --- | --- | --- |
 | `!T` | `?T` | Value exchange |
-| `!type a.T` | `?type a.Dual T` | Type exchange |
+| `!type a. T` | `?type a. Dual T` | Type exchange |
 | `+{l: T, ...}` | `&{l: Dual T, ...}` | Choice |
 | `Close` | `Wait` | Channel closing |
 | Output | Input |  |
@@ -344,7 +344,7 @@ By 'chaining' we mean the composition of output operations with the inverse func
 | Positive type | Operator | Chaining operator |
 | --- | --- | --- |
 | `!T` | `send : forall #m -> forall (a : mT) -> a -> (forall (b : 1S) -> !a; b -m-> b)` | `c |> send v |> ...` |
-| `!type a.T` | `sendType @U : !type a.T -> T[U/a]` | `c |> sendType @T |> ...` |
+| `!type a. T` | `sendType @U : !type a. T -> T[U/a]` | `c |> sendType @T |> ...` |
 | `+{l: T, ...}` | `select l : +{l: T, ...} -> T`| `c |> select l |> ...` |
 | `Close` | `close : Close -> ()` | `c |> close` |
 
@@ -355,7 +355,7 @@ Dually, each negative type has a corresponding pattern:
 | Negative type | Operator | Pattern |
 | --- | --- | --- |
 | `?T` | `receive : forall (a : 1T) (b : 1S) -> ?a; b -> (a, b)` | `?x ; p` |
-| `?type a.T` | `receiveType : (?type (a : k). T) -> (exists (a : k), T)` | `?type a . p` |
+| `?type a. T` | `receiveType : (?type (a : k). T) -> (exists (a : k), T)` | `?type a. p` |
 | `&{l: T, ...}` | `case exp of &l p -> ...` | `&l p` |
 | `Wait` | `wait : Wait -> ()` | `Wait` |
 
@@ -363,7 +363,7 @@ In the case of receive type, we see that the result of a call to `receiveType` i
 
 ## Unbounded protocols
 
-All protocols we have seen so far comprise a fixed number of interactions. For example, to consume type `?type a . ?(a -1-> String) ; ?a ; !String ; Wait`, five interactions are needed.
+All protocols we have seen so far comprise a fixed number of interactions. For example, to consume type `?type a. ?(a -1-> String) ; ?a ; !String ; Wait`, five interactions are needed.
 
 There are however cases when one cannot anticipate the exact number of interactions. Imagine a server that reads from a channel integer values until a negative value is received. Clearly the type constructors we have seen so far cannot describe this protocol. Here's how the server may act: receive a value; if negative signal the client that no more numbers are expected; if positive ask for a new number. In the former case the server waits for the channel to be closed; in the latter the server "goes back to the beginning" of the protocol. To implement the "going back" part we name the protocol and use this name as a type.
 

@@ -89,6 +89,17 @@ applies to `forall`-bound variables and type abstractions (`\(a : k) -> U`).
 It does not apply to choice-type labels (`+{l: T, ...}`), which keep their
 own established convention: no space before the colon, one space after.
 
+### 3. Space the type-variable binder dot in `!type`/`?type`
+
+Write `!type a. T` and `?type a. T` (and the matching pattern `?type a. p`):
+no space before the dot, one space after. Same for the kinded form,
+`?type (a : k). T`. This mirrors the choice-type label convention above.
+
+### 4. Space function composition `(.)`
+
+Write `f . g`, not `f.g` — a space on both sides, the same as any other
+binary operator.
+
 ## Checking a snippet after editing it
 
 `freest -t <file>.fst` type-checks without running. Re-indenting must not change the result: line:column numbers in messages shift, but the diagnostics themselves must be identical before and after.
