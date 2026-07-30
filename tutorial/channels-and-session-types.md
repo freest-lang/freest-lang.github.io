@@ -348,7 +348,7 @@ By 'chaining' we mean the composition of output operations with the inverse func
 | `+{l: T, ...}` | `select l : +{l: T, ...} -> T`| `c |> select l |> ...` |
 | `Close` | `close : Close -> ()` | `c |> close` |
 
-In the case for send type, notation `T[U/a]` denotes the result of replacing (free) occurrences of type variable `a` by type `U`. For example, `(a, Bool)[Char/`] = (Char, Bool)`.
+In the case of send type, notation `T[U/a]` denotes the result of replacing (free) occurrences of type variable `a` by type `U`. For example, `(a, Bool)[Char/`] = (Char, Bool)`.
 
 Dually, each negative type has a corresponding pattern:
 
@@ -359,7 +359,7 @@ Dually, each negative type has a corresponding pattern:
 | `&{l: T, ...}` | `case exp of &l p -> ...` | `&l p` |
 | `Wait` | `wait : Wait -*-> ()` | `Wait` |
 
-In the case for receive type, we see that the result of a call to `receiveType` is an existential type (this is further developed in [*session existentials and universals*](existentials.md#session-existentials-and-universals)).
+In the case of receive type, we see that the result of a call to `receiveType` is an existential type (this is further developed in [*session existentials and universals*](existentials.md#session-existentials-and-universals)).
 
 ## Unbounded protocols
 
