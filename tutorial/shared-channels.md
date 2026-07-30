@@ -53,19 +53,19 @@ We start with the type of the cake store, as seen from the side of the store: it
 type CakeStore = *+{Cake, Disappointment}
 ```
 
-The cake store first selects `Cake`, then `Disappointment`, and then terminates.
+The cake store first selects `Cake`, then `Disappointment`, and then terminates. Because we are selecting on unrestricted channels, we use `select_` and not `select` which should be kept for linear channels.
 ```freest
 cakeStore : CakeStore -> ()
-cakeStore  c = c |> select Cake
-                 |> select Disappointment ; ()
+cakeStore c = c |> select_ Cake
+                |> select_ Disappointment ; ()
 ```
-Notice how the function "abandons" channel `c`. The expression `c |> select Cake |> select Disappointment` is of type `CakeStore`. Because of its unrestricted nature, it can be discarded, in this case at the left-hand-side of the semicolon operator.
+Notice how the function "abandons" channel `c`. The expression `c |> select_ Cake |> select_ Disappointment` is of type `CakeStore`. Because of its unrestricted nature, it can be discarded, in this case at the left-hand-side of the semicolon operator.
 
-Cake lovers branch on the incoming label and print a message accordingly.
+Cake lovers branch on the incoming label and print a message accordingly. Because we are pattern-matching on unrestricted channels we use a pattern `(*&Cake)`, rather than `(&Cake)`, which should be kept for linear channels.
 ```freest
 cakeLover : String -> Dual CakeStore -> ()
-cakeLover name (&Cake c)           = putStrLn (name ++ " got cake!")
-cakeLover name (&Disappointment c) = putStrLn (name ++ " got disappointment")
+cakeLover name (*&Cake)           = putStrLn (name ++ " got cake!")
+cakeLover name (*&Disappointment) = putStrLn (name ++ " got disappointment")
 ```
 
 To run a system with a store and two clients, we create a `CakeStore` channel and distribute its two endpoints to the appropriate actors.
@@ -88,7 +88,36 @@ Ami got cake!
 ```
 But there are many others. The program terminates when thread `cakeLover "Boé" c` terminates, so there will always be a Boé message. But whether you'll read an Ami message or not, depends on the interleaving of the various operations in the three threads.
 
-There are different solutions to this problem. A simple one uses the fork-join pattern discussed in the next section. It requires an extra, separate, channel to communicate task completion. Another refactors the program, so that the same channel that conveys cakes or disappointments also signals task completion. We postpone this solution until a later section.
+There are different solutions to this problem. A simple one uses the fork-join pattern discussed in the next section. It requires an extra, separate, channel to communicate task completion. Another refactors the program, so that the same channel that conveys cakes or disappointments also signals task completion.
+<!-- We postpone this solution until a later section. -->
+
+
+## A summary of the basic elements of unrestricted interaction
+
+The table below summarises what we have seen on unrestricted (shared) channel type operations. Being stateless, unrestricted channels cannot be closed, so, unlike linear channels, there is no `Close`/`Wait` pair. Send and receive type operators are likewise not available on unrestricted channels.
+
+| `S` | `Dual S` | Operation |
+| --- | --- | --- |
+| `*!U` | `*?U` | Value exchange |
+| `*+{l1,...,ln}` | `*&{l1,...,ln}` | Choice |
+| Output | Input |  |
+| Positive | Negative |  |
+| Chaining available | Pattern matching available |  |
+| Nonblocking operation | Blocking operation |  |
+
+ Each positive type has a corresponding chaining operator:
+
+| Positive type | Chaining operator |
+| --- | --- |
+| `*!U` | `c \|> send_ v \|> ...` |
+| `*+{l1,...,ln}` | `c \|> select_ l \|> ...` |
+
+Dually, each negative type has a corresponding pattern:
+
+| Negative type | Pattern |
+| --- | --- |
+| `*?U` | `*?x ; p` |
+| `*&{l1,...,ln}` | `*&l p` |
 
 
 ## Fork-join
@@ -130,21 +159,21 @@ _ =
 ```
 We are now guaranteed to read three distinct characters on the console, even if we cannot anticipate their order.
 
-It is instructive to study the implementation of the fork-join primitives. A `ForkJoin` channel is a channel on which threads can `select Over` an unbounded number of times.
+It is instructive to study the implementation of the fork-join primitives. A `ForkJoin` channel is a channel on which threads can `select_ Over` an unbounded number of times.
 ```freest
 type ForkJoin = *+{Over}
 ```
 
-To signal completion of a child thread to the parent waiting on the join channel, we `select Over` on a `ForkJoin` channel. The operation returns the continuation channel, of type `ForkJoin`. The semicolon operator discards the (unrestricted) channel and returns `()`.
+To signal completion of a child thread to the parent waiting on the join channel, we `select_ Over` on a `ForkJoin` channel. The operation returns the continuation channel, of type `ForkJoin`. The semicolon operator discards the (unrestricted) channel and returns `()`.
 ```freest
 join : ForkJoin -> ()
-join c = select Over c ; ()
+join c = select_ Over c ; ()
 ```
 
 To wait until `n` child threads have signalled completion through the join channel, we use the `await` primitive which receives `n` `Over` labels, by making use of the `times` operation in the Prelude.
 ```freest
 await : Int -> Dual ForkJoin -> ()
-await n c = times @() n (\_ -> case c of &Over _ -> ())
+await n c = times @() n (\_ -> case c of *&Over -> ())
 ```
 
 
@@ -187,18 +216,47 @@ read : forall (a : *T) -> CellRef a -> a
 read s = s |> receive_ |> select Read |> receiveAndClose
 ```
 
-We now address the server side of session initiation. The server *accepts* a request for a `CellOp` on a `CellRef` channel. Function `accept` creates a `CellRef` channel, sends one endpoint on `CellOp` and returns the other endpoint:
+We now address the server side of session initiation. The server *accepts* a request for a `CellOp` on a `CellRef` channel. Function `accept` creates a `CellOp` channel, sends one endpoint on the (dual) `CellRef` channel and returns the other endpoint:
 ```freest
 accept : forall (a : 1C) -> *!a -> Dual a
 ```
 
-The cell server accepts a connection from some client, and dispatches on the client operation: `Write` or `Read`. The Prelude functions `receiveAndWait` and `sendAndWait` complete the consumption of the `CellOp` channel. The function then recurs, either with the value received or with the old value.
+The cell server accepts a connection from some client, and dispatches on the client operation: `Write` or `Read`. We could write the code from scratch, but a Prelude function comes quite handy when writing servers that serve clients *sequentially*, one at a time. The function we have in mind is:
+```freest
+runServer : forall (a : *T) (b : 1C) -> (a -> Dual b -> a) -> a -> *!b -> ()
+```
+where `a` represents the state of the server, `b` the linear channel on which to serve one particular client. The function accepts a function to handle a particular client, the initial value of the state, and the shared channel.
+
+Now, using `runServer`, `receiveAndWait` and `sendAndWait` we can consume a `CellOp` channel.
 ```freest
 cell : forall (a : *T) -> a -> Dual (CellRef a) -> ()
-cell n c =
-  case accept c of
-    &Write s -> cell (receiveAndWait s) c
-    &Read  s -> sendAndWait n s ; cell n c
+cell @a =
+  runServer serveOne
+  where
+    serveOne : forall a -> a -> Dual (CellOp a) -> a
+    serveOne _ (&Write c) = receiveAndWait c
+    serveOne x (&Read  c) = sendAndWait x c ; x
+```
+
+***Note:*** This is an example where the type checker needs a hand. Omitting the type annotation currently yields the below error. We decided to fix it by binding the signature's type variables with `@a` patterns on the left-hand side, as the error message suggests.
+```bash
+Type mismatch:
+   | 
+32 |   runServer serveOne
+   |   ^^^^^^^^^^^^^^^^^^
+Couldn't match expected type `forall (a : *T) -*-> a -*-> Dual (CellRef a) -*-> ()`, taken from:
+   /Users/vv/workspace/freest/freest/test/prog/Valid/Tutorial/MemoryCell/MemoryCell.fst:30:8–30:54
+   | 
+30 | cell : forall (a : *T) -> a -> Dual (CellRef a) -> ()
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+with actual type `_ -*-> *!_ -*-> ()`, taken from:
+    StandardLib/Prelude.fst:445:63–445:77
+    | 
+445 | runServer : forall (a : *T) (b : 1C) -> (a -> Dual b -> a) -> a -> *!b -> ()
+    |                                                               ^^^^^^^^^^^^^^
+Type inference could not determine a type argument here (shown as `_`).
+Consider annotating the application with an explicit type argument (e.g. `f @a`),
+binding the signature's type variables with `@a` patterns on the left-hand side.
 ```
 
 To test the cell and its clients we could try forking a few `write` and `read` threads, but we must make sure they all complete their tasks before the main thread ends. For that we use the fork-join pattern again.
@@ -228,7 +286,7 @@ type PredEvalSession = !Int ; ?Bool ; Close
 type PredEvalService : *C
 type PredEvalService = *?PredEvalSession
 ```
-As before these are two types of base kinds `C` (meaning that channels can be created from the types). Session is linear, `1`, and service is shared, `*`.
+As before these are two types of base kind `C` (meaning that channels can be created from the types). Session is linear, `1`, and service is shared, `*`.
 
 Clients interact on `PredEvalService`. They `receive_` a session on which they provide an integer and wait for the result, before closing the channel:
 ```freest
