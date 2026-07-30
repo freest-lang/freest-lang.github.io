@@ -46,6 +46,13 @@ For channels that forever send values of type `U` we use a type of the form `*!U
 | `*+{l1,...,ln}` | Forever send one of the `l1`,...,`ln` labels |
 | `*&{l1,...,ln}` | Forever receive one of the `l1`,...,`ln` labels |
 
+As with linear types, unrestricted types come in dual pairs:
+
+| `S` | `Dual S` |
+| --- | --- |
+| `*!U` | `*?U` |
+| `*+{l1,...,ln}` | `*&{l1,...,ln}` |
+
 All shared types are of kind `*C`, meaning that a) they can be shared (`*`) and b) that they can be used to create channels (`C`).
 
 We start with the type of the cake store, as seen from the side of the store: it either provides `Cake` or `Disappointment`.
@@ -109,8 +116,8 @@ The table below summarises what we have seen on unrestricted (shared) channel ty
 
 | Positive type | Chaining operator |
 | --- | --- |
-| `*!U` | `c \|> send_ v \|> ...` |
-| `*+{l1,...,ln}` | `c \|> select_ l \|> ...` |
+| `*!U` | `c |> send_ v |> ...` |
+| `*+{l1,...,ln}` | `c |> select_ l |> ...` |
 
 Dually, each negative type has a corresponding pattern:
 
@@ -202,7 +209,7 @@ Notice that both `CellRef` and `CellOp` are type operators that expect unrestric
 ```freest
 receive_ : forall (a : 1T) -> *?a -> a
 ```
-Unlike its linear counterpart, `receive`, this function returns the value read from the channel. The channel itself need not be returned by the function: it can be reused as often as needed.
+Unlike its linear counterpart, `receive`, this function returns only the value read from the channel. The channel itself need not be returned by the function: it can be reused as often as needed.
 
 Given `CellRef`, to write a value `x` to the cell, one first `receive_` a `CellOp` on which one selects `Write`, sends `x` and closes the channel:
 ```freest
@@ -221,13 +228,40 @@ We now address the server side of session initiation. The server *accepts* a req
 accept : forall (a : 1C) -> *!a -> Dual a
 ```
 
-The cell server accepts a connection from some client, and dispatches on the client operation: `Write` or `Read`. We could write the code from scratch, but a Prelude function comes quite handy when writing servers that serve clients *sequentially*, one at a time. The function we have in mind is:
+The cell server accepts a connection from some client, and dispatches on the client operation: `Write` or `Read`.  Using `receiveAndWait` and `sendAndWait` we can easily consume a `Dual (CellRef a)` channel.
+
+```freest
+cell : forall (a : *T) -> a -> Dual (CellRef a) -> ()
+cell n c =
+  case accept c of
+    &Write s -> cell (receiveAndWait s) c
+    &Read  s -> sendAndWait n s ; cell n c
+```
+
+To test the cell and its clients we could try forking a few `write` and `read` threads, but we must make sure they all complete their tasks before the main thread ends. For that we use the fork-join pattern again.
+The below program forks three `read` threads and two `write` clients. Expect to read any sequence of numbers `0`, `5` and `6`, possibly duplicated or triplicated.
+```freest
+_ =
+  let c      = forkWith (cell 0)
+      (j, a) = channel @ForkJoin in
+  fork (\_ -> c |> read |> print ; join j) ;
+  fork (\_ -> c |> read |> print ; join j) ;
+  fork (\_ -> c |> write 5       ; join j) ;
+  fork (\_ -> c |> write 6       ; join j) ;
+  fork (\_ -> c |> read |> print ; join j) ;
+  await 5 a
+```
+
+
+## Running servers
+
+The Prelude contains an handy abbreviation for writing servers that serve clients *sequentially*, one at a time. The function we have in mind is:
 ```freest
 runServer : forall (a : *T) (b : 1C) -> (a -> Dual b -> a) -> a -> *!b -> ()
 ```
 where `a` represents the state of the server, `b` the linear channel on which to serve one particular client. The function accepts a function to handle a particular client, the initial value of the state, and the shared channel.
 
-Now, using `runServer`, `receiveAndWait` and `sendAndWait` we can consume a `CellOp` channel.
+Using `runServer`, `receiveAndWait` and `sendAndWait` we can consume a `CellOp` channel.
 ```freest
 cell : forall (a : *T) -> a -> Dual (CellRef a) -> ()
 cell @a =
@@ -258,21 +292,6 @@ Type inference could not determine a type argument here (shown as `_`).
 Consider annotating the application with an explicit type argument (e.g. `f @a`),
 binding the signature's type variables with `@a` patterns on the left-hand side.
 ```
-
-To test the cell and its clients we could try forking a few `write` and `read` threads, but we must make sure they all complete their tasks before the main thread ends. For that we use the fork-join pattern again.
-The below program forks three `read` threads and two `write` clients. Expect to read any sequence of numbers `0`, `5` and `6`, possibly duplicated or triplicated.
-```freest
-_ =
-  let c      = forkWith (cell 0)
-      (j, a) = channel @ForkJoin in
-  fork (\_ -> c |> read |> print ; join j) ;
-  fork (\_ -> c |> read |> print ; join j) ;
-  fork (\_ -> c |> write 5       ; join j) ;
-  fork (\_ -> c |> write 6       ; join j) ;
-  fork (\_ -> c |> read |> print ; join j) ;
-  await 5 a
-```
-
 
 ## Multiple producer, multiple consumer
 
