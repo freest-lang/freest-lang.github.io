@@ -205,7 +205,7 @@ countLines n inp =
   let (eof, inp) = hIsEOF inp in
   if eof
   then (n, inp)
-  else hGetLine inp |> snd |> countLines(n + 1)
+  else inp |> hGetLine |> snd |> countLines (n + 1)
 
 main : ()
 main =
@@ -215,7 +215,7 @@ main =
 ```
 Notice that `hIsEOF` is itself a read on the input stream: the `IsEOF` branch of type `InStream` sends a `Bool` back and then continues as `InStream`, so testing for the end of input consumes the endpoint and hands back a continuation, exactly as `hGetLine` does. This is why `countLines` returns a pair. The `Int` is the answer we were after, and the `InStream` is the endpoint the caller still owes a `hCloseIn`. Dropping either half is a type error.
 
-We decided to write `countLines` in tail recursion format, by passing `n`, the number of lines read so far, as a parameter. This allows a rather compact `else` branch, where `snd` (the second element in a pair) discards the value read by `receive_`.
+We decided to write `countLines` in tail recursion format, by passing `n`, the number of lines read so far, as a parameter. This allows a rather compact `else` branch, where `snd` (the second element in a pair) discards the value read by `hGetLine`.
 
 The line read in the `else` branch is bound to `_`: we count lines, we do not care about their contents. Discarding the `String` is harmless because strings are unrestricted; had `hGetLine` returned a linear value, the wildcard would not have type checked.
 
