@@ -42,21 +42,21 @@ The two endpoints of a channel are usually held by two different threads. These 
 
 | `S` | `Dual S` |
 | --- | --- |
-| `!T` | `?(Dual T)` |
-| `!type a.T` | `?type a.(Dual T)` |
+| `!T` | `?T` |
+| `!type a.T` | `?type a.Dual T` |
 | `+{l: T, ...}` | `&{l: Dual T, ...}` |
 | `Close` | `Wait` |
 
-Duality is symmetric so that one should also expect the below laws:
+The dual of a positive type is a negative type, and conversely:
 
 | `S` | `Dual S` |
 | --- | --- |
-| `?T` | `!(Dual T)` |
-| `?type a.T` | `!type a.(Dual T)` |
+| `?T` | `!T` |
+| `?type a.T` | `!type a.Dual T` |
 | `&{l: T, ...}` | `+{l: Dual T, ...}` |
 | `Wait` | `Close` |
 
-Type operator `Dual` converts a session type into its dual, and can be used in FreeST code.
+Type operator `Dual` converts a session type into its dual, and can be used in FreeST code. In it an involution, so that `Dual (Dual S) = S`, for all types `S`. For example `Dual (Dual !T) = Dual (?T) = !T`.
 
  The elements of interaction may be composed by means of sequential composition and recursion. We start with sequential composition and leave recursion for later. The sequential composition of (session) types is denoted by the semicolon binary operator. If `T` and `U` are session types, then type `T ; U` denotes the type that first performs `T` and then `U`.
 
@@ -330,7 +330,7 @@ The table below summarises what we have seen on session type operations.
 
 | `S` | `Dual S` | Operation |
 | --- | --- | --- |
-| `!T` | `?(Dual T)` | Value exchange |
+| `!T` | `?T` | Value exchange |
 | `!type a.T` | `?type a.Dual T` | Type exchange |
 | `+{l: T, ...}` | `&{l: Dual T, ...}` | Choice |
 | `Close` | `Wait` | Channel closing |
@@ -339,7 +339,23 @@ The table below summarises what we have seen on session type operations.
 | Chaining available | Pattern matching available |  |
 | Nonblocking operation | Blocking operation |  |
 
-By 'chaining' we mean the composition of output operations with the inverse function application `|>`.
+By 'chaining' we mean the composition of output operations with the inverse function application `|>`. Each positive type has a corresponding chaining operator:
+
+| Positive type | Chaining operator |
+| --- | --- |
+| `!T` | `c \|> send v \|> ...` |
+| `!type a.T` | `c \|> sendType @T \|> ...` |
+| `+{l: T, ...}` | `c \|> select l \|> ...` |
+| `Close` | `c \|> close` |
+
+Dually, each negative type has a corresponding pattern:
+
+| Negative type | Pattern |
+| --- | --- |
+| `?T` | `?x ; p` |
+| `?type a.T` | `?type a . p` |
+| `&{l: T, ...}` | `&l p` |
+| `Wait` | `Wait` |
 
 
 ## Unbounded protocols
