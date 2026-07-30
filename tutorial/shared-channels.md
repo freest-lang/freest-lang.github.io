@@ -121,10 +121,10 @@ The table below summarises what we have seen on unrestricted (shared) channel ty
 
 Dually, each negative type has a corresponding pattern:
 
-| Negative type | Pattern |
-| --- | --- |
-| `*?U` | `*?x ; p` |
-| `*&{l1,...,ln}` | `*&l p` |
+| Negative type | Pattern | Primitive operator |
+| --- | --- | --- |
+| `*?U` | `*?x ; p` | `let x = receive_ c in ...` |
+| `*&{l1,...,ln}` | `*&l p` | `case c of *&l -> ...` |
 
 
 ## Fork-join

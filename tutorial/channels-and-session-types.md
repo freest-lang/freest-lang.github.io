@@ -350,12 +350,12 @@ By 'chaining' we mean the composition of output operations with the inverse func
 
 Dually, each negative type has a corresponding pattern:
 
-| Negative type | Pattern |
-| --- | --- |
-| `?T` | `?x ; p` |
-| `?type a.T` | `?type a . p` |
-| `&{l: T, ...}` | `&l p` |
-| `Wait` | `Wait` |
+| Negative type | Pattern | Primitive operator |
+| --- | --- | --- |
+| `?T` | `?x ; p` | `let (x, c') = receive c in ...` |
+| `?type a.T` | `?type a . p` | `let (@a, c') = receiveType c in ...` |
+| `&{l: T, ...}` | `&l p` | `case c of &l c' -> ...` |
+| `Wait` | `Wait` | `wait c` |
 
 
 ## Unbounded protocols
