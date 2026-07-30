@@ -113,6 +113,14 @@ data Ordering = LT | EQ | GT
 | `ord` | `Char -> Int`{: .language-freest } |
 | `chr` | `Int -> Char`{: .language-freest } |
 
+### `isSpace`
+{: .no_toc}
+```freest
+isSpace : Char -> Bool
+```
+`True` for a space or any of the whitespace control characters (tab, newline,
+carriage return, ...).
+
 ### `String`
 {: .no_toc}
 ```freest
@@ -126,6 +134,21 @@ type String = [Char]
 show : forall (a : *T) -> a -> String
 ```
 Renders a value as a `String`.
+
+### `words`
+{: .no_toc}
+```freest
+words : String -> [String]
+```
+Splits a string into a list of whitespace-separated words.
+
+### `unwords`
+{: .no_toc}
+```freest
+unwords : [String] -> String
+```
+Joins a list of words back into a single string, separated by single spaces.
+The inverse of `words` (modulo how repeated whitespace is collapsed).
 
 ## Numbers
 
@@ -364,12 +387,19 @@ pairs.
 
 ## Lists
 
+### `null`
+{: .no_toc}
+```freest
+null : forall a -> [a] -> Bool
+```
+`True` on the empty list, `False` otherwise.
+
 ### `(++)`
 {: .no_toc}
 ```freest
-(++) : forall #m (a : m T) -> [a] -> [a] -m-> [a]
+(++) : forall (a : *T) -> [a] -> [a] -> [a]
 ```
-Appends two lists.
+Appends two (unrestricted) lists.
 
 ### `head`
 {: .no_toc}
@@ -406,27 +436,115 @@ length : forall (a : *T) -> [a] -> Int
 ```
 The number of elements in a list.
 
+### `sum`
+{: .no_toc}
+```freest
+sum : [Int] -> Int
+```
+The sum of a list of integers.
+
+### `reverse`
+{: .no_toc}
+```freest
+reverse : forall (a : *T) -> [a] -> [a]
+```
+Reverses a list. Uses an accumulator internally so it runs in linear time, as in
+Haskell's `Data.List.reverse`.
+
+### `map`
+{: .no_toc}
+```freest
+map : forall (a : *T) (b : *T) -> (a -> b) -> [a] -> [b]
+```
+Applies a function to every element of a list, producing a new list.
+
+### `foldl`
+{: .no_toc}
+```freest
+foldl : forall #m #n (a : m T) (b : *T) -> (a -> b -n-> a) -> a -> [b] -m-> a
+```
+Left fold: combines the elements of a list with an accumulator function,
+starting from an initial value and processing the list left to right.
+
+### `foldr`
+{: .no_toc}
+```freest
+foldr : forall #m #n (a : *T) (b : m T) -> (a -> b -n-> b) -> b -> [a] -m-> b
+```
+Right fold: combines the elements of a list with an accumulator function,
+processing the list right to left.
+
+### `takeWhile`
+{: .no_toc}
+```freest
+takeWhile : forall (a : *T) -> (a -> Bool) -> [a] -> [a]
+```
+The longest prefix of a list all of whose elements satisfy the predicate.
+
+### `dropWhile`
+{: .no_toc}
+```freest
+dropWhile : forall (a : *T) -> (a -> Bool) -> [a] -> [a]
+```
+Drops the longest prefix of a list all of whose elements satisfy the predicate,
+and returns the rest.
+
+### `span`
+{: .no_toc}
+```freest
+span : forall (a : *T) -> (a -> Bool) -> [a] -> ([a], [a])
+```
+Splits a list into the longest prefix satisfying the predicate and the
+remaining suffix. Equivalent to `(takeWhile p xs, dropWhile p xs)`.
+
+### Linear lists
+{: .no_toc}
+
+Alongside the unrestricted list type `[a]` (built with `[]` and `::`), the
+Prelude also has a *linear* list type, written `[a]'` and built with `[]'` and
+`::'`. A linear list can hold linear elements, and — like every linear value —
+must be consumed exactly once. The combinators below mirror their unrestricted
+counterparts.
+
+{: .lib-table}
+| Function | Type |
+|:---------|:-----|
+| `(++')` | `forall (a : 1T) -> [a]' -> [a]' -1-> [a]'`{: .language-freest } |
+| `map'` | `forall (a : 1T) (b : 1T) -> (a -> b) -> [a]' -> [b]'`{: .language-freest } |
+| `foldl'` | `forall #m #n (a : m T) (b : 1T) -> (a -> b -n-> a) -> a -> [b]' -m-> a`{: .language-freest } |
+| `foldr'` | `forall #m #n (a : 1T) (b : m T) -> (a -> b -n-> b) -> b -> [a]' -m-> b`{: .language-freest } |
+
+### `mapUL` / `mapLU`
+{: .no_toc}
+```freest
+mapUL : forall (a : *T) (b : 1T) -> (a -> b) -> [a] -> [b]'
+mapLU : forall (a : 1T) (b : *T) -> (a -> b) -> [a]' -> [b]
+```
+Convert between the unrestricted and linear list types while mapping a
+function over the elements: `mapUL` turns an unrestricted list into a linear
+one, `mapLU` turns a linear list into an unrestricted one.
+
 ## Errors
 
 {: .lib-table}
 | Function | Type |
 |:---------|:-----|
 | `undefined` | `forall (a : *T) -> a`{: .language-freest } |
-| `error` | `forall (a : *T) -> String -> a`{: .language-freest } |
+| `error` | `forall (a : 1T) -> String -> a`{: .language-freest } |
 
 ## Concurrency and channels
 
 ### `fork`
 {: .no_toc}
 ```freest
-fork : forall #m (a : *T) -> (() -m-> a) -> ()
+fork : forall #m -> (() -m-> ()) -> ()
 ```
-Spawns a thunk as a new thread.
+Spawns a thunk as a new thread. The thunk must return `()`.
 
 ### `send`
 {: .no_toc}
 ```freest
-send : forall (a : 1T) -> a -> forall (b : 1S) -> !a;b -1-> b
+send : forall #m (a : m T) -> a -> forall (b : 1S) -> !a;b -m-> b
 ```
 Sends a value on a channel. Returns the continuation channel.
 
@@ -455,34 +573,33 @@ Closes a channel.
 ### `sendAndWait`
 {: .no_toc}
 ```freest
-sendAndWait : forall (a : 1T) -> a -> !a ; Wait -1-> ()
+sendAndWait : forall #m (a : m T) -> a -> !a ; Wait -m-> ()
 ```
 Sends a value on a given channel and then waits for the channel to be closed.
-Returns ().
+Returns `()`.
 
 ### `sendAndClose`
 {: .no_toc}
 ```freest
-sendAndClose : forall (a : 1T) -> a -> !a ; Close -1-> ()
+sendAndClose : forall #m (a : m T) -> a -> !a ; Close -m-> ()
 ```
-Sends a value on a given channel and then closes the channel. Returns ().
+Sends a value on a given channel and then closes the channel. Returns `()`.
 
 ### `receiveAndWait`
 {: .no_toc}
 ```freest
 receiveAndWait : forall (a : 1T) -> ?a ; Wait -> a
 ```
-Receives a value from a channel that continues to `Wait`, closes the
+Receives a value from a channel that continues to `Wait`, waits for the
 continuation and returns the value.
 
 ```freest
-main : ()
-main =
+_ =
   -- create channel endpoints
-  let (c, s) = new @(?String ; Wait) () in
-  -- fork a thread that prints the received value (and closes the channel)
-  fork (\(_ : ()) -1-> c |> receiveAndWait @String |> putStrLn);
-  -- send a string through the channel (and close it)
+  let (c, s) = channel @(?String ; Wait) in
+  -- fork a thread that prints the received value
+  fork (\_ -1-> c |> receiveAndWait @String |> putStrLn);
+  -- send a string through the channel (and wait for its endpoint to close)
   s |> send "Hello!" |> close
 ```
 
@@ -491,63 +608,48 @@ main =
 ```freest
 receiveAndClose : forall (a : 1T) -> ?a ; Close -> a
 ```
-As in receiveAndWait only that the type is Wait and the function closes the
-channel rather the waiting for the channel to be closed.
-
-### `readApply`
-{: .no_toc}
-```freest
-readApply : forall (a : *T) (b : 1S) -> (a -> ()) {- Consumer a -} -> ?a ; b -1-> b
-```
-Receives a value from a linear channel and applies a function to it. Discards the
-result and returns the continuation channel.
-
-```freest
-main : ()
-main =
-  -- create channel endpoints
-  let (c, s) = new @(?String ; Wait) () in
-  -- fork a thread that prints the received value (and closes the channel)
-  fork (\_:() -1-> c |> readApply @String @End putStrLn |> wait);
-  -- send a string through the channel (and close it)
-  s |> send "Hello!" |> close
-```
+As in `receiveAndWait`, only that the continuation is `Close` and the function
+closes the channel rather than waiting for it to close.
 
 ### `send_`
 {: .no_toc}
 ```freest
-send_ : forall (a : 1T) -> a -> *!a -1-> ()
+send_ : forall #m (a : m T) -> a -> *!a -m-> *!a
 ```
-Sends a value on a star channel. Unrestricted version of `send`.
+Sends a value on an unrestricted (shared) channel. Unrestricted version of
+`send`. Returns the (unrestricted) channel, so further operations can be
+chained.
 
 ### `receive_`
 {: .no_toc}
 ```freest
 receive_ : forall (a : 1T) -> *?a -> a
 ```
-Receives a value from a star channel. Unrestricted version of `receive`.
+Receives a value from an unrestricted channel. Unrestricted version of
+`receive`. The channel need not be returned: it can be reused as often as
+needed.
 
 ### `accept`
 {: .no_toc}
 ```freest
 accept : forall (a : 1C) -> *!a -> Dual a
 ```
-Session initiation. Accepts a request for a linear session on a shared channel.
-The requester uses a conventional `receive` to obtain the channel end.
+Session initiation. Accepts a request for a linear session on a shared
+channel. The requester uses a `receive_` operation to obtain the channel end.
 
 ### `forkWith`
 {: .no_toc}
 ```freest
-forkWith : forall #m (a : 1C) (b : *T) -> (Dual a -m-> b) -> a
+forkWith : forall #m (a : 1C) -> (Dual a -m-> ()) -> a
 ```
-Creates a new child process and a channel through which it can communicate with
-its parent process. Returns the channel endpoint.
+Creates a new child process and a channel through which it can communicate
+with its parent process. Returns the channel endpoint. The forked function
+must return `()`.
 
 ```freest
-main : ()
-main =
-  -- fork a thread that receives a string and prints
-  let c = forkWith @(!String ; Wait) @() (\s:(?String ; End) -1-> s |> receiveAndWait @String |> putStrLn) in
+_ =
+  -- fork a thread that receives a string and prints it
+  let c = forkWith @(!String ; Wait) (\s -1-> s |> receiveAndClose @String |> putStrLn) in
   -- send the string to be printed
   c |> send "Hello!" |> wait
 ```
@@ -555,67 +657,94 @@ main =
 ### `runServer`
 {: .no_toc}
 ```freest
-runServer : forall (a : 1C) (b : *T) -> (b -> Dual a -1-> b) -> b -> *!a -> Void @*T
+runServer : forall (a : *T) (b : 1C) -> (a -> Dual b -> a) -> a -> *!b -> ()
 ```
-Runs an infinite shared server thread given a function to serve a client (a
-handle), the initial state, and the server's shared channel endpoint. It can be
-seen as an infinite sequential application of the handle function over a newly
-accepted session, while continuously updating the state.
+Runs an infinite shared server, given a function to handle one client session,
+an initial state, and the server's shared channel endpoint. It behaves as an
+infinite sequential application of the handler function over newly accepted
+sessions, threading the state through each call.
 
 Note: this only works with session types that use session initiation.
 
 ```freest
-type SharedCounter : *S = *?Counter
-type Counter : 1S = +{ Inc: Close
-                     , Dec: Close
-                     , Get: ?Int ; Close
-                     }
+type SharedCounter = *?Counter
+type Counter = +{ Inc: Close
+                , Dec: Close
+                , Get: ?Int ; Close
+                }
 
 -- | Handler for a counter
-counterService : Int -> dualof Counter -1-> Int
-counterService i (Inc c) = wait c ; i + 1 
-counterService i (Dec c) = wait c ; i - 1
-counterService i (Get c) = c |> send i |> wait ; i
+counterService : Int -> Dual Counter -> Int
+counterService i (&Inc c) = wait c ; i + 1
+counterService i (&Dec c) = wait c ; i - 1
+counterService i (&Get c) = c |> send i |> wait ; i
 
 -- | Counter server
-runCounterServer : dualof SharedCounter -> Diverge
-runCounterServer = runServer @Counter @Int counterService 0 
+runCounterServer : Dual SharedCounter -> ()
+runCounterServer = runServer @Int @Counter counterService 0
 ```
 
-### `sink`
+### `times`
 {: .no_toc}
 ```freest
-sink : forall (a : *T) -> a -> ()
+times : forall (a : *T) -> Int -> (() -> a) -> ()
 ```
-Discards an unrestricted value.
-
-### `repeat`
-{: .no_toc}
-```freest
-repeat : forall (a : *T) -> Int -> (() -> a) -> ()
-```
-Executes a thunk n times, sequentially.
+Executes a thunk `n` times, sequentially.
 
 ```freest
-main : ()
-main = 
+_ =
   -- print "Hello!" 5 times sequentially
-  repeat @() 5 (\_:() -> putStrLn "Hello!")
+  times @() 5 (\_ -> putStrLn "Hello!")
 ```
 
 ### `parallel`
 {: .no_toc}
 ```freest
-parallel : forall (a : *T) -> Int -> (() -> a) -> ()
+parallel : Int -> (() -> ()) -> ()
 ```
-Forks n identical threads. Works the same as a `repeat` call but in parallel
+Forks `n` identical threads. Works the same as a `times` call, but in parallel
 instead of sequentially.
 
 ```freest
-main : ()
-main = 
+_ =
   -- print "Hello!" 5 times in parallel
-  parallel @() 5 (\_:() -> putStrLn "Hello!")
+  parallel 5 (\_ -> putStrLn "Hello!")
+```
+
+## Fork-join
+
+### `ForkJoin`
+{: .no_toc}
+```freest
+type ForkJoin = *+{Over}
+```
+A simple channel-based fork-join coordination protocol: each child thread
+signals completion by selecting the `Over` branch, and the parent thread waits
+for a fixed number of such completions.
+
+### `join`
+{: .no_toc}
+```freest
+join : ForkJoin -> ()
+```
+Signals completion of a child thread to the parent waiting on the join
+channel.
+
+### `await`
+{: .no_toc}
+```freest
+await : Int -> Dual ForkJoin -> ()
+```
+Waits until `n` child threads have signalled completion through the join
+channel.
+
+```freest
+_ =
+  let (w, r) = channel @ForkJoin in
+  fork (\_ -> putChar 'A'; join w) ;
+  fork (\_ -> putChar 'B'; join w) ;
+  fork (\_ -> putChar 'C'; join w) ;
+  await 3 r
 ```
 
 ## Input and output streams
@@ -624,40 +753,24 @@ main =
 {: .no_toc}
 ```freest
 type InStream : 1C
-type InStream = +{ GetChar: ?Char   ; InStream
-                 , GetLine: ?String ; InStream
-                 , IsEOF  : ?Bool   ; InStream
-                 , SWait  : Wait
+type InStream = +{ GetChar : ?Char   ; InStream
+                 , GetLine : ?String ; InStream
+                 , IsEOF   : ?Bool   ; InStream
+                 , Stop    : Wait
                  }
 ```
 
 The `InStream` type describes input streams (such as `stdin` and read files).
 `GetChar` reads a single character, `GetLine` reads a line, and `IsEOF` checks
-for the EOF (End-Of-File) token, i.e., if an input stream reached the end.
-Operations in this channel end with the `SWait` option.
-
-### `InStreamProvider`
-{: .no_toc}
-```freest
-type InStreamProvider : *C
-type InStreamProvider = *?InStream
-```
-
-Unrestricted session type for the `OutStream` type.
-
-### `hCloseIn`
-{: .no_toc}
-```freest
-hCloseIn : InStream -> ()
-```
-Closes an `InStream` channel endpoint. Behaves as a `close`.
+for the EOF (End-Of-File) token, i.e., if an input stream has reached the end.
+Operations on this channel terminate with the `Stop` option.
 
 ### `hGetChar`
 {: .no_toc}
 ```freest
 hGetChar : InStream -> (Char, InStream)
 ```
-Reads a character from an `InStream` channel endpoint. Behaves as 
+Reads a character from an `InStream` channel endpoint. Behaves as
 `|> select GetChar |> receive`.
 
 ### `hGetLine`
@@ -665,7 +778,7 @@ Reads a character from an `InStream` channel endpoint. Behaves as
 ```freest
 hGetLine : InStream -> (String, InStream)
 ```
-Reads a line (as a string) from an `InStream` channel endpoint. Behaves as 
+Reads a line (as a string) from an `InStream` channel endpoint. Behaves as
 `|> select GetLine |> receive`.
 
 ### `hIsEOF`
@@ -673,154 +786,134 @@ Reads a line (as a string) from an `InStream` channel endpoint. Behaves as
 ```freest
 hIsEOF : InStream -> (Bool, InStream)
 ```
-Checks if an `InStream` reached the EOF token that marks where no more input can be read. 
-Does the same as `|> select IsEOF |> receive`.
+Checks if an `InStream` reached the EOF token that marks where no more input
+can be read. Behaves as `|> select IsEOF |> receive`.
 
-### `hGetContent`
+### `hCloseIn`
 {: .no_toc}
 ```freest
-hGetContent : InStream -> (String, InStream)
+hCloseIn : InStream -> ()
 ```
-Reads the entire content from an `InStream` (i.e. until EOF is reached). Returns the content
-as a single string and the continuation channel.
+Closes an `InStream` channel endpoint. Behaves as `|> select Stop |> wait`.
 
 ### `hGetChar_`
 {: .no_toc}
 ```freest
-hGetChar_ : InStreamProvider -> Char
+hGetChar_ : *?InStream -> Char
 ```
-Unrestricted version of `hGetChar`. Behaves the same, except it first receives an `InStream` 
-channel endpoint (via session initiation), executes an `hGetChar` and then closes the 
-enpoint with `hCloseIn`.
+Unrestricted version of `hGetChar`. Behaves the same, except it first receives
+an `InStream` channel endpoint (via session initiation), executes an
+`hGetChar` and then closes the endpoint with `hCloseIn`.
 
 ### `hGetLine_`
 {: .no_toc}
 ```freest
-hGetLine_ : InStreamProvider -> String
+hGetLine_ : *?InStream -> String
 ```
-Unrestricted version of `hGetLine`. Behaves the same, except it first receives an `InStream` 
-channel endpoint (via session initiation), executes an `hGetLine` and then closes the 
-enpoint with `hCloseIn`.
-
-### `hGetContent_`
-{: .no_toc}
-```freest
-hGetContent_ : InStreamProvider -> String
-```
-Unrestricted version of `hGetContent`. Behaves the same, except it first receives an `InStream`
-channel endpoint (via session initiation), executes an `hGetContent` and then closes the
-endpoint with `hCloseIn`.
+Unrestricted version of `hGetLine`. Behaves the same, except it first receives
+an `InStream` channel endpoint (via session initiation), executes an
+`hGetLine` and then closes the endpoint with `hCloseIn`.
 
 ### `OutStream`
 {: .no_toc}
 ```freest
 type OutStream : 1C
-type OutStream = +{ PutChar : !Char ; OutStream
-                  , PutStr  : !String ; OutStream
-                  , PutStrLn: !String ; OutStream
-                  , SWait   : Wait
+type OutStream = +{ PutStr   : !String ; OutStream
+                  , PutStrLn : !String ; OutStream
+                  , Stop     : Wait
                   }
 ```
 
 The `OutStream` type describes output streams (such as `stdout`, `stderr` and
-write mode files). `PutChar` outputs a character, `PutStr` outputs a string, and
-`PutStrLn` outputs a string followed by the newline character (`\n`). Operations
-in this channel must end with the `Close` option.
-
-### `OutStreamProvider`
-{: .no_toc}
-```freest
-type OutStreamProvider : *C
-type OutStreamProvider = *?OutStream
-```
-
-Unrestricted session type for the `OutStream` type.
-
-### `hCloseOut`
-{: .no_toc}
-```freest
-hCloseOut : OutStream -> ()
-```
-Closes an `OutStream` channel endpoint. Behaves as a `close`.
-
-### `hPutChar`
-{: .no_toc}
-```freest
-hPutChar : Char -> OutStream -> OutStream
-```
-Sends a character through an `OutStream` channel endpoint. Behaves as 
-`|> select PutChar |> send`.
+write mode files). `PutStr` outputs a string, and `PutStrLn` outputs a string
+followed by the newline character (`\n`). Operations on this channel must end
+with the `Stop` option.
 
 ### `hPutStr`
 {: .no_toc}
 ```freest
 hPutStr : String -> OutStream -> OutStream
 ```
-Sends a String through an `OutStream` channel endpoint. Behaves as 
-`|> select PutString |> send`.
+Writes a string on an `OutStream` channel endpoint. Behaves as
+`|> select PutStr |> send`.
 
 ### `hPutStrLn`
 {: .no_toc}
 ```freest
 hPutStrLn : String -> OutStream -> OutStream
 ```
-Sends a string through an `OutStream` channel endpoint, to be output with
-the newline character. Behaves as `|> select PutStringLn |> send`.
+Writes a string on an `OutStream` channel endpoint, followed by the newline
+character. Behaves as `|> select PutStrLn |> send`.
+
+### `hPutChar`
+{: .no_toc}
+```freest
+hPutChar : Char -> OutStream -> OutStream
+```
+Writes a character on an `OutStream` channel endpoint. There is no dedicated
+protocol branch for single characters: this is implemented as `hPutStr [c]`,
+sending the character as a one-character string.
 
 ### `hPrint`
 {: .no_toc}
 ```freest
 hPrint : forall (a : *T) -> a -> OutStream -> OutStream
 ```
-Sends the string representation of a value through an `OutStream` channel
-endpoint, to be outputed with the newline character. Behaves as `hPutStrLn
-(show @t v)`, where `v` is the value to be sent and `t` its type.
+Writes the string representation of a value on an `OutStream` channel
+endpoint, followed by the newline character. Behaves as `hPutStrLn . show`.
+
+### `hCloseOut`
+{: .no_toc}
+```freest
+hCloseOut : OutStream -> ()
+```
+Closes an `OutStream` channel endpoint. Behaves as `|> select Stop |> wait`.
 
 ### `hPutChar_`
 {: .no_toc}
 ```freest
-hPutChar_ : Char -> OutStreamProvider -> ()
+hPutChar_ : Char -> *?OutStream -> ()
 ```
 Unrestricted version of `hPutChar`. Behaves the same, except it first
 receives an `OutStream` channel endpoint (via session initiation), executes
-an `hPutChar` and then closes the enpoint with `hCloseOut`.
+an `hPutChar` and then closes the endpoint with `hCloseOut`.
 
 ### `hPutStr_`
 {: .no_toc}
 ```freest
-hPutStr_ : String -> OutStreamProvider -> ()
+hPutStr_ : String -> *?OutStream -> ()
 ```
 Unrestricted version of `hPutStr`. Behaves similarly, except that it first
 receives an `OutStream` channel endpoint (via session initiation), executes
-an `hPutStr` and then closes the enpoint with `hCloseOut`.
+an `hPutStr` and then closes the endpoint with `hCloseOut`.
 
 ### `hPutStrLn_`
 {: .no_toc}
 ```freest
-hPutStrLn_ : String -> OutStreamProvider -> ()
+hPutStrLn_ : String -> *?OutStream -> ()
 ```
-Unrestricted version of `hPutStrLn`. Behaves similarly, except that it
-first receives an `OutStream` channel endpoint (via session initiation),
-executes an `hPutStrLn` and then closes the enpoint with `hCloseOut`.
+Unrestricted version of `hPutStrLn`. Behaves similarly, except that it first
+receives an `OutStream` channel endpoint (via session initiation), executes
+an `hPutStrLn` and then closes the endpoint with `hCloseOut`.
 
 ### `hPrint_`
 {: .no_toc}
 ```freest
-hPrint_ : forall (a : *T) -> a -> OutStreamProvider -> ()
+hPrint_ : forall (a : *T) -> a -> *?OutStream -> ()
 ```
 Unrestricted version of `hPrint`. Behaves similarly, except that it first
 receives an `OutStream` channel endpoint (via session initiation), executes
-an `hPrint` and then closes the enpoint with `hCloseOut`.
+an `hPrint` and then closes the endpoint with `hCloseOut`.
 
 ## Standard input and output
 
 {: .lib-table}
 | Function | Type | Description |
 |:---------|:-----|:------------|
-| `stdin` | `InStreamProvider`{: .language-freest } | Standard input stream. Reads from the console. |
+| `stdin` | `*?InStream`{: .language-freest } | Standard input stream. Reads from the console. |
 | `getChar` | `() -> Char`{: .language-freest } | Reads a single character from `stdin`. |
 | `getLine` | `() -> String`{: .language-freest } | Reads a single line from `stdin`. |
-| `stdout` | `OutStreamProvider`{: .language-freest } | Standard output stream. Prints to the console. |
+| `stdout` | `*?OutStream`{: .language-freest } | Standard output stream. Prints to the console. |
 | `putChar` | `Char -> ()`{: .language-freest } | Prints a character to `stdout`. Behaves the same as `hPutChar_ c stdout`, where `c` is the character to be printed. |
 | `putStr` | `String -> ()`{: .language-freest } | Prints a string to `stdout`. Behaves the same as `hPutStr_ s stdout`, where `s` is the string to be printed. |
 | `putStrLn` | `String -> ()`{: .language-freest } | Prints a string to `stdout`, followed by the newline character `\n`. Behaves as `hPutStrLn_ s stdout`, where `s` is the string to be printed. |

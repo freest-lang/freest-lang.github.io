@@ -64,13 +64,9 @@ Other alignment to preserve as-is:
 
 ## Checking a snippet after editing it
 
-`freest -t <file>.fst` type-checks without running. Re-indenting must not change
-the result: line:column numbers in messages shift, but the diagnostics
-themselves must be identical before and after.
+`freest -t <file>.fst` type-checks without running. Re-indenting must not change the result: line:column numbers in messages shift, but the diagnostics themselves must be identical before and after.
 
-Many snippets are fragments that use definitions introduced earlier in the same
-page, so `Variable out of scope` / `Type constructor out of scope` is the
-expected outcome for them and is not evidence of a problem. A *parse* error is —
+Many snippets are fragments that use definitions introduced earlier in the same page, so `Variable out of scope` / `Type constructor out of scope` is the expected outcome for them and is not evidence of a problem. A *parse* error is —
 that is what a broken re-indent produces.
 
 ## Scope note
@@ -78,3 +74,7 @@ that is what a broken re-indent produces.
 `tutorial/` follows these rules. `libraries/` and `freest3/` also contain
 `freest` blocks and have not been normalised; match the surrounding style when
 editing those, or normalise the whole file.
+
+`libraries/` snippets are still required to pass `freest -t`, same as
+`tutorial/` — only the indentation normalisation is pending there, not
+correctness checking.
