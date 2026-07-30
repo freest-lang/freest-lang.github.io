@@ -343,10 +343,10 @@ By 'chaining' we mean the composition of output operations with the inverse func
 
 | Positive type | Chaining operator |
 | --- | --- |
-| `!T` | `c \|> send v \|> ...` |
-| `!type a.T` | `c \|> sendType @T \|> ...` |
-| `+{l: T, ...}` | `c \|> select l \|> ...` |
-| `Close` | `c \|> close` |
+| `!T` | `c |> send v |> ...` |
+| `!type a.T` | `c |> sendType @T |> ...` |
+| `+{l: T, ...}` | `c |> select l |> ...` |
+| `Close` | `c |> close` |
 
 Dually, each negative type has a corresponding pattern:
 
