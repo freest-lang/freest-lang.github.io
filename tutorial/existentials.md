@@ -14,7 +14,7 @@ parent: Tutorial
 
 Data abstraction is an important tool in structuring programs. It establishes an interface between clients and providers of some functionality. The interface specifies what clients can use and providers must provide, allowing clients and providers to work separately. An implementation (prepared by some provider) may be replaced with another if the interface is kept intact, and the behaviour is not affected.
 
-Data abstraction is captured by existential types. An existential type comprises a (bound) type variable `a`, standing for the unspecified abstract type, and a type `U` that stands for the implementation. Such a type is written `(exists a, U)`, or `(exists (a:k), U)`, if the kind `k` of type `a` is important. Type variable `a` may occur in type `U`.
+Data abstraction is captured by existential types. An existential type comprises a (bound) type variable `a`, standing for the unspecified abstract type, and a type `U` that stands for the implementation. Such a type is written `(exists a, U)`, or `(exists (a : k), U)`, if the kind `k` of type `a` is important. Type variable `a` may occur in type `U`.
 
 Let us start with a simple abstract type, inspired on Pierce,
 Types and programming languages. MIT Press 2002. A counter is an abstract that type that allows for the creation of new counters, reading the value of the counter, and increment of a given counter. The type if the counter itself is kept abstract. Let us call it `a`. We are then interested in three values:
@@ -126,7 +126,7 @@ An implementation of a flip-flop using a counter is as follows: we first unpack 
 ```freest
 flipFlop : FlipFlop
 flipFlop =
-  let (@(a:*T), (new, get, inc)) = counter
+  let (@(a : *T), (new, get, inc)) = counter
   in (@a, ( new        -- new
           , even . get -- read
           , inc        -- toggle
@@ -137,7 +137,41 @@ flipFlop =
 Here we see that the (bound) type variable `a` obtained by unpacking the counter is used as representation type of the new package. (The explicit kind annotation forces `a` to be of unrestricted nature, to match the expected kind in the representation type of the pack operation).
 
 We can put a flip-flop to work by unpacking it and chaining its operations, starting wth `new` and terminating with `read` (followed by `print`). We leave to the reader guessing the value on the console.
-```freeest
+```freest
 _ = let (@_, (new, read, toggle, reset)) = flipFlop
     in new |> toggle |> reset |> toggle |> read |> print
 ```
+
+## Session existentials and universals
+
+Existential packages can be passed in messages. Channels in FreeST may exchange values of any tupe, existentals included.
+Here is shared channel that provides counter abstract data types:
+```freest
+type CounterProvider = *?Counter
+```
+
+A consumer, receives a counter (we use `receive_` to receive on shared channels), unpacks the counter and uses its operations as we have seen before.
+```freest
+incTwice : CounterProvider -> ()
+incTwice s =
+  let (@_, (new, get, inc)) = receive_ s
+  in new |> inc |> inc |> get |> print
+```
+
+A consumer of the dual type, that is a function that provides counters, can be written as follows.
+```freest
+counterProvider : Dual CounterProvider -> ()
+counterProvider c =
+    c |> send_ intCounter ; counterProvider c
+```
+
+We bring the two functions together by means of `forkJpoin`.
+```freest
+_ = forkWith counterProvider |> incTwice
+```
+
+This is all very unsurprising, we are passing existential values on channels, as we do with integer values. All the operations that define the abstract datatype are pre-defined, packed and sent. What if the operations take time to prepared, what if they are computed one by one? what if the set of operations is much larger than the one required by particular clients? Clients need bot download the whole lot; they could download the operations on as needed base. Could we not send each individual operation as they get ready? That is what session types are for. If we need to send two integer values we may compute both and then send a pair of type `(Int, Int}`. Or else we may dispatch the integers as they get ready, one at a time, in two separate messages, both of type `Int`.
+
+So we need a means to send the type first, and then the various operations on the type. We need to send and receive types, and we have seen how ro do this before, in section [*exchanging types*](channels-and-session-types.md#exchanging-types).
+
+So here is the plan for the remote counter: we send the abstract type first, and the the operations, one by one. Rather than eagerly sending all three operations in a row, we let clients ask for each one of them, individually and by an arbitrary order.
