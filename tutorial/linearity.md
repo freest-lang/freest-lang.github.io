@@ -46,12 +46,12 @@ Then the compiler complains as follows.
 ```bash
 MultipleArgs.fst:4:13–4:14: error:
 Linear variable `f` of type `Int -1-> Int -1-> Int`, bound at
-  Valid/Tutorial/MultipleArgs/MultipleArgs.fst:4:13–4:14
+  MultipleArgs.fst:4:13–4:14
   | 
 4 | linBinApply f x y = f x y
   |             ^
  is consumed in body of an unrestricted function
-  Valid/Tutorial/MultipleArgs/MultipleArgs.fst:4:15–4:26
+  MultipleArgs.fst:4:15–4:26
   | 
 4 | linBinApply f x y = f x y
   |               ^^^^^^^^^^^

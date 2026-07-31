@@ -295,7 +295,7 @@ Type mismatch:
 32 |   runServer serveOne
    |   ^^^^^^^^^^^^^^^^^^
 Couldn't match expected type `forall (a : *T) -*-> a -*-> Dual (CellRef a) -*-> ()`, taken from:
-   /Users/vv/workspace/freest/freest/test/prog/Valid/Tutorial/MemoryCell/MemoryCell.fst:30:8–30:54
+   MemoryCell.fst:30:8–30:54
    | 
 30 | cell : forall (a : *T) -> a -> Dual (CellRef a) -> ()
    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
