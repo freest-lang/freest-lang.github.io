@@ -188,7 +188,10 @@ So we need a means to send the type first, and then the various operations on th
 So here is the plan for the remote counter: we send the abstract type first, and then the operations, one by one, as requested by the client. That is, rather than eagerly sending all three operations in a row, we let clients ask for each one of them, individually and by an arbitrary order.
 Here is the type that governs the channel as seen from the end of the counter provider (the server):
 ```freest
-type Provide a = &{New: !a ; Provide a, Get: !(a -> Int) ; Provide a, Inc: !(a -> a) ; Provide a, Done: Wait}
+type Provide a = &{ New: !a ; Provide a
+                  , Get: !(a -> Int) ; Provide a
+                  , Inc: !(a -> a) ; Provide a
+                  , Done: Wait }
 
 type CounterProvider = !type a. Provide a
 ```
@@ -207,16 +210,18 @@ counterProvider c =
     provide (&Done c) = c |> wait
 ```
 
-The client, on the other end of the channel, consumes an endpoint of type `Dual CounterProvider`. It first receives an existential pack, which it deconstructs straightaway with pattern matching, thus obtaining the existential type (bound to `@a` and never *explicitly* used) and the continuation channel `c` on which to continue interaction. It then eagerly downloads all functions and closes the channel endpoint.
+The client, on the other end of the channel, consumes an endpoint of type `Dual CounterProvider`. It first receives an existential pack, which it deconstructs straightaway with pattern matching, thus obtaining the existential type (bound to `@a` and never *explicitly* used) and the continuation channel `c` on which to continue interaction. It then downloads functions on an as needed basis, while computing the counter expression `get (inc (inc new))`. In the end it closes the channel endpoint and prints the result.
 ```freest
 incTwice : Dual CounterProvider -> ()
 incTwice c =
-  let (@a, c)  = receiveType c
-      (inc, c) = c |> select Inc  |> receive
-      (new, c) = c |> select New  |> receive
+  let (@a, c) = receiveType c
+      (v,   c) = c |> select New  |> receive
+      (inc, c) = c |> select Inc  |> receive @(a -> a) @(Dual (Provide a))
+      v        = inc (inc v)
       (get, c) = c |> select Get  |> receive
+      n        = get v
       ()       = c |> select Done |> close
-  in new |> inc |> inc |> get |> print
+  in print n
 ```
 
 If you are wondering why one has to bind a type variable when unpacking an existential value, and then not use it, remember that the compiler conducts a lot of inference. For example, recall the type of receive:
