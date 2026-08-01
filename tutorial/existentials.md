@@ -251,7 +251,7 @@ Couldn't match expected type `!(forall (a : 1T) -*-> a -*-> a); Provide Int`, ta
 339 | send : forall #m (a : m T) -> a -> forall (b : 1S) -> !a;b -m-> b
     |                                                       ^^^^
 with actual type `!(Int -*-> Int); Provide Int`, taken from:
-  RemoteLazyCounter/RemoteLazyCounter.fst:1:47–1:70
+  RemoteLazyCounter.fst:1:47–1:70
   | 
 1 | type Provide a = &{New : !a ; Provide a, Get: !(a -> Int) ; Provide a,  Inc: !(a -> a) ; Provide a, Done: Wait}
   |                                               ^^^^^^^^^^^^^^^^^^^^^^^
@@ -259,3 +259,25 @@ A polymorphic value was not instantiated here (note the `forall`).
 Consider giving it an explicit type argument (e.g. `Nothing @a`) or a type annotation.
 ```
 We decided to follow the suggestion "Consider giving it an explicit type argument", et voilà! The compiler is happy.
+
+## A summary of existential and universal types
+
+FreeST has both functional and session variants of existential and universal quantification. The table below puts them side by side.
+
+| Kind | Existential | Universal |
+| --- | --- | --- |
+| Functional (`T`)| `(exists (a : k), U)` | `forall (a : k) -> U` |
+| Session (`S` or `C`) | `!type (a : k). U` | `?type (a : k). U` |
+
+Each is introduced and eliminated by a matching pair of operators:
+
+| | Introduced by | Eliminated by |
+| --- | --- | --- |
+| Functional existential | pack: `(@U, v)` | unpack: `let (@a, x) = exp in exp` |
+| Functional universal | abstractin: `\ @(a : k) -> exp` | application: `exp @U` |
+| Session existential | `channel @(?type (a : k). U)` |  `receiveType : (?type (a : k). U) -> (exists (a : k), U)` |
+| Session universal | `channel @!type (a : k). U` | `sendType @V : (!type (a : k). U) -> ((\(a : k) -> U)V)` |
+
+Unlike their functional counterparts, the session types do not feature specific introduction expressions; session types are all introduced by the `channel` primitive.
+
+<!-- are `Dual` of each other, `Dual (!type a. T) = ?type a. Dual T`. This is exactly the classical duality between ∃ and ∀: sending a type is offering a witness (existential), receiving one is being ready to handle whichever type shows up (universal). -->
