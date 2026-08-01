@@ -60,8 +60,8 @@ Here we are interested in the concrete function `id @Int` (the compiler infers t
 
 Notice the parallelism between the type and its constructor:
 ```freest
-(exists a, U)     -- type
-(exists T, value) -- value
+(exists a, U) -- type
+(@T, value)   -- value
 ```
 where `value` is of type `U` with occurrences of `a` replaced by T. In the case of the counter we have:
 ```freest
