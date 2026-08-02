@@ -275,9 +275,9 @@ Each is introduced and eliminated by a matching pair of expressions:
 | --- | --- | --- |
 | Functional existential | pack: `(@U, v)` | unpack: `let (@a, x) = exp in exp` |
 | Functional universal | abstract: `\@(a : k) -> exp` | apply: `exp @U` |
-| Session existential | `channel @(?type (a : k). U)` |  `receiveType : (?type (a : k). U) -> (exists (a : k), U)` |
-| Session universal | `channel @!type (a : k). U` | `sendType @V : (!type (a : k). U) -> ((\(a : k) -> U)V)` |
+| Session existential | |  `receiveType : (?type (a : k). U) -> (exists (a : k), U)` |
+| Session universal | | `sendType @V : (!type (a : k). U) -> ((\(a : k) -> U)V)` |
 
-Unlike their functional counterparts, the session types do not feature specific introduction expressions; session types are all introduced by the `channel` primitive.
+Unlike their functional counterparts, the session types do not feature specific introduction operators. Session types may be introduced by the `channel` primitive. For example, `channel @(?type (a : k). U)` introduces a pair of channel endpoints, the first of which is of type `?type (a : k). U`. But expression `send 5 c` may also introduce such a type if `c` is of type `!Int ; ?type (a : k). U`.
 
 <!-- are `Dual` of each other, `Dual (!type a. T) = ?type a. Dual T`. This is exactly the classical duality between ∃ and ∀: sending a type is offering a witness (existential), receiving one is being ready to handle whichever type shows up (universal). -->
