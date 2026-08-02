@@ -269,12 +269,12 @@ FreeST has both functional and session variants of existential and universal qua
 | Functional (`T`)| `(exists (a : k), U)` | `forall (a : k) -> U` |
 | Session (`S` or `C`) | `!type (a : k). U` | `?type (a : k). U` |
 
-Each is introduced and eliminated by a matching pair of operators:
+Each is introduced and eliminated by a matching pair of expressions:
 
 | | Introduced by | Eliminated by |
 | --- | --- | --- |
 | Functional existential | pack: `(@U, v)` | unpack: `let (@a, x) = exp in exp` |
-| Functional universal | abstractin: `\ @(a : k) -> exp` | application: `exp @U` |
+| Functional universal | abstract: `\@(a : k) -> exp` | apply: `exp @U` |
 | Session existential | `channel @(?type (a : k). U)` |  `receiveType : (?type (a : k). U) -> (exists (a : k), U)` |
 | Session universal | `channel @!type (a : k). U` | `sendType @V : (!type (a : k). U) -> ((\(a : k) -> U)V)` |
 
