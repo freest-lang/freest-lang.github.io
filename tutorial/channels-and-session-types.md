@@ -372,8 +372,8 @@ Could not infer a type for this `select` expression
   | 
 1 | select Done
   | ^^^^^^^^^^^
-freest> :t select Done : (+{Done: Close} -> Close)
-(select Done : (+{Done: Close} -> Close)) : +{Done: Close} -> Close
+freest> :t select Done : +{Done: Close} -> Close
+(select Done : +{Done: Close} -> Close) : +{Done: Close} -> Close
 ``` -->
 
 
