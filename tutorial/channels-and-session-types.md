@@ -56,9 +56,24 @@ The dual of a positive type is a negative type, and conversely:
 | `&{l: T, ...}` | `+{l: Dual T, ...}` |
 | `Wait` | `Close` |
 
-Type operator `Dual` converts a session type into its dual, and can be used in FreeST code. In it an involution, so that `Dual (Dual S) = S`, for all types `S`. For example `Dual (Dual !T) = Dual (?T) = !T`.
+Type operator `Dual` converts a session type into its dual, and can be used in FreeST code. It is an involution, so that `Dual (Dual S) = S`, for all types `S`. For example `Dual (Dual !Bool) = Dual (?Bool) = !Bool`.
 
- The elements of interaction may be composed by means of sequential composition and recursion. We start with sequential composition and leave recursion for later. The sequential composition of (session) types is denoted by the semicolon binary operator. If `T` and `U` are session types, then type `T ; U` denotes the type that first performs `T` and then `U`.
+ The elements of interaction may be composed by means of sequential composition and recursion. We start with sequential composition and leave recursion for later (see [*unbounded protocols*](#unbounded-protocols)).
+ 
+ The sequential composition of (session) types is denoted by the semicolon binary operator. If `T` and `U` are session types, then type `T ; U` denotes the type that first performs `T` and then `U`.
+Sequential composition has a unit, the session type `Skip`: performing `Skip` does nothing, so `Skip ; T` is the same as `T`.
+
+| Session type | Meaning |
+| --- | --- |
+| `T ; U` | perform `T` then `U` |
+| `Skip` | do nothing |
+
+Duality distributes over sequential composition, and `Skip` is self-dual:
+
+| `S` | `Dual S` |
+| --- | --- |
+| `T ; U` | `Dual T ; Dual U` |
+| `Skip` | `Skip` |
 
 ## Exchanging values and closing channels
 
@@ -339,7 +354,9 @@ The table below summarises what we have seen on session type operations.
 | Chaining available | Pattern matching available |  |
 | Nonblocking operation | Blocking operation |  |
 
-By 'chaining' we mean the composition of output operations with the inverse function application `|>`. Each positive type has a corresponding chaining operator:
+By 'chaining' we mean the composition of output operations with the inverse function application `|>`.
+
+Each positive type has a corresponding chaining operator:
 
 | Positive type | Operator | Chaining operator |
 | --- | --- | --- |
