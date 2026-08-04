@@ -273,13 +273,13 @@ accept @a c =
 
 The Prelude contains a handy abbreviation for writing servers that serve clients *sequentially*, one at a time. The function we have in mind is:
 ```freest
-runServer : forall (a : *T) (b : 1C) -> (a -> Dual b -> a) -> a -> *!b -> ()
+runServer : forall (a : *T) (b : 1C) -> (a -> Dual b -> a) -> a -> *!b -> Void @*T
 ```
-where `a` represents the state of the server, `b` the linear channel on which to serve one particular client. The function accepts a function to handle a particular client, the initial value of the state, and the shared channel.
+where `a` represents the state of the server, `b` the linear channel on which to serve one particular client. The function accepts a function to handle a particular client, the initial value of the state, and the shared channel. Since it never returns, its result type is `Void @*T`.
 
 Using `runServer`, `receiveAndWait` and `sendAndWait` we can consume a `CellOp` channel.
 ```freest
-cell : forall (a : *T) -> a -> Dual (CellRef a) -> ()
+cell : forall (a : *T) -> a -> Dual (CellRef a) -> Void @*T
 cell @a =
   runServer serveOne
   where
@@ -292,18 +292,18 @@ cell @a =
 ```bash
 Type mismatch:
    | 
-32 |   runServer serveOne
+30 |   runServer serveOne
    |   ^^^^^^^^^^^^^^^^^^
-Couldn't match expected type `forall (a : *T) -*-> a -*-> Dual (CellRef a) -*-> ()`, taken from:
-   MemoryCell.fst:30:8–30:54
+Couldn't match expected type `forall (a : *T) -*-> a -*-> Dual (CellRef a) -*-> Void @*T`, taken from:
+   MemoryCell.fst:28:8–28:60
    | 
-30 | cell : forall (a : *T) -> a -> Dual (CellRef a) -> ()
-   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-with actual type `_ -*-> *!_ -*-> ()`, taken from:
-    StandardLib/Prelude.fst:445:63–445:77
+28 | cell : forall (a : *T) -> a -> Dual (CellRef a) -> Void @*T
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+with actual type `_ -*-> *!_ -*-> Void @*T`, taken from:
+    StandardLib/Prelude.fst:445:63–445:83
     | 
-445 | runServer : forall (a : *T) (b : 1C) -> (a -> Dual b -> a) -> a -> *!b -> ()
-    |                                                               ^^^^^^^^^^^^^^
+445 | runServer : forall (a : *T) (b : 1C) -> (a -> Dual b -> a) -> a -> *!b -> Void @*T
+    |                                                               ^^^^^^^^^^^^^^^^^^^^
 Type inference could not determine a type argument here (shown as `_`).
 Consider annotating the application with an explicit type argument (e.g. `f @a`),
 binding the signature's type variables with `@a` patterns on the left-hand side.

@@ -165,19 +165,19 @@ Rather than trying to decree such types as invalid, a not-so-easy endeavour, we 
 
 ## Multiplicity polymorphism
 
-We have used function `forkWith` quite often, but we have not been very explicit about its type. We know that it is a polymorphic function, that it accepts a channel endpoint type (a type of base kind `C`, call it `T`) and a function from `Dual T` to `()`, and that it returns a value of type `T`.
+We have used function `forkWith` quite often, but we have not been very explicit about its type. We know that it is a polymorphic function, that it accepts a channel endpoint type (a type of base kind `C`, call it `T`), and a function from `Dual T` to some unrestricted type `U` (whatever it returns is simply discarded), and that it returns a value of type `T`.
 So, one possible type for `forkWith` is
 ```freest
-forall (a : 1C) -*-> (Dual a -1-> ()) -*-> a
+forall (a : 1C) (b : *T) -*-> (Dual a -1-> b) -*-> a
 ```
-where we have chosen a linear function for the `Dual a` to `()` function. That makes a lot of sense. Such a type signals the client that the function is going to be used exactly once, that the runtime system will not fork two threads, each running the given function.
+where we have chosen a linear function for the `Dual a` to `b` function. That makes a lot of sense. Such a type signals the client that the function is going to be used exactly once, that the runtime system will not fork two threads, each running the given function.
 
-If the linear arrow gives the client extra assurance, it also hinders code reusability. Suppose the client is endowed with an unrestricted function, a function of type `Dual a -*-> ()`, that they would like to use to fork a thread, trusting the runtime that the function would nevertheless be used once only. There is really no workaround, except perhaps rewriting the code.
+If the linear arrow gives the client extra assurance, it also hinders code reusability. Suppose the client is endowed with an unrestricted function, a function of type `Dual a -*-> b`, that they would like to use to fork a thread, trusting the runtime that the function would nevertheless be used once only. There is really no workaround, except perhaps rewriting the code.
 
 So we could set up two signatures for the *same* underlying function.
 ```freest
-forkWith  : forall (a : 1C) -*-> (Dual a -*-> ()) -*-> a
-forkWith' : forall (a : 1C) -*-> (Dual a -1-> ()) -*-> a
+forkWith  : forall (a : 1C) (b : *T) -*-> (Dual a -*-> b) -*-> a
+forkWith' : forall (a : 1C) (b : *T) -*-> (Dual a -1-> b) -*-> a
 ```
 
 But `forkWith`, we have seen, calls `fork` and passes the incoming function as is to `fork`. We would need two different fork functions:
@@ -190,9 +190,12 @@ This story ends here because `fork` is primitive, but one can think of scenarios
 
 The code of the two versions of `forkWith` is exactly the same, only the signatures vary. The same happens with `fork`. This calls for **multiplicity polymorphism**. There is only one version of each function. Their type signatures are as follows:
 ```freest
-forkWith : forall #m -*-> forall (a : 1C) -*-> (Dual a -m-> ()) -*-> a
+forkWith : forall #m -*-> forall (a : 1C) (b : *T) -*-> (Dual a -m-> b) -*-> a
 fork : forall #m -*-> forall (a : *T) -*-> (() -m-> a) -*-> ()
 ```
+
+This freedom to discard follows directly from FreeST's linearity discipline: unrestricted values (kind `*T`) may be dropped silently, while linear values (kind `1T`) must be consumed exactly once. The Prelude leans on this wherever a result is produced but of no interest to the caller. `fork`, `parallel` and `times` each take a thunk returning some `a : *T` and discard it once the thunk has run; `forkWith` does the same with its handler's result `b : *T`. Because that result is only ever thrown away, it can stay fully polymorphic — the thunk may return anything unrestricted, and the caller need not care which.
+<!-- `runServer`'s `Void @*T` return type draws on the same slack for the opposite reason: since the function never returns, no value of that type is ever produced either — nothing to commit to, rather than something to ignore. -->
 
 Type `forall #m -> T` introduces multiplicity polymorphism. The variable name, `m` in this case, must be preceded by a sharp symbol, `#`, so that it can be distinguished from a type variable. In the body we use `-m->`, not `-#m->`. The syntax is otherwise similar to type polymorphism.
 

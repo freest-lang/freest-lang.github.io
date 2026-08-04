@@ -537,9 +537,9 @@ one, `mapLU` turns a linear list into an unrestricted one.
 ### `fork`
 {: .no_toc}
 ```freest
-fork : forall #m -> (() -m-> ()) -> ()
+fork : forall #m (a : *T) -> (() -m-> a) -> ()
 ```
-Spawns a thunk as a new thread. The thunk must return `()`.
+Spawns a thunk as a new thread. The thunk's return value, of unrestricted base kind, is discarded.
 
 ### `send`
 {: .no_toc}
@@ -640,11 +640,11 @@ channel. The requester uses a `receive_` operation to obtain the channel end.
 ### `forkWith`
 {: .no_toc}
 ```freest
-forkWith : forall #m (a : 1C) -> (Dual a -m-> ()) -> a
+forkWith : forall #m (a : 1C) (b : *T) -> (Dual a -m-> b) -> a
 ```
 Creates a new child process and a channel through which it can communicate
-with its parent process. Returns the channel endpoint. The forked function
-must return `()`.
+with its parent process. Returns the channel endpoint. The forked function's
+return value, of unrestricted base kind, is discarded.
 
 ```freest
 _ =
@@ -657,12 +657,13 @@ _ =
 ### `runServer`
 {: .no_toc}
 ```freest
-runServer : forall (a : *T) (b : 1C) -> (a -> Dual b -> a) -> a -> *!b -> ()
+runServer : forall (a : *T) (b : 1C) -> (a -> Dual b -> a) -> a -> *!b -> Void @*T
 ```
 Runs an infinite shared server, given a function to handle one client session,
 an initial state, and the server's shared channel endpoint. It behaves as an
 infinite sequential application of the handler function over newly accepted
-sessions, threading the state through each call.
+sessions, threading the state through each call. Since it never returns, its
+result type is `Void @*T`.
 
 Note: this only works with session types that use session initiation.
 
@@ -680,7 +681,7 @@ counterService i (&Dec c) = wait c ; i - 1
 counterService i (&Get c) = c |> send i |> wait ; i
 
 -- | Counter server
-runCounterServer : Dual SharedCounter -> ()
+runCounterServer : Dual SharedCounter -> Void @*T
 runCounterServer = runServer @Int @Counter counterService 0
 ```
 
@@ -700,7 +701,7 @@ _ =
 ### `parallel`
 {: .no_toc}
 ```freest
-parallel : Int -> (() -> ()) -> ()
+parallel : forall (a : *T) -> Int -> (() -> a) -> ()
 ```
 Forks `n` identical threads. Works the same as a `times` call, but in parallel
 instead of sequentially.
@@ -913,8 +914,17 @@ an `hPrint` and then closes the endpoint with `hCloseOut`.
 | `stdin` | `*?InStream`{: .language-freest } | Standard input stream. Reads from the console. |
 | `getChar` | `() -> Char`{: .language-freest } | Reads a single character from `stdin`. |
 | `getLine` | `() -> String`{: .language-freest } | Reads a single line from `stdin`. |
-| `stdout` | `*?OutStream`{: .language-freest } | Standard output stream. Prints to the console. |
+| `stdout` | `*?OutStream`{: .language-freest } | Standard output stream. Prints to the console, via the `h*_` functions (e.g. `hPutStrLn_ s stdout`) or the `put*` wrappers below. |
+| `stderr` | `*?OutStream`{: .language-freest } | Standard error stream. Prints to the console, via the `h*_` functions (e.g. `hPutStrLn_ s stderr`); unlike `stdout`, it has no dedicated `put*` wrappers. |
 | `putChar` | `Char -> ()`{: .language-freest } | Prints a character to `stdout`. Behaves the same as `hPutChar_ c stdout`, where `c` is the character to be printed. |
 | `putStr` | `String -> ()`{: .language-freest } | Prints a string to `stdout`. Behaves the same as `hPutStr_ s stdout`, where `s` is the string to be printed. |
 | `putStrLn` | `String -> ()`{: .language-freest } | Prints a string to `stdout`, followed by the newline character `\n`. Behaves as `hPutStrLn_ s stdout`, where `s` is the string to be printed. |
-| `print` | `forall (a : *T) -> a -> ()`{: .language-freest } | Prints the string representation of a given value to `stdout`, followed by the newline character `\n`. Behaves the same as `hPrint_ @t v stdout`, where `v` is the value to be printed and `t` its type. |
+| `print` | `forall (U : *T) -> U -> ()`{: .language-freest } | Prints the string representation of a given value to `stdout`, followed by the newline character `\n`. Behaves the same as `hPrint_ @U v stdout`, where `v` is the value to be printed and `U` its type. |
+
+## Command line
+
+{: .lib-table}
+| Function | Type | Description |
+|:---------|:-----|:------------|
+| `getArgs` | `() -> [String]`{: .language-freest } | The arguments the program was run with, excluding the program name. |
+| `getProgName` | `() -> String`{: .language-freest } | The name the program was run under. |
