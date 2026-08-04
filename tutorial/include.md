@@ -30,7 +30,7 @@ back in the 1970s: **textual inclusion**. You name a file, and the compiler
 splices that file's source into yours before doing anything else. That is all
 there is to it — the same idea as C's `#include`.
 
-To pull the contents of `Helper.fst` into your program, write an `INCLUDE`
+To pull the contents of `Helper.fst` into your program, write an `INCLUDE`{: .language-freest }
 pragma at the top of the file:
 
 ```freest
@@ -109,7 +109,7 @@ Malformed INCLUDE pragma, expected {-# INCLUDE "path" #-}
 ## The Prelude is just another include
 
 The standard library `Prelude.fst` is included implicitly into every program, so
-functions such as `print` are always available without any pragma of your own.
+functions such as `print`{: .language-freest } are always available without any pragma of your own.
 It is merged exactly like any file you include yourself — once, ahead of your
 code. If you want to work without it, pass `--no-implicit-prelude` on the command
 line.
