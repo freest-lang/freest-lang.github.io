@@ -343,23 +343,39 @@ By 'chaining' we mean the composition of output operations with the inverse func
 
 | Positive type | Operator | Chaining operator |
 | --- | --- | --- |
-| `!T` | `send : forall #m -> forall (a : mT) -> a -> (forall (b : 1S) -> !a; b -m-> b)` | `c |> send v |> ...` |
-| `!type a. T` | `sendType @U : !type a. T -> T[U/a]` | `c |> sendType @T |> ...` |
-| `+{l: T, ...}` | `select l : +{l: T, ...} -> T`| `c |> select l |> ...` |
+| `!U` | `send : forall #m -> forall (a : mT) -> a -> (forall (b : 1S) -> !a; b -m-> b)` | `c |> send v |> ...` |
+| `!type a. U` | `sendType @V : !type a. W -> W[V/a]` | `c |> sendType @T |> ...` |
+| `+{l: U, ...}` | `select l : +{l: U, ...} -> U`| `c |> select l |> ...` |
 | `Close` | `close : Close -> ()` | `c |> close` |
 
-In the case of send type, notation `T[U/a]` denotes the result of replacing (free) occurrences of type variable `a` by type `U`. For example, `(a, Bool)[Char/`] = (Char, Bool)`.
+In the case of send type, notation `W[V/a]` denotes the result of replacing (free) occurrences of type variable `a` by type `U`. For example, `(a, Bool)[a/Char]` = `(Char, Bool)`.
 
 Dually, each negative type has a corresponding pattern:
 
 | Negative type | Operator | Pattern |
 | --- | --- | --- |
-| `?T` | `receive : forall (a : 1T) (b : 1S) -> ?a; b -> (a, b)` | `?x ; p` |
-| `?type a. T` | `receiveType : (?type (a : k). T) -> (exists (a : k), T)` | `?type a. p` |
-| `&{l: T, ...}` | `case exp of &l p -> ...` | `&l p` |
+| `?U` | `receive : forall (a : 1T) (b : 1S) -> ?a; b -> (a, b)` | `?x ; p` |
+| `?type a. U` | `receiveType : (?type (a : k). U) -> (exists (a : k), U)` | `?type a. p` |
+| `&{l: U, ...}` | `case exp of &l p -> ...` | `&l p` |
 | `Wait` | `wait : Wait -> ()` | `Wait` |
 
-In the case of receive type, we see that the result of a call to `receiveType` is an existential type (this is further developed in [*session existentials and universals*](existentials.md#session-existentials-and-universals)).
+In the case of receive type, we see that the result of a call to `receiveType` is an existential type (existential types are further developed in [*session existentials and universals*](existentials.md#session-existentials-and-universals)).
+
+<!-- ***Note:*** Some of the operators in the above two tables can only be used in *check* mode. They include `select`, `sendType` and `receiveType`. For example, `select Done` in *infer* mode fails, but if we provide the intended type (via ascprition), then compiler infers the expected type.
+```bash
+$ freest -i
+The FreeST Compiler, version 5.0, https://freest-lang.github.io/, :h for help
+Ok, no modules loaded.
+freest> :t select Done
+<interactive0>:1:1–1:12: error:
+Could not infer a type for this `select` expression
+  | 
+1 | select Done
+  | ^^^^^^^^^^^
+freest> :t select Done : (+{Done: Close} -> Close)
+(select Done : (+{Done: Close} -> Close)) : +{Done: Close} -> Close
+``` -->
+
 
 ## Unbounded protocols
 
