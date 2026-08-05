@@ -18,11 +18,12 @@ any import.
 
 Terse operator families are collected into tables; everything else has its own
 entry with its signature and — where the library documents it — a description
-and a worked example.
+and a worked example. Sections and their order mirror the Prelude's own
+source file.
 </div>
 
 <!-- collapsible TOC (check https://just-the-docs.github.io/just-the-docs/docs/navigation-structure/#top) -->
-<details markdown="block">
+<details open markdown="block">
   <summary>
     Table of contents
   </summary>
@@ -31,7 +32,25 @@ and a worked example.
 {:toc}
 </details>
 
-## Booleans
+## Standard types, classes and related functions
+
+### `undefined`
+{: .no_toc}
+```freest
+undefined : forall (a : *T) -> a
+```
+An inhabitant of every unrestricted type. Used as the placeholder
+implementation for every other builtin in this file — useful when writing
+your own builtins, but this one ought to be a builtin itself.
+
+### `error`
+{: .no_toc}
+```freest
+error : forall (a : 1T) -> String -> a
+```
+Aborts the program, printing the given message.
+
+### Basic datatypes
 
 ### `Bool`
 {: .no_toc}
@@ -63,8 +82,6 @@ otherwise : Bool
 ```
 Always `True`. Handy as the last guard of a definition.
 
-## Maybe, Either and Ordering
-
 ### `Maybe`
 {: .no_toc}
 ```freest
@@ -95,15 +112,6 @@ either : forall (a : *T) (b : *T) (c : 1T) -> (a -> c) -> (b -> c) -> Either a b
 Consumes an `Either`: applies the first function to a `Left`, the second to a
 `Right`.
 
-### `Ordering`
-{: .no_toc}
-```freest
-type Ordering : *T
-data Ordering = LT | EQ | GT
-```
-
-## Characters and strings
-
 ### Character conversions
 {: .no_toc}
 
@@ -112,14 +120,6 @@ data Ordering = LT | EQ | GT
 |:---------|:-----|
 | `ord` | `Char -> Int`{: .language-freest } |
 | `chr` | `Int -> Char`{: .language-freest } |
-
-### `isSpace`
-{: .no_toc}
-```freest
-isSpace : Char -> Bool
-```
-`True` for a space or any of the whitespace control characters (tab, newline,
-carriage return, ...).
 
 ### `String`
 {: .no_toc}
@@ -135,25 +135,67 @@ show : forall (a : *T) -> a -> String
 ```
 Renders a value as a `String`.
 
-### `words`
+### Tuples
+
+### `fst`
 {: .no_toc}
 ```freest
-words : String -> [String]
+fst : forall (a : 1T) (b : *T) -> (a, b) -> a
 ```
-Splits a string into a list of whitespace-separated words.
+Extracts the first element from a pair, discarding the second.
 
-### `unwords`
+### `snd`
 {: .no_toc}
 ```freest
-unwords : [String] -> String
+snd : forall (a : *T) (b : 1T) -> (a, b) -> b
 ```
-Joins a list of words back into a single string, separated by single spaces.
-The inverse of `words` (modulo how repeated whitespace is collapsed).
+Extracts the second element from a pair, discarding the first.
 
-## Numbers
-
-### Integer arithmetic
+### `swap`
 {: .no_toc}
+```freest
+swap : forall (a : 1T) (b : 1T) -> (a, b) -> (b, a)
+```
+Swaps the components of a pair. The expression `swap (1, True)` evaluates to
+`(True, 1)`.
+
+### `curry`
+{: .no_toc}
+```freest
+curry : forall (a : *T) (b : 1T) (c : 1T) -> ((a, b) -> c) -> a -> b -> c
+```
+Converts a function that receives a pair into a function that receives its
+arguments one at a time.
+
+### `uncurry`
+{: .no_toc}
+```freest
+uncurry : forall (a : 1T) (b : 1T) (c : 1T) -> (a -> b -> c) -> ((a, b) -> c)
+```
+Converts a function that receives its arguments one at a time into a function
+on pairs.
+
+### Comparison
+
+Only `Int` and `Float` are comparable, for now.
+
+{: .lib-table}
+| Function | Type |
+|:---------|:-----|
+| `(<)` | `Int -> Int -> Bool`{: .language-freest } |
+| `(<=)` | `Int -> Int -> Bool`{: .language-freest } |
+| `(==)` | `Int -> Int -> Bool`{: .language-freest } |
+| `(>=)` | `Int -> Int -> Bool`{: .language-freest } |
+| `(>)` | `Int -> Int -> Bool`{: .language-freest } |
+| `(/=)` | `Int -> Int -> Bool`{: .language-freest } |
+| `(>.)` | `Float -> Float -> Bool`{: .language-freest } |
+| `(<.)` | `Float -> Float -> Bool`{: .language-freest } |
+| `(>=.)` | `Float -> Float -> Bool`{: .language-freest } |
+| `(<=.)` | `Float -> Float -> Bool`{: .language-freest } |
+
+### Numeric functions
+
+**Int**
 
 {: .lib-table}
 | Function | Type |
@@ -179,32 +221,7 @@ The inverse of `words` (modulo how repeated whitespace is collapsed).
 | `even` | `Int -> Bool`{: .language-freest } |
 | `odd` | `Int -> Bool`{: .language-freest } |
 
-### Integer comparison
-{: .no_toc}
-
-{: .lib-table}
-| Function | Type |
-|:---------|:-----|
-| `(<)` | `Int -> Int -> Bool`{: .language-freest } |
-| `(<=)` | `Int -> Int -> Bool`{: .language-freest } |
-| `(==)` | `Int -> Int -> Bool`{: .language-freest } |
-| `(>=)` | `Int -> Int -> Bool`{: .language-freest } |
-| `(>)` | `Int -> Int -> Bool`{: .language-freest } |
-| `(/=)` | `Int -> Int -> Bool`{: .language-freest } |
-
-### Floating-point comparison
-{: .no_toc}
-
-{: .lib-table}
-| Function | Type |
-|:---------|:-----|
-| `(>.)` | `Float -> Float -> Bool`{: .language-freest } |
-| `(<.)` | `Float -> Float -> Bool`{: .language-freest } |
-| `(>=.)` | `Float -> Float -> Bool`{: .language-freest } |
-| `(<=.)` | `Float -> Float -> Bool`{: .language-freest } |
-
-### Floating-point arithmetic
-{: .no_toc}
+**Float**
 
 {: .lib-table}
 | Function | Type |
@@ -217,13 +234,6 @@ The inverse of `words` (modulo how repeated whitespace is collapsed).
 | `maxF` | `Float -> Float -> Float`{: .language-freest } |
 | `minF` | `Float -> Float -> Float`{: .language-freest } |
 | `logBase` | `Float -> Float -> Float`{: .language-freest } |
-
-### Floating-point functions
-{: .no_toc}
-
-{: .lib-table}
-| Function | Type |
-|:---------|:-----|
 | `absF` | `Float -> Float`{: .language-freest } |
 | `negateF` | `Float -> Float`{: .language-freest } |
 | `recip` | `Float -> Float`{: .language-freest } |
@@ -243,13 +253,6 @@ The inverse of `words` (modulo how repeated whitespace is collapsed).
 | `sinh` | `Float -> Float`{: .language-freest } |
 | `cosh` | `Float -> Float`{: .language-freest } |
 | `tanh` | `Float -> Float`{: .language-freest } |
-
-### Numeric conversions
-{: .no_toc}
-
-{: .lib-table}
-| Function | Type |
-|:---------|:-----|
 | `truncate` | `Float -> Int`{: .language-freest } |
 | `round` | `Float -> Int`{: .language-freest } |
 | `ceiling` | `Float -> Int`{: .language-freest } |
@@ -257,7 +260,7 @@ The inverse of `words` (modulo how repeated whitespace is collapsed).
 | `pi` | `Float`{: .language-freest } |
 | `fromInteger` | `Int -> Float`{: .language-freest } |
 
-## General-purpose functions
+### Miscellaneous functions
 
 ### `id`
 {: .no_toc}
@@ -345,46 +348,6 @@ fix : forall (a : *T) -> ((a -> a) -> (a -> a)) -> (a -> a)
 ```
 Fixed-point Z combinator.
 
-## Tuples
-
-### `fst`
-{: .no_toc}
-```freest
-fst : forall (a : 1T) (b : *T) -> (a, b) -> a
-```
-Extracts the first element from a pair, discarding the second.
-
-### `snd`
-{: .no_toc}
-```freest
-snd : forall (a : *T) (b : 1T) -> (a, b) -> b
-```
-Extracts the second element from a pair, discarding the first.
-
-### `swap`
-{: .no_toc}
-```freest
-swap : forall (a : 1T) (b : 1T) -> (a, b) -> (b, a)
-```
-Swaps the components of a pair. The expression `swap (1, True)` evaluates to
-`(True, 1)`.
-
-### `curry`
-{: .no_toc}
-```freest
-curry : forall (a : *T) (b : 1T) (c : 1T) -> ((a, b) -> c) -> a -> b -> c
-```
-Converts a function that receives a pair into a function that receives its
-arguments one at a time.
-
-### `uncurry`
-{: .no_toc}
-```freest
-uncurry : forall (a : 1T) (b : 1T) (c : 1T) -> (a -> b -> c) -> ((a, b) -> c)
-```
-Converts a function that receives its arguments one at a time into a function on
-pairs.
-
 ## Lists
 
 ### `null`
@@ -448,8 +411,7 @@ The sum of a list of integers.
 ```freest
 reverse : forall (a : *T) -> [a] -> [a]
 ```
-Reverses a list. Uses an accumulator internally so it runs in linear time, as in
-Haskell's `Data.List.reverse`.
+Reverses a list. Uses an accumulator internally so it runs in linear time.
 
 ### `map`
 {: .no_toc}
@@ -524,6 +486,31 @@ Convert between the unrestricted and linear list types while mapping a
 function over the elements: `mapUL` turns an unrestricted list into a linear
 one, `mapLU` turns a linear list into an unrestricted one.
 
+### Strings
+
+### `isSpace`
+{: .no_toc}
+```freest
+isSpace : Char -> Bool
+```
+`True` for a space or any of the whitespace control characters (tab, newline,
+carriage return, ...).
+
+### `words`
+{: .no_toc}
+```freest
+words : String -> [String]
+```
+Splits a string into a list of whitespace-separated words.
+
+### `unwords`
+{: .no_toc}
+```freest
+unwords : [String] -> String
+```
+Joins a list of words back into a single string, separated by single spaces.
+The inverse of `words` (modulo how repeated whitespace is collapsed).
+
 ## Errors
 
 {: .lib-table}
@@ -532,14 +519,15 @@ one, `mapLU` turns a linear list into an unrestricted one.
 | `undefined` | `forall (a : *T) -> a`{: .language-freest } |
 | `error` | `forall (a : 1T) -> String -> a`{: .language-freest } |
 
-## Concurrency and channels
+## Concurrency
 
 ### `fork`
 {: .no_toc}
 ```freest
 fork : forall #m (a : *T) -> (() -m-> a) -> ()
 ```
-Spawns a thunk as a new thread. The thunk's return value, of unrestricted base kind, is discarded.
+Spawns a thunk as a new thread. The thunk's return value, of unrestricted base
+kind, is discarded.
 
 ### `send`
 {: .no_toc}
@@ -712,7 +700,7 @@ _ =
   parallel 5 (\_ -> putStrLn "Hello!")
 ```
 
-## Fork-join
+### Fork-join
 
 ### `ForkJoin`
 {: .no_toc}
@@ -748,7 +736,11 @@ _ =
   await 3 r
 ```
 
-## Input and output streams
+## I/O
+
+### I/O streams
+
+**Input stream**
 
 ### `InStream`
 {: .no_toc}
@@ -765,6 +757,16 @@ The `InStream` type describes input streams (such as `stdin` and read files).
 `GetChar` reads a single character, `GetLine` reads a line, and `IsEOF` checks
 for the EOF (End-Of-File) token, i.e., if an input stream has reached the end.
 Operations on this channel terminate with the `Stop` option.
+
+### `hGenericGet`
+{: .no_toc}
+```freest
+hGenericGet : forall (a : *T) -> (InStream -> ?a; InStream) -> InStream -> (a, InStream)
+```
+Reads a value selected from an `InStream` by a selector (e.g. `select
+GetChar`), returning the value and the continuation channel endpoint. This is
+how `hGetChar`, `hGetLine` and `hIsEOF` are themselves defined, e.g. `hGetChar
+= hGenericGet (select GetChar)`.
 
 ### `hGetChar`
 {: .no_toc}
@@ -790,12 +792,31 @@ hIsEOF : InStream -> (Bool, InStream)
 Checks if an `InStream` reached the EOF token that marks where no more input
 can be read. Behaves as `|> select IsEOF |> receive`.
 
+### `hGetContent`
+{: .no_toc}
+```freest
+hGetContent : InStream -> (String, InStream)
+```
+Reads an `InStream` channel endpoint all the way to EOF, separating lines with
+the newline character `\n`, and returns the accumulated content together with
+the (now exhausted) continuation channel.
+
 ### `hCloseIn`
 {: .no_toc}
 ```freest
 hCloseIn : InStream -> ()
 ```
 Closes an `InStream` channel endpoint. Behaves as `|> select Stop |> wait`.
+
+### `hGenericGet_`
+{: .no_toc}
+```freest
+hGenericGet_ : forall (a : *T) -> (InStream -> (a, InStream)) -> *?InStream -> a
+```
+The unrestricted version of an `InStream` getter: receives the `InStream`
+channel endpoint (via session initiation), runs the getter, closes the
+endpoint with `hCloseIn`, and returns the value. This is how `hGetChar_` and
+`hGetLine_` are themselves defined, e.g. `hGetChar_ = hGenericGet_ hGetChar`.
 
 ### `hGetChar_`
 {: .no_toc}
@@ -815,6 +836,8 @@ Unrestricted version of `hGetLine`. Behaves the same, except it first receives
 an `InStream` channel endpoint (via session initiation), executes an
 `hGetLine` and then closes the endpoint with `hCloseIn`.
 
+**Output stream**
+
 ### `OutStream`
 {: .no_toc}
 ```freest
@@ -829,6 +852,16 @@ The `OutStream` type describes output streams (such as `stdout`, `stderr` and
 write mode files). `PutStr` outputs a string, and `PutStrLn` outputs a string
 followed by the newline character (`\n`). Operations on this channel must end
 with the `Stop` option.
+
+### `hGenericPut`
+{: .no_toc}
+```freest
+hGenericPut : forall (a : *T) -> (OutStream -> !a; OutStream) -> a -> OutStream -> OutStream
+```
+Writes a value on an `OutStream` through a selector (e.g. `select PutStr`),
+returning the continuation channel endpoint. This is how `hPutStr` and
+`hPutStrLn` are themselves defined, e.g. `hPutStr = hGenericPut (select
+PutStr)`.
 
 ### `hPutStr`
 {: .no_toc}
@@ -870,6 +903,17 @@ hCloseOut : OutStream -> ()
 ```
 Closes an `OutStream` channel endpoint. Behaves as `|> select Stop |> wait`.
 
+### `hGenericPut_`
+{: .no_toc}
+```freest
+hGenericPut_ : forall (a : *T) -> (a -> OutStream -> OutStream) -> a -> *?OutStream -> ()
+```
+The unrestricted version of an `OutStream` putter: receives the `OutStream`
+channel endpoint (via session initiation), runs the putter, and closes the
+endpoint with `hCloseOut`. This is how `hPutChar_`, `hPutStr_`, `hPutStrLn_`
+and `hPrint_` are themselves defined, e.g. `hPutChar_ = hGenericPut_
+hPutChar`.
+
 ### `hPutChar_`
 {: .no_toc}
 ```freest
@@ -906,7 +950,9 @@ Unrestricted version of `hPrint`. Behaves similarly, except that it first
 receives an `OutStream` channel endpoint (via session initiation), executes
 an `hPrint` and then closes the endpoint with `hCloseOut`.
 
-## Standard input and output
+### Standard I/O
+
+**stdin**
 
 {: .lib-table}
 | Function | Type | Description |
@@ -914,6 +960,12 @@ an `hPrint` and then closes the endpoint with `hCloseOut`.
 | `stdin` | `*?InStream`{: .language-freest } | Standard input stream. Reads from the console. |
 | `getChar` | `() -> Char`{: .language-freest } | Reads a single character from `stdin`. |
 | `getLine` | `() -> String`{: .language-freest } | Reads a single line from `stdin`. |
+
+**stdout and stderr**
+
+{: .lib-table}
+| Function | Type | Description |
+|:---------|:-----|:------------|
 | `stdout` | `*?OutStream`{: .language-freest } | Standard output stream. Prints to the console, via the `h*_` functions (e.g. `hPutStrLn_ s stdout`) or the `put*` wrappers below. |
 | `stderr` | `*?OutStream`{: .language-freest } | Standard error stream. Prints to the console, via the `h*_` functions (e.g. `hPutStrLn_ s stderr`); unlike `stdout`, it has no dedicated `put*` wrappers. |
 | `putChar` | `Char -> ()`{: .language-freest } | Prints a character to `stdout`. Behaves the same as `hPutChar_ c stdout`, where `c` is the character to be printed. |
@@ -921,10 +973,113 @@ an `hPrint` and then closes the endpoint with `hCloseOut`.
 | `putStrLn` | `String -> ()`{: .language-freest } | Prints a string to `stdout`, followed by the newline character `\n`. Behaves as `hPutStrLn_ s stdout`, where `s` is the string to be printed. |
 | `print` | `forall (U : *T) -> U -> ()`{: .language-freest } | Prints the string representation of a given value to `stdout`, followed by the newline character `\n`. Behaves the same as `hPrint_ @U v stdout`, where `v` is the value to be printed and `U` its type. |
 
-## Command line
+### Files
+
+FreeST models files as streams: reading opens an `InStream`, writing or
+appending opens an `OutStream`. Opening currently raises an error on failure
+rather than returning a `Maybe`, since a total variant would need a *linear*
+`Maybe` (`Maybe` is `*T -> *T`, but the streams are `1C`) — that is not yet
+available.
+
+### `FilePath`
+{: .no_toc}
+```freest
+type FilePath : *T
+type FilePath = String
+```
+
+### `openReadFile`
+{: .no_toc}
+```freest
+openReadFile : FilePath -> InStream
+```
+Opens a file for reading. The file is closed when the stream is.
+
+### `openWriteFile`
+{: .no_toc}
+```freest
+openWriteFile : FilePath -> OutStream
+```
+Opens a file for writing, discarding its current content.
+
+### `openAppendFile`
+{: .no_toc}
+```freest
+openAppendFile : FilePath -> OutStream
+```
+Opens a file for writing, after its current content.
+
+### `readFile`
+{: .no_toc}
+```freest
+readFile : FilePath -> String
+```
+The entire content of a file, separating lines with `\n`. Behaves as
+`openReadFile` followed by `hGetContent` and `hCloseIn`.
+
+### `writeFile`
+{: .no_toc}
+```freest
+writeFile : FilePath -> String -> ()
+```
+Writes a string to a file, discarding its current content.
+
+### `appendFile`
+{: .no_toc}
+```freest
+appendFile : FilePath -> String -> ()
+```
+Writes a string to a file, after its current content.
+
+### Command line
 
 {: .lib-table}
 | Function | Type | Description |
 |:---------|:-----|:------------|
 | `getArgs` | `() -> [String]`{: .language-freest } | The arguments the program was run with, excluding the program name. |
 | `getProgName` | `() -> String`{: .language-freest } | The name the program was run under. |
+
+### Environment
+
+### `lookupEnv`
+{: .no_toc}
+```freest
+lookupEnv : String -> Maybe String
+```
+The value of an environment variable, if it is set.
+
+### `getEnv`
+{: .no_toc}
+```freest
+getEnv : String -> String
+```
+The value of an environment variable, which must be set. Behaves as
+`lookupEnv`, but errors instead of returning `Nothing` when the variable is
+unset.
+
+### `getEnvironment`
+{: .no_toc}
+```freest
+getEnvironment : () -> [(String, String)]
+```
+The whole environment, as name-value pairs.
+
+### Exiting
+
+### `exitWith`
+{: .no_toc}
+```freest
+exitWith : forall (a : 1T) -> Int -> a
+```
+Terminates the program, reporting success for an exit code of `0` and failure
+for any other. Called from a forked thread, terminates that thread alone. Its
+result type is universally quantified since, like `Void`, it never actually
+produces a value.
+
+### `exitSuccess` / `exitFailure`
+{: .no_toc}
+```freest
+exitSuccess : forall (a : 1T) -> () -> a
+exitFailure : forall (a : 1T) -> () -> a
+```
+Shorthands for `exitWith 0` and `exitWith 1`, respectively.
