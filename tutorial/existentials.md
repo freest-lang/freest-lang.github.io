@@ -275,10 +275,10 @@ Each is introduced and eliminated by a matching pair of expressions:
 | --- | --- | --- |
 | Functional existential | pack: `(@U, v)`{: .language-freest } | unpack: `let (@a, x) = exp in exp`{: .language-freest } |
 | Functional universal | abstract: `\@(a : k) -> exp`{: .language-freest } | apply: `exp @U`{: .language-freest } |
-| Session existential | ... |  receive type: `receiveType exp`{: .language-freest } |
-| Session universal | ... | send type: `sendType @U exp`{: .language-freest } |
+| Session existential | (**\***) |  receive type: `receiveType exp`{: .language-freest } |
+| Session universal | (**\***) | send type: `sendType @U exp`{: .language-freest } |
 
-Unlike their functional counterparts, the session types do not feature specific introduction operators. Session types may be introduced by the `channel`{: .language-freest } primitive. For example, `channel @(?type (a : k). U)`{: .language-freest } introduces a pair of channel endpoints, the first of which is of type `?type (a : k). U`{: .language-freest }. But expression `send 5 c`{: .language-freest } also introduces such a type if `c`{: .language-freest } is of type `!Int ; ?type (a : k). U`{: .language-freest }.
+(**\***) Unlike their functional counterparts, the session types do not feature specific introduction operators. Session types may be introduced by the `channel`{: .language-freest } primitive. For example, `channel @(?type (a : k). U)`{: .language-freest } introduces a pair of channel endpoints, the first of which is of type `?type (a : k). U`{: .language-freest }. But expression `send 5 c`{: .language-freest } also introduces such a type if `c`{: .language-freest } is of type `!Int ; ?type (a : k). U`{: .language-freest }.
 
 <!-- `receiveType : (?type (a : k). U) -> (exists (a : k), U)`{: .language-freest }
 `sendType @V : (!type (a : k). U) -> ((\(a : k) -> U)V)`{: .language-freest } -->
