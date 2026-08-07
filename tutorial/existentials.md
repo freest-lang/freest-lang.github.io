@@ -122,7 +122,7 @@ in (new : a)        |>
    print
 ```
 
-For a better use of type variable `a`{: .language-freest }, we build a new abstract datatype. A `FlipFlop`{: .language-freest } may be on a flip or on a flop state. It consists of four operations: create a new flip-flop, read the value of the flip-flop (a boolean value), toggle the value of the flip-flop, and reset the value of the flip-flop. The type is as follows:
+For a better use of type variable `a`{: .language-freest }, we build a new abstract datatype, still following Pierce. A `FlipFlop`{: .language-freest } may be on a flip or on a flop state. It consists of four operations: create a new flip-flop, read the value of the flip-flop (a boolean value), toggle the value of the flip-flop, and reset the value of the flip-flop. The type is as follows:
 ```freest
 type FlipFlop = (exists a, ( a          -- new
                            , a -> Bool -- read
