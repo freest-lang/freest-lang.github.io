@@ -79,11 +79,13 @@ So type `TreeC`{: .language-freest } is not a proper type, it is a function that
 ```
 
 Proper kinds come equipped with a subkind relation (diagram above) and so do higher-order kinds. For a function kind, subkinding follows the standard contravariant/covariant rule for subtyping function types:
-```
-k1' <: k1    k2 <: k2'
-----------------------
-k1 -> k2 <: k1' -> k2'
-```
+
+<table style="margin: 1.5em auto; border-collapse: collapse; font-family: overpass-mono, monospace;">
+  <tr><td style="text-align: center; padding: 0 0.5em 0.3em;">k1' &lt;: k1&nbsp;&nbsp;&nbsp;&nbsp;k2 &lt;: k2'</td></tr>
+  <tr><td style="border-top: 1px solid currentColor; padding: 0;"></td></tr>
+  <tr><td style="text-align: center; padding: 0.3em 0.5em 0;">k1 -&gt; k2 &lt;: k1' -&gt; k2'</td></tr>
+</table>
+
 That is, subkinding is *contravariant* in the domain and *covariant* in the codomain. For example, `1T -> *S <: *T -> 1S`{: .language-freest }, since `*T <: 1T`{: .language-freest } in the domain and `*S <: 1S`{: .language-freest } in the codomain.
 
 
