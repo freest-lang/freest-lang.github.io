@@ -22,20 +22,20 @@
     // NOTE: dualof/match/with are not in the current Lexer.x but are used
     // pervasively in the docs as FreeST surface syntax; included so they
     // highlight. Drop them here if the lexer is the sole source of truth.
-    'keyword': /\b(?:case|channel|data|dualof|else|exists|forall|if|import|in|let|match|module|mutual|of|otherwise|rec|receiveType|select|sendType|then|type|where|with)\b/,
+    'keyword': /\b(?:case|channel|data|dualof|else|exists|forall|if|import|in|let|match|mutual|of|otherwise|receiveType|select|sendType|then|type|where|with)\b/,
 
     // Built-in (session / functional) type constructors.
     'builtin': /\b(?:Char|Close|Dual|Float|Int|Skip|Void|Wait)\b/,
 
-    // Definition-site name: the lower-case identifier that opens a top-level
-    // declaration line (a function signature or an equation head), at column
-    // 0 -- e.g. both `writeFive :` and `writeFive c =`. Indented / mid-line
-    // uses (call sites, variables) stay plain, since a regex cannot tell a
-    // use from a definition. The trailing-whitespace lookahead keeps this
-    // from firing on a bare inline span like `close`{: .language-freest },
-    // where the whole highlighted string is just the identifier and `^`
-    // still matches at position 0.
-    'function': /^[a-z][A-Za-z0-9_']*(?=[ \t])/m,
+    // NOTE: lower-case identifiers (functions AND variables) are left
+    // unstyled on purpose. A regex cannot tell a definition from a call
+    // site, and when the name is itself a reserved word (send/close vs.
+    // select/sendType) the `keyword` rule wins anyway since it runs first --
+    // so any attempt at highlighting just the "definition head" ends up
+    // colouring the same name differently in different places. Leaving
+    // identifiers plain -- as Rouge's Haskell lexer does -- keeps colouring
+    // consistent. (Already tried and reverted once before, in 9492e8e; do
+    // not reintroduce a position-based `function` rule.)
 
     // Data / type constructors and (qualified) type names: Mod.Con, List, ...
     'class-name': /\b[A-Z][A-Za-z0-9_']*(?:\.[A-Z][A-Za-z0-9_']*)*\b/,
