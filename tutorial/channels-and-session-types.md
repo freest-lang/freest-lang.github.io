@@ -378,7 +378,7 @@ In the case of receive type, we see that the result of a call to `receiveType`{:
 
 (\*) Some of the types in the above two tables are illustrative only; they must be understood as *type schemes* rather than FreeST types.
 
-* `sendType`{: .language-freest } is not an expression. It must be used with a type, as in, e.g., `sendType @Int`{: .language-freest }. It has all types of the form `!type a. W -> W[Int/a]`{: .language-freest }. Notation `W[V/a]`{: .language-freest } denotes the result of replacing (free) occurrences of type variable `a`{: .language-freest } by type `V`{: .language-freest }. For example, `(!a ; Close)[a/Int]`{: .language-freest } = `!Int ; Close`{: .language-freest }.
+* `sendType`{: .language-freest } is not an expression. It must be used with a type, as in, e.g., `sendType @Int`{: .language-freest }. It has all types of the form `!type a. W -> W[Int/a]`{: .language-freest }. Notation `W[Int/a]`{: .language-freest } denotes the result of replacing (free) occurrences of type variable `a`{: .language-freest } by type `Int`{: .language-freest } in type `W`{: .language-freest }. For example, `(!a ; Close)[a/Int]`{: .language-freest } = `!Int ; Close`{: .language-freest }.
 * `select`{: .language-freest } is not an expression. It must be used with a label (an upper-case id), as in, e.g., `select Done`{: .language-freest }. Then, `select Done`{: .language-freest } has all types of the form `+{Done: U, ...} -> U`{: .language-freest }.
 * `receiveType`{: .language-freest } is an expression. It has all the types of the form `(?type (a : k). U) -> (exists (a : k), U)`{: .language-freest }.
 
@@ -395,7 +395,7 @@ Could not infer a type for this `select` expression
   | ^^^^^^^^^^^
 ```
 
-These expressions can only be used in *check* mode. This occurs naturally in many cases during the process of type checking. If not, and the type checker complains as above, then there is a simple way out: provide the expected type. One can provide a type to an expression via *ascription*: `exp : type`{: .language-freest }. Here are a few examples where, in the answer of `freest -i`, the first colon is part of the expression, while the second separates the expression from its type.
+These expressions can only be used in *check* mode. This occurs naturally in many cases during the process of type checking. If not, if the type checker complains as above, then there is a simple way out: provide the expected type. One can provide a type to an expression via *ascription*: `exp : type`{: .language-freest }. Here are a few examples where, in the answer of `freest -i`, the first colon is part of the expression, while the second separates the expression from its type.
 ```bash
 freest> type U = +{Done: Close} -> Close
 freest> :t select Done : U
