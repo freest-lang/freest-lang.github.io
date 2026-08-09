@@ -361,8 +361,8 @@ Each positive type has a corresponding chaining operator:
 | Positive type | Operator | Chaining operator |
 | --- | --- | --- |
 | `!U`{: .language-freest } | `send : forall #m -> forall (a : mT) -> a -> (forall (b : 1S) -> !a; b -m-> b)`{: .language-freest } | `c |> send v |> ...`{: .language-freest } |
-| `!type a. U`{: .language-freest } | `sendType @V : !type a. W -> W[V/a]`{: .language-freest } | `c |> sendType @T |> ...`{: .language-freest } |
-| `+{l: U, ...}`{: .language-freest } | `select l : +{l: U, ...} -> U`{: .language-freest }| `c |> select l |> ...`{: .language-freest } |
+| `!type a. U`{: .language-freest } | `sendType @V : !type a. W -> W[V/a]`{: .language-freest } (\*) | `c |> sendType @T |> ...`{: .language-freest } |
+| `+{l: U, ...}`{: .language-freest } | `select l : +{l: U, ...} -> U`{: .language-freest }| `c |> select l |> ...`{: .language-freest } (\*) |
 | `Close`{: .language-freest } | `close : Close -> ()`{: .language-freest } | `c |> close`{: .language-freest } |
 
 In the case of send type, notation `W[V/a]`{: .language-freest } denotes the result of replacing (free) occurrences of type variable `a`{: .language-freest } by type `U`{: .language-freest }. For example, `(a, Bool)[a/Char]`{: .language-freest } = `(Char, Bool)`{: .language-freest }.
@@ -372,13 +372,16 @@ Dually, each negative type has a corresponding pattern:
 | Negative type | Operator | Pattern |
 | --- | --- | --- |
 | `?U`{: .language-freest } | `receive : forall (a : 1T) (b : 1S) -> ?a; b -> (a, b)`{: .language-freest } | `?x ; p`{: .language-freest } |
-| `?type a. U`{: .language-freest } | `receiveType : (?type (a : k). U) -> (exists (a : k), U)`{: .language-freest } | `?type a. p`{: .language-freest } |
+| `?type a. U`{: .language-freest } | `receiveType : (?type (a : k). U) -> (exists (a : k), U)`{: .language-freest } (\*) | `?type a. p`{: .language-freest } |
 | `&{l: U, ...}`{: .language-freest } | `case exp of &l p -> ...`{: .language-freest } | `&l p`{: .language-freest } |
 | `Wait`{: .language-freest } | `wait : Wait -> ()`{: .language-freest } | `Wait`{: .language-freest } |
 
 In the case of receive type, we see that the result of a call to `receiveType`{: .language-freest } is an existential type (existential types are further developed in [*session existentials and universals*](existentials.md#session-existentials-and-universals)).
 
-<!-- ***Note:*** Some of the operators in the above two tables can only be used in *check* mode. They include `select`{: .language-freest }, `sendType`{: .language-freest } and `receiveType`{: .language-freest }. For example, `select Done`{: .language-freest } in *infer* mode fails, but if we provide the intended type (via ascprition), then compiler infers the expected type.
+<!-- (\*) Some of the types in the above two tables 
+
+
+operators in the above two tables can only be used in *check* mode. They include `select`{: .language-freest }, `sendType`{: .language-freest } and `receiveType`{: .language-freest }. For example, `select Done`{: .language-freest } in *infer* mode fails, but if we provide the intended type (via ascprition), then compiler infers the expected type.
 ```bash
 $ freest -i
 The FreeST Compiler, version 5.0, https://freest-lang.github.io/, :h for help

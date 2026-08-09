@@ -31,8 +31,11 @@
     // declaration line (a function signature or an equation head), at column
     // 0 -- e.g. both `writeFive :` and `writeFive c =`. Indented / mid-line
     // uses (call sites, variables) stay plain, since a regex cannot tell a
-    // use from a definition.
-    'function': /^[a-z][A-Za-z0-9_']*/m,
+    // use from a definition. The trailing-whitespace lookahead keeps this
+    // from firing on a bare inline span like `close`{: .language-freest },
+    // where the whole highlighted string is just the identifier and `^`
+    // still matches at position 0.
+    'function': /^[a-z][A-Za-z0-9_']*(?=[ \t])/m,
 
     // Data / type constructors and (qualified) type names: Mod.Con, List, ...
     'class-name': /\b[A-Z][A-Za-z0-9_']*(?:\.[A-Z][A-Za-z0-9_']*)*\b/,
