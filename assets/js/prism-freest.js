@@ -18,24 +18,37 @@
     'string': { pattern: /"(?:\\.|[^"\\\r\n])*"/, greedy: true },
     'char':   { pattern: /'(?:\\.|[^'\\])'/, greedy: true, alias: 'string' },
 
-    // Reserved words -- Lexer.x  <0> "kw" { token TkXxx }
+    // Reserved words -- Lexer.x  <0> "kw" { token TkXxx } -- minus
+    // select/select_/sendType/receiveType, which read as primitive channel
+    // operations (see below) even though the lexer happens to tokenise them
+    // specially.
     // NOTE: dualof/match/with are not in the current Lexer.x but are used
     // pervasively in the docs as FreeST surface syntax; included so they
     // highlight. Drop them here if the lexer is the sole source of truth.
-    'keyword': /\b(?:case|channel|data|dualof|else|exists|forall|if|import|in|let|match|mutual|of|otherwise|receiveType|select|sendType|then|type|where|with)\b/,
+    'keyword': /\b(?:case|channel|data|dualof|else|exists|forall|if|import|in|let|match|mutual|of|otherwise|then|type|where|with)\b/,
 
     // Built-in (session / functional) type constructors.
     'builtin': /\b(?:Char|Close|Dual|Float|Int|Skip|Void|Wait)\b/,
 
-    // NOTE: lower-case identifiers (functions AND variables) are left
-    // unstyled on purpose. A regex cannot tell a definition from a call
-    // site, and when the name is itself a reserved word (send/close vs.
-    // select/sendType) the `keyword` rule wins anyway since it runs first --
-    // so any attempt at highlighting just the "definition head" ends up
-    // colouring the same name differently in different places. Leaving
-    // identifiers plain -- as Rouge's Haskell lexer does -- keeps colouring
-    // consistent. (Already tried and reverted once before, in 9492e8e; do
-    // not reintroduce a position-based `function` rule.)
+    // Primitive channel operations: the vocabulary a FreeST programmer
+    // reaches for to drive a channel (send/receive a value, send/receive a
+    // type, select/offer a choice, wait, close), grouped as one category
+    // regardless of whether the lexer implements each as a reserved word
+    // (select, select_, sendType, receiveType) or as an ordinary applied
+    // identifier pre-bound in the Prelude (send, receive, wait, close,
+    // send_, receive_ -- see Interpreter/Builtin.hs). Unlike the old
+    // `function` rule this is a fixed name list, not a line-position
+    // heuristic, so a given name always renders the same colour wherever it
+    // appears -- no red-here/black-there split.
+    'primitive': /\b(?:close|receive_|receive|receiveType|select_|select|sendType|send_|send|wait)\b/,
+
+    // NOTE: all other lower-case identifiers (ordinary functions AND
+    // variables) are left unstyled on purpose. A regex cannot tell a
+    // definition from a call site, so highlighting only the "definition
+    // head" coloured the same name differently in different places.
+    // Leaving them plain -- as Rouge's Haskell lexer does -- keeps
+    // colouring consistent. (Already tried and reverted once before, in
+    // 9492e8e; do not reintroduce a position-based `function` rule.)
 
     // Data / type constructors and (qualified) type names: Mod.Con, List, ...
     'class-name': /\b[A-Z][A-Za-z0-9_']*(?:\.[A-Z][A-Za-z0-9_']*)*\b/,

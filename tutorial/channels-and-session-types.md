@@ -354,22 +354,20 @@ The table below summarises what we have seen on session type operations.
 | Chaining available | Pattern matching available |  |
 | Nonblocking operation | Blocking operation |  |
 
-By 'chaining' we mean the composition of output operations with the inverse function application `|>`{: .language-freest }.
+By 'chaining' we mean the composition of output operations with the reverse function application `|>`{: .language-freest }.
 
 Each positive type has a corresponding chaining operator:
 
-| Positive type | Operator | Chaining operator |
+| Positive type | Destructor | Chaining operator |
 | --- | --- | --- |
 | `!U`{: .language-freest } | `send : forall #m -> forall (a : mT) -> a -> (forall (b : 1S) -> !a; b -m-> b)`{: .language-freest } | `c |> send v |> ...`{: .language-freest } |
 | `!type a. U`{: .language-freest } | `sendType @V : !type a. W -> W[V/a]`{: .language-freest } (\*) | `c |> sendType @T |> ...`{: .language-freest } |
 | `+{l: U, ...}`{: .language-freest } | `select l : +{l: U, ...} -> U`{: .language-freest }| `c |> select l |> ...`{: .language-freest } (\*) |
 | `Close`{: .language-freest } | `close : Close -> ()`{: .language-freest } | `c |> close`{: .language-freest } |
 
-In the case of send type, notation `W[V/a]`{: .language-freest } denotes the result of replacing (free) occurrences of type variable `a`{: .language-freest } by type `U`{: .language-freest }. For example, `(a, Bool)[a/Char]`{: .language-freest } = `(Char, Bool)`{: .language-freest }.
-
 Dually, each negative type has a corresponding pattern:
 
-| Negative type | Operator | Pattern |
+| Negative type | Destructor | Pattern |
 | --- | --- | --- |
 | `?U`{: .language-freest } | `receive : forall (a : 1T) (b : 1S) -> ?a; b -> (a, b)`{: .language-freest } | `?x ; p`{: .language-freest } |
 | `?type a. U`{: .language-freest } | `receiveType : (?type (a : k). U) -> (exists (a : k), U)`{: .language-freest } (\*) | `?type a. p`{: .language-freest } |
@@ -378,10 +376,13 @@ Dually, each negative type has a corresponding pattern:
 
 In the case of receive type, we see that the result of a call to `receiveType`{: .language-freest } is an existential type (existential types are further developed in [*session existentials and universals*](existentials.md#session-existentials-and-universals)).
 
-<!-- (\*) Some of the types in the above two tables 
+(\*) Some of the types in the above two tables are illustrative only; they must be understood as *type schemes* rather than FreeST types.
 
+* `sendType`{: .language-freest } is not an expression. It must be used with a type, as in, e.g., `sendType @Int`{: .language-freest }. It has all types of the form `!type a. W -> W[Int/a]`{: .language-freest }. Notation `W[V/a]`{: .language-freest } denotes the result of replacing (free) occurrences of type variable `a`{: .language-freest } by type `V`{: .language-freest }. For example, `(!a ; Close)[a/Int]`{: .language-freest } = `!Int ; Close`{: .language-freest }.
+* `select`{: .language-freest } is not an expression. It must be used with a label (an upper-case id), as in, e.g., `select Done`{: .language-freest }. Then, `select Done`{: .language-freest } has all types of the form `+{Done: U, ...} -> U`{: .language-freest }.
+* `receiveType`{: .language-freest } is an expression. It has all the types of the form `(?type (a : k). U) -> (exists (a : k), U)`{: .language-freest }.
 
-operators in the above two tables can only be used in *check* mode. They include `select`{: .language-freest }, `sendType`{: .language-freest } and `receiveType`{: .language-freest }. For example, `select Done`{: .language-freest } in *infer* mode fails, but if we provide the intended type (via ascprition), then compiler infers the expected type.
+The problem with type schemes is that the type checker *cannot infer* a FreeST type for the expression.
 ```bash
 $ freest -i
 The FreeST Compiler, version 5.0, https://freest-lang.github.io/, :h for help
@@ -392,9 +393,22 @@ Could not infer a type for this `select` expression
   | 
 1 | select Done
   | ^^^^^^^^^^^
-freest> :t select Done : +{Done: Close} -> Close
-(select Done : +{Done: Close} -> Close) : +{Done: Close} -> Close
-``` -->
+```
+
+These expressions can only be used in *check* mode. This occurs naturally in many cases during the process of type checking. If not, and the type checker complains as above, then there is a simple way out: provide the expected type. One can provide a type to an expression via *ascription*: `exp : type`{: .language-freest }. Here are a few examples where, in the answer of `freest -i`, the first colon is part of the expression, while the second separates the expression from its type.
+```bash
+freest> type U = +{Done: Close} -> Close
+freest> :t select Done : U
+select Done : U : U
+
+freest> type V = !type a. !a ; Close -> !Int ; Close
+freest> :t sendType @Int : V
+sendType @Int : V : V
+
+freest> type W = (?type (a : *T). ?a ; Wait) -> (exists (a : *T), ?a ; Wait)
+freest> :t receiveType : W
+receiveType : W : W
+```
 
 
 ## Unbounded protocols
