@@ -362,7 +362,7 @@ Each positive type has a corresponding chaining operator:
 | --- | --- | --- |
 | `!U`{: .language-freest } | `send : forall #m -> forall (a : mT) -> a -> (forall (b : 1S) -> !a; b -m-> b)`{: .language-freest } | `c |> send v |> ...`{: .language-freest } |
 | `!type a. U`{: .language-freest } | `sendType @V : !type a. W -> W[V/a]`{: .language-freest } (\*) | `c |> sendType @T |> ...`{: .language-freest } |
-| `+{l: U, ...}`{: .language-freest } | `select l : +{l: U, ...} -> U`{: .language-freest }| `c |> select l |> ...`{: .language-freest } (\*) |
+| `+{l: U, ...}`{: .language-freest } | `select l : +{l: U, ...} -> U`{: .language-freest } (\*) | `c |> select l |> ...`{: .language-freest } |
 | `Close`{: .language-freest } | `close : Close -> ()`{: .language-freest } | `c |> close`{: .language-freest } |
 
 Dually, each negative type has a corresponding pattern:
