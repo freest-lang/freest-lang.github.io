@@ -395,7 +395,7 @@ Could not infer a type for this `select` expression
   | ^^^^^^^^^^^
 ```
 
-These expressions can only be used in *check* mode. This occurs naturally in many cases during the process of type checking. If not, if the type checker complains as above, then there is a simple way out: provide the expected type. One can provide a type to an expression via *ascription*: `exp : type`{: .language-freest }. Here are a few examples where, in the answer of `freest -i`, the first colon is part of the expression, while the second separates the expression from its type.
+These expressions can only be used in *check* mode. This occurs naturally in many cases during the process of type checking. If not, if the type checker complains as above. In this case there is a simple way out: provide the expected type. One can provide a type to an expression via *ascription*: `exp : type`{: .language-freest }. Here are a few examples where, in the answer of `freest -i`, the first colon is part of the expression, while the second separates the expression from its type.
 ```bash
 freest> type U = +{Done: Close} -> Close
 freest> :t select Done : U
