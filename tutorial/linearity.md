@@ -38,9 +38,9 @@ The reasoning for the first parameter is the one we have followed for function `
 linBinApply : (Int -1-> Int -1-> Int) -*-> Int -1-> Int -1-> Int
 ```
 
-Suppose that we insist that `linBinApply h`{: .language-freest } is of an unrestricted type:
+Suppose that we insist that `linBinApply h`{: .language-freest } is of an unrestricted type. The last pair of parenthesis is not absolutely necessary; it highlight the type of expression `linBinApply h`{: .language-freest }.
  ```freest
- linBinApply : (Int -1-> Int -1-> Int) -*-> Int -*-> Int -1-> Int
+ linBinApply : (Int -1-> Int -1-> Int) -*-> (Int -*-> Int -1-> Int)
 ```
 Then the compiler complains as follows.
 ```bash
