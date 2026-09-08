@@ -1,0 +1,192 @@
+---
+---
+/* ---------------------------------------------------------------------------
+   Playground page chrome.
+
+   Loaded from _includes/head_custom.html only on pages whose front matter sets
+   `playground: true`, so every rule here is already scoped to those pages and
+   needs no extra selector guard. Values that mirror a Just the Docs SCSS
+   variable are named in the comment beside them.
+   --------------------------------------------------------------------------- */
+
+:root {
+  --pg-header-h: 3.75rem;  /* $header-height */
+  --pg-nav-w:    16.5rem;  /* $nav-width     */
+  --pg-border:   #eeebee;  /* $border-color  */
+  --pg-gutter:   1rem;
+}
+
+/* 1. Give the page the whole window ---------------------------------------
+
+   By default `.main` is capped at $content-width (50rem) and, from the `lg`
+   breakpoint up, `.side-bar` swells to `(100% - 66.5rem) / 2 + 16.5rem` so the
+   content column stays centred. That is what pushes the sidebar's right edge
+   far into the page on a wide screen. Here the sidebar keeps its minimum width
+   and the content takes everything that is left. */
+
+.main {
+  max-width: none;
+}
+
+@media (min-width: 66.5rem) { /* mq(lg) */
+  .side-bar {
+    width: var(--pg-nav-w);
+  }
+
+  .side-bar + .main {
+    margin-left: var(--pg-nav-w);
+  }
+}
+
+/* 2. Turn the content well into a full-height, padding-free frame --------- */
+
+.main-content-wrap {
+  padding: 0;
+}
+
+.main-content > main {
+  display: flex;
+  flex-direction: column;
+}
+
+/* The "Back to top" / theme footer would push the panes out of the window. */
+.main-content > footer,
+.main-content > hr {
+  display: none;
+}
+
+/* 3. The two panes -------------------------------------------------------- */
+
+.playground {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - var(--pg-header-h) - 1px);
+  min-height: 24rem;
+}
+
+@media (min-width: 50rem) { /* mq(md) — landscape split */
+  .playground {
+    flex-direction: row;
+  }
+}
+
+.pg-pane {
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  flex: 1 1 50%;
+  flex-direction: column;
+}
+
+.pg-pane + .pg-pane {
+  border-top: 1px solid var(--pg-border);
+}
+
+@media (min-width: 50rem) {
+  .pg-pane + .pg-pane {
+    border-top: 0;
+    border-left: 1px solid var(--pg-border);
+  }
+}
+
+.pg-pane-head {
+  display: flex;
+  height: 2.25rem;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--pg-gutter);
+  border-bottom: 1px solid var(--pg-border);
+  font-size: 0.6875rem;         /* $font-size-2 */
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.pg-pane-head .btn {
+  padding: 0.15rem 0.75rem;
+  font-size: 0.6875rem;
+}
+
+/* 4. Pane bodies ---------------------------------------------------------- */
+
+#pg-editor {
+  overflow: hidden;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.CodeMirror {
+  height: 100%;
+  font-family: overpass-mono, monospace;   /* $mono-font-family */
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.CodeMirror-gutters {
+  border-right: 1px solid var(--pg-border);
+  background: #fafafa;
+}
+
+#pg-output {
+  overflow: auto;
+  flex: 1 1 auto;
+  min-height: 0;
+  margin: 0;
+  padding: var(--pg-gutter);
+  border: 0;
+  border-radius: 0;
+  background: #212a2f;
+  color: #6b8898;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+/* 5. FreeST syntax colours ------------------------------------------------
+
+   The same palette as assets/css/freest-syntax.css, so a program in the
+   editor is coloured exactly like a ```freest block in the tutorial. That
+   file is the source of truth; keep the two in step. Token names come from
+   assets/js/codemirror-freest.js, which in turn mirrors prism-freest.js.
+
+   These load after CodeMirror's own stylesheet (see _includes/head_custom.html)
+   and so win the specificity tie against `.cm-s-default .cm-keyword` and
+   friends. */
+
+.CodeMirror .cm-comment {
+  color: #6b7680;
+  font-style: italic;
+}
+
+.CodeMirror .cm-keyword {
+  color: #0063a3;               /* brand blue -- let/in/case/forall/... */
+  font-weight: 600;
+}
+
+.CodeMirror .cm-builtin {
+  color: #7048e8;               /* violet -- Int, Skip, Close, Wait, ... */
+}
+
+.CodeMirror .cm-primitive {
+  color: #d9480f;               /* rust -- send, receive, select, sendType, ... */
+  font-weight: 600;
+}
+
+.CodeMirror .cm-type {
+  color: #0b7285;               /* teal -- constructors & type names */
+}
+
+.CodeMirror .cm-string {
+  color: #2b8a3e;               /* green -- string & char literals */
+}
+
+.CodeMirror .cm-number {
+  color: #b02a37;               /* red -- Int & Float literals */
+}
+
+.CodeMirror .cm-operator {
+  color: #364152;               /* slate -- ->, !, ?, &, +, ::, ... */
+}
+
+.CodeMirror .cm-punctuation {
+  color: #868e96;               /* grey -- ( ) { } [ ] , ; */
+}

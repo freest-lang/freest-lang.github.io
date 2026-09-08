@@ -15,3 +15,11 @@
 <script defer src="{{ '/assets/js/prism-core.min.js' | relative_url }}"></script>
 <script defer src="{{ '/assets/js/prism-freest.js' | relative_url }}"></script>
 {%- endif -%}
+
+{%- comment -%}
+  Playground pages pull in their own chrome; see assets/css/playground.css.
+{%- endcomment -%}
+{%- if page.playground -%}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css" integrity="sha512-uf06llspW44/LZpHzHT6qBOIVODjWtv4MxCricRxkzvopAlSWnTf6hpZTFxuuZcuNE9CBQhqE0Seu1CoRk84nQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
+<link rel="stylesheet" href="{{ '/assets/css/playground.css' | relative_url }}">
+{%- endif -%}

@@ -1,0 +1,65 @@
+{%- comment -%}
+  The playground itself: two panes side by side, code on the left, output on
+  the right. The editor is CodeMirror 5 with the FreeST mode in
+  assets/js/codemirror-freest.js.
+
+  Two things to know before editing the inline <script> below. The theme
+  chains its layouts through vendor/compress, which flattens the whole page:
+
+    * `//` comments would swallow the rest of the script -- use `/* */` only
+      (the same reason _layouts/tryit.html has no line comments);
+    * runs of whitespace outside <pre> collapse, so the starter program lives
+      in a <pre> (compress copies those through verbatim) rather than in a JS
+      string, where its indentation would silently change. FreeST's layout
+      rule makes that load-bearing. Escape `<` and `&` as &lt; and &amp;.
+{%- endcomment -%}
+<div class="playground">
+  <section class="pg-pane">
+    <div class="pg-pane-head">
+      <span>main.fst</span>
+      <button id="pg-run" class="btn btn-primary" type="button">Run</button>
+    </div>
+    <div id="pg-editor"></div>
+  </section>
+
+  <section class="pg-pane">
+    <div class="pg-pane-head"><span>Output</span></div>
+    <pre id="pg-output">$</pre>
+  </section>
+</div>
+
+<pre id="pg-starter" hidden>main : ()
+main = putStrLn "Hello, World!"
+</pre>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js" integrity="sha512-OeZ4Yrb/W7d2W4rAMOO0HQ9Ro/aWLtpW9BUSR2UOWnSV2hprXLkkYnnCGc9NeLUxxE4ZG7zN16UuT1Elqq8Opg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="{{ '/assets/js/codemirror-freest.js' | relative_url }}"></script>
+<script>
+  (function () {
+    var editor = CodeMirror(document.getElementById("pg-editor"), {
+      value: document.getElementById("pg-starter").textContent,
+      mode: "freest",
+      lineNumbers: true,
+      indentUnit: 2,       /* cf. CLAUDE.md: two spaces per level, never four */
+      tabSize: 2,
+      indentWithTabs: false,
+      smartIndent: false   /* layout-sensitive language; keep the previous indent */
+    });
+
+    var output = document.getElementById("pg-output");
+
+    document.getElementById("pg-run").addEventListener("click", async function () {
+      output.textContent = "Running...";
+      try {
+        var response = await fetch("https://85.240.106.6:8080/freest/run", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: editor.getValue()
+        });
+        output.textContent = await response.text();
+      } catch (e) {
+        output.textContent = "Could not reach the FreeST server:\n" + e;
+      }
+    });
+  })();
+</script>
