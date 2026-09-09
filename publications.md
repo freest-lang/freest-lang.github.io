@@ -13,7 +13,7 @@ nav_order: 5
 # Publications
 
 - [**Simple Grammar Bisimilarity, with an Application to Session Type Equivalence**](https://arxiv.org/abs/2407.04063)  
-  **Poças, D., Silva, G., Vasconcelos, V.T.**  @ LMCS (to appear)
+  **Poças, D., Silva, G., Vasconcelos, V.T.**  @ LMCS 2026 (to appear)
 {: .mb-5 }
 
 - [**The types of dyadic interaction, a tribute to Kohei Honda**]({% link resources/publications/talk_ifip2.8_mar26.pdf %})  
