@@ -14,14 +14,15 @@ nav_order: 5
 
 - [**Simple grammar bisimilarity, with an application to session type equivalence**](https://arxiv.org/abs/2407.04063)  
   **Poças, D., Silva, G. and Vasconcelos, V.T.**
-  LMCS 2026 (to appear)
-  [Paper](https://arxiv.org/abs/2407.04063) @arXiv
+  LMCS 2026 (to appear)  
+  [Paper](https://arxiv.org/abs/2407.04063) @arXiv  
   [Talk]({% link resources/publications/2026.FCUL.SimpleGrammarBisimilarity.pdf %}) @ Seminário de Lógica Matemática, 2026
 {: .mb-5 }
 
 
 - [**The types of dyadic interaction, a tribute to Kohei Honda**]({% link resources/publications/talk_ifip2.8_mar26.pdf %})  
-  **Costa, D., Mordido, A., Poças, D. and Vasconcelos, V. T.**  @ [IFIP WG 2.8 2026](https://www.cs.cornell.edu/ifip28-2026/)
+  **Costa, D., Mordido, A., Poças, D. and Vasconcelos, V. T.**  
+  Talk @ [IFIP WG 2.8 2026](https://www.cs.cornell.edu/ifip28-2026/)
 {: .mb-5 }
 
 - [**Session types R context free**]( {% link resources/publications/Dagstuhl Feb 2026.pdf %} )  
