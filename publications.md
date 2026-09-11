@@ -15,7 +15,7 @@ nav_order: 5
 - [**Simple grammar bisimilarity, with an application to session type equivalence**](https://arxiv.org/abs/2407.04063)  
   **Poças, D., Silva, G. and Vasconcelos, V.T.**
   LMCS 2026 (to appear)  
-  [Paper](https://arxiv.org/abs/2407.04063) @arXiv  
+  [Paper](https://arxiv.org/abs/2407.04063) @ arXiv  
   [Talk]({% link resources/publications/2026.FCUL.SimpleGrammarBisimilarity.pdf %}) @ Seminário de Lógica Matemática, 2026
 {: .mb-5 }
 
@@ -27,7 +27,7 @@ nav_order: 5
 
 - [**Session types R context free**]( {% link resources/publications/Dagstuhl Feb 2026.pdf %} )  
   **Vasconcelos, V.T.**  
-  Talk @ Dagstuhl Seminar, Behavioral Types for Resilience. February 2026.
+  Talk @ Dagstuhl Seminar, Behavioral Types for Resilience. February 2026
 {: .mb-5 }
 
 - [**Types as grammars**]({% link resources/publications/TypesAsGrammarsAbstract.pdf %})  
@@ -47,7 +47,7 @@ nav_order: 5
 
 - [**Programming with T ; U**]({% link resources/publications/PLatLXJun2024.pdf %})  
   **Almeida, B. and others**  
-  Talk @ PL@LX. 2024.
+  Talk @ PL@LX. 2024
 {: .mb-5 }
 
 - [**Improving Parallel and Concurrent Programming in FreeST**]({% link resources/publications/GuilhermeLopesMSc.pdf %})  
@@ -72,7 +72,7 @@ nav_order: 5
 - [**System $$F^\mu_\omega$$ with Context-free Session Types**](https://link.springer.com/chapter/10.1007/978-3-031-30044-8_15)  
   **Poças, D., Costa, D., Mordido, A. and Vasconcelos, V.T.**  
   [Programming Languages and Systems, ESOP 2023](https://link.springer.com/book/10.1007/978-3-031-30044-8)  
-  [arXiv (long version)](https://arxiv.org/abs/2301.08659)
+  [Long version](https://arxiv.org/abs/2301.08659) @ arXiv
 {: .mb-5 }
 
 - [**Kind Inference for the FreeST Programming Language**](https://arxiv.org/abs/2304.06396v1)  
