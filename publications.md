@@ -12,9 +12,12 @@ nav_order: 5
 
 # Publications
 
-- [**Simple Grammar Bisimilarity, with an Application to Session Type Equivalence**](https://arxiv.org/abs/2407.04063)  
-  **Poças, D., Silva, G., Vasconcelos, V.T.**  @ LMCS 2026 (to appear)
+- [**Simple grammar bisimilarity, with an application to session type equivalence**](https://arxiv.org/abs/2407.04063)  
+  **Poças, D., Silva, G., and Vasconcelos, V.T.**  @ LMCS 2026 (to appear)
+  [arXiv](https://arxiv.org/abs/2407.04063) 
+  [Talk]({% link resources/publications/2026.FCUL.SimpleGrammarBisimilarity.pdf %}) @ Seminário de Lógica Matemática, 2026
 {: .mb-5 }
+
 
 - [**The types of dyadic interaction, a tribute to Kohei Honda**]({% link resources/publications/talk_ifip2.8_mar26.pdf %})  
   **Costa, D., Mordido, A., Poças, D. and Vasconcelos, V. T.**  @ [IFIP WG 2.8 2026](https://www.cs.cornell.edu/ifip28-2026/)
@@ -33,12 +36,6 @@ nav_order: 5
 - [**Kind inference for the FreeST programming language**](https://www.sciencedirect.com/science/article/abs/pii/S2352220825000495)  
   **Almeida, B., Mordido, A. and Vasconcelos, V.T.**  
   [ J. Log. Algebraic Methods Program.](https://www.sciencedirect.com/journal/journal-of-logical-and-algebraic-methods-in-programming) 148:101083, 2026
- {: .mb-5 }
-
-- [**Simple grammar bisimilarity, with an application to session type equivalence**](https://arxiv.org/abs/2407.04063)  
-  **Poças, D., Silva, G., and Vasconcelos, V.T.**  
-  [arXiv](https://arxiv.org/abs/2407.04063), 2025  
-  [Talk]({% link resources/publications/2026.FCUL.SimpleGrammarBisimilarity.pdf %}) @ Seminário de Lógica Matemática, 2026
  {: .mb-5 }
 
 - [**Polymorphic higher-order context-free session types**](https://www.sciencedirect.com/science/article/pii/S030439752400197X)  
