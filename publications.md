@@ -13,7 +13,7 @@ nav_order: 5
 # Publications
 
 - [**Simple grammar bisimilarity, with an application to session type equivalence**](https://arxiv.org/abs/2407.04063)  
-  **Poças, D., Silva, G. and Vasconcelos, V.T.**
+  **Poças, D., Silva, G. and Vasconcelos, V.T.**  
   LMCS 2026 (to appear)  
   [Paper](https://arxiv.org/abs/2407.04063) @ arXiv  
   [Talk]({% link resources/publications/2026.FCUL.SimpleGrammarBisimilarity.pdf %}) @ Seminário de Lógica Matemática, 2026
@@ -112,7 +112,7 @@ nav_order: 5
 
 - [**Polymorphic Context-free Session Types**]( {% link resources/publications/Dagstuhl Sep 2021.pdf %} )  
   **Vasconcelos, V.T.**  
-  Talk @ Dagstuhl Seminar, Behavioural Types: Bridging Theory and Practice. September 2021.
+  Dagstuhl Seminar, Behavioural Types: Bridging Theory and Practice. September 2021.
 {: .mb-5 }
 
 - [**Deciding the bisimilarity of context-free session types**](http://www.di.fc.ul.pt/~vv/papers/almeida.mordido_bisimilarity-context-free-session-types.pdf)  
