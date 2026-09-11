@@ -13,7 +13,8 @@ nav_order: 5
 # Publications
 
 - [**Simple grammar bisimilarity, with an application to session type equivalence**](https://arxiv.org/abs/2407.04063)  
-  **Poças, D., Silva, G., and Vasconcelos, V.T.**  @ LMCS 2026 (to appear)
+  **Poças, D., Silva, G. and Vasconcelos, V.T.**
+  LMCS 2026 (to appear)
   [arXiv](https://arxiv.org/abs/2407.04063) 
   [Talk]({% link resources/publications/2026.FCUL.SimpleGrammarBisimilarity.pdf %}) @ Seminário de Lógica Matemática, 2026
 {: .mb-5 }
