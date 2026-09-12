@@ -32,7 +32,7 @@ nav_order: 5
 
 - [**Types as grammars**]({% link resources/publications/TypesAsGrammarsAbstract.pdf %})  
   **Silva, G., Almeida, B., Costa, D., Mordido, A., Poças, D. and Vasconcelos, V. T.**  
-  [Talk]({% link resources/publications/TypesAsGrammars.pdf %}) @ [WITS 2026](https://popl26.sigplan.org/details/wits-2026-papers/1/Types-as-grammars)
+  Talk @ [WITS 2026](https://popl26.sigplan.org/details/wits-2026-papers/1/Types-as-grammars)
 {: .mb-5 }
 
 - [**Kind inference for the FreeST programming language**](https://www.sciencedirect.com/science/article/abs/pii/S2352220825000495)  
