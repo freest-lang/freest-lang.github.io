@@ -112,7 +112,7 @@ nav_order: 5
 
 - [**Polymorphic Context-free Session Types**]( {% link resources/publications/Dagstuhl Sep 2021.pdf %} )  
   **Vasconcelos, V.T.**  
-  Talk @ [Dagstuhl Seminar, Behavioural Types: Bridging Theory and Practice](https://www.dagstuhl.de/en/seminars/seminar-calendar/seminar-details/21372), 2021.
+  Talk @ [Dagstuhl Seminar, Behavioural Types: Bridging Theory and Practice](https://www.dagstuhl.de/en/seminars/seminar-calendar/seminar-details/21372), 2021
 {: .mb-5 }
 
 - [**Deciding the bisimilarity of context-free session types**](http://www.di.fc.ul.pt/~vv/papers/almeida.mordido_bisimilarity-context-free-session-types.pdf)  
