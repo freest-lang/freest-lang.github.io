@@ -27,7 +27,7 @@ nav_order: 5
 
 - [**Session types R context free**]( {% link resources/publications/Dagstuhl Feb 2026.pdf %} )  
   **Vasconcelos, V.T.**  
-  Talk @ Dagstuhl Seminar, Behavioral Types for Resilience. February 2026
+  Talk @ [Dagstuhl Seminar, Behavioral Types for Resilience](https://www.dagstuhl.de/seminars/seminar-calendar/seminar-details/26071). February 2026
 {: .mb-5 }
 
 - [**Types as grammars**]({% link resources/publications/TypesAsGrammarsAbstract.pdf %})  
@@ -112,7 +112,7 @@ nav_order: 5
 
 - [**Polymorphic Context-free Session Types**]( {% link resources/publications/Dagstuhl Sep 2021.pdf %} )  
   **Vasconcelos, V.T.**  
-  Dagstuhl Seminar, Behavioural Types: Bridging Theory and Practice. September 2021.
+  Talk @ Dagstuhl Seminar, Behavioural Types: Bridging Theory and Practice. September 2021.
 {: .mb-5 }
 
 - [**Deciding the bisimilarity of context-free session types**](http://www.di.fc.ul.pt/~vv/papers/almeida.mordido_bisimilarity-context-free-session-types.pdf)  
