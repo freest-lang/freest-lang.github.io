@@ -459,6 +459,14 @@ span : forall (a : *T) -> (a -> Bool) -> [a] -> ([a], [a])
 Splits a list into the longest prefix satisfying the predicate and the
 remaining suffix. Equivalent to `(takeWhile p xs, dropWhile p xs)`.
 
+### `intercalate`
+{: .no_toc}
+```freest
+intercalate : forall (a : *T) -> [a] -> [[a]] -> [a]
+```
+Joins a list of lists with a separator, e.g. `intercalate ", " ["a", "b"]`
+is `"a, b"`.
+
 ### Linear lists
 {: .no_toc}
 
