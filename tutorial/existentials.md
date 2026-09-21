@@ -144,34 +144,34 @@ _ = let (@_, (new, read, toggle, reset)) = flipFlop
 
 ## Session existentials and universals
 
-Existential packages can be passed in messages. Channels in FreeST may exchange values of any tupe, existentals included.
-Here is shared channel that provides counter abstract data types:
+Existential packages can be passed in messages. Channels in FreeST may exchange values of any type, existentals included.
+Here is channel that provides counter abstract data types:
 ```freest
-type CounterProvider = *?Counter
+type CounterProvider = !Counter ; Close
 ```
 
-A consumer, receives a counter (we use `receive_` to receive on shared channels), unpacks the counter and uses its operations as we have seen before.
+A consumer, receives a counter, unpacks the counter and uses its operations as we have seen before.
 ```freest
-incTwice : CounterProvider -> ()
+incTwice : Dual CounterProvider -> ()
 incTwice s =
-  let (@_, (new, get, inc)) = receive_ s
+  let (@_, (new, get, inc)) = receiveAndWait s
   in new |> inc |> inc |> get |> print
 ```
 
 A consumer of the dual type, that is a function that provides counters, can be written as follows.
 ```freest
-counterProvider : Dual CounterProvider -> ()
-counterProvider c =
-    c |> send_ intCounter ; counterProvider c
+counterProvider : CounterProvider -> ()
+counterProvider = sendAndClose intCounter
 ```
 
 We bring the two functions together by means of `forkJpoin`.
 ```freest
-_ = forkWith counterProvider |> incTwice
+_ =
+    forkWith counterProvider |> incTwice
 ```
 
-This is all very unsurprising, we are passing existential values on channels, as we do with integer values. All the operations that define the abstract datatype are pre-defined, packed and sent. What if the operations take time to prepared, what if they are computed one by one? what if the set of operations is much larger than the one required by particular clients? Clients need bot download the whole lot; they could download the operations on as needed base. Could we not send each individual operation as they get ready? That is what session types are for. If we need to send two integer values we may compute both and then send a pair of type `(Int, Int}`. Or else we may dispatch the integers as they get ready, one at a time, in two separate messages, both of type `Int`.
+This is all very unsurprising: we are passing existential values on channels, as we do with integer values. All the operations that define the abstract datatype are pre-defined, packed and sent. What if the operations take time to prepared, what if they are computed one by one? what if the set of operations is much larger than the one required by particular clients? Clients need not download the whole lot; they could download the operations on an as needed basis. Could we not send each individual operation as they get ready? That is what session types are for. If we need to send two integer values we may compute both and then send a pair of type `(Int, Int}`. Or else we may dispatch the integers as they get ready, one at a time, in two separate messages, both of type `Int`.
 
-So we need a means to send the type first, and then the various operations on the type. We need to send and receive types, and we have seen how ro do this before, in section [*exchanging types*](channels-and-session-types.md#exchanging-types).
+It seems need a means to send the type first, and then the various operations on the type. We need to send and receive types, and we have seen how ro do this before, in section [*exchanging types*](channels-and-session-types.md#exchanging-types).
 
 So here is the plan for the remote counter: we send the abstract type first, and the the operations, one by one. Rather than eagerly sending all three operations in a row, we let clients ask for each one of them, individually and by an arbitrary order.
