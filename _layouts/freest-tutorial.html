@@ -1,0 +1,13 @@
+---
+layout: default
+---
+
+{{ content }}
+
+<script src="{{ '/playground/codeMirror/editor.bundle.js' | relative_url }}"></script>
+<script>
+    document.querySelectorAll(".textEditor").forEach(el => 
+        window.createEditor(el, el.textContent.trim())
+    )
+</script>
+<script src="{{ '/tutorial/executableExamples-template/buttonBackend.js' | relative_url }}"></script>

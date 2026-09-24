@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@codemirror/lang-javascript": "^6.2.5",
+    "@codemirror/legacy-modes": "^6.5.4",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "codemirror": "^6.0.2",
+    "rollup": "^4.62.3"
+  }
+}

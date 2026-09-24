@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>FreeST_P template</title>
+        <link rel="stylesheet" href="template-styles.css">
+    </head>
+
+    <body>
+        <div class="panels_button">
+            <div class = "panels">
+                <div class = "textEditor">plus, minus : Int -> Int -> Int&#10;plus x y = x + y&#10;minus x y = x - y</div>
+                <p class = "output">Click the button run to execute the code on the left.</p>
+            </div>
+            <button class = "buttonRUN" type = "button">RUN</button>
+        </div>
+        <div class="panels_button">
+            <div class = "panels">
+                <div class = "textEditor"></div>
+                <p class = "output">Click the button run to execute the code on the left.</p>
+            </div>
+            <button class = "buttonRUN" type = "button">RUN</button>
+        </div>
+        <script src="/playground/codeMirror/editor.bundle.js"></script>
+        <script>
+            document.querySelectorAll(".textEditor").forEach(el => 
+                window.createEditor(el, el.textContent.trim())
+            )
+        </script>
+        <script src = "buttonBackend.js"></script>
+    </body>
+</html>
