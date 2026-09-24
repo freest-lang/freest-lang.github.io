@@ -10,6 +10,7 @@
   {%- if page.url contains prefix -%}{%- assign load_freest_highlight = true -%}{%- endif -%}
 {%- endfor -%}
 {%- if load_freest_highlight -%}
+<link rel="stylesheet" href="{{ 'tutorial/executableExamples-template/template-styles.css' | relative_url }}">
 <link rel="stylesheet" href="{{ '/assets/css/freest-syntax.css' | relative_url }}">
 <script>window.Prism = window.Prism || {}; window.Prism.manual = true;</script>
 <script defer src="{{ '/assets/js/prism-core.min.js' | relative_url }}"></script>

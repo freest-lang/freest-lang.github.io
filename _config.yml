@@ -37,14 +37,6 @@ color_scheme: freest
 # Build settings
 remote_theme: pmarsceill/just-the-docs
 
-# Adds a new sidenav option to an external link
-# -> https://just-the-docs.github.io/just-the-docs/docs/navigation/main/external/
-nav_external_links:
-  - title: Try it online!
-    url: http://rss.di.fc.ul.pt/tryit/FreeST
-    hide_icon: false # set to true to hide the external link icon - defaults to false
-    opens_in_new_tab: true # set to true to open this link in a new tab - defaults to false
-
 # Back to top link
 back_to_top: true
 back_to_top_text: "Back to top"
@@ -70,6 +62,8 @@ exclude:
   - vendor/cache/
   - vendor/gems/
   - vendor/ruby/
+  - playground/codeMirror/node_modules/
+  - tutorial/executableExamples-template/codeMirror/node_modules/
 
 # plugins:
   # - jekyll-feed

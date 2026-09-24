@@ -3,7 +3,7 @@
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
 title: Threads and channels
-layout: default
+layout: freest-tutorial
 nav_order: 6
 parent: Tutorial
 ---
@@ -75,6 +75,7 @@ in ...
 To fork a new thread use function `fork`{: .language-freest }. Fork receives a linear thunk, `t`{: .language-freest }, creates a thread running `t ()`{: .language-freest } and returns `()`{: .language-freest }. Thunks to be used with fork are usually written `(\_ -1-> ...)`{: .language-freest } with `_`{: .language-freest } of type `()`{: .language-freest }. The function is linear; the client rests assured that the function shall be used once only. For example, one of the relays is created with `fork (\_ -1-> relay c1 d2)`{: .language-freest }.
 
 Putting everything together we have:
+
 ```freest
 circle : ()
 circle =

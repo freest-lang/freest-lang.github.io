@@ -3,7 +3,7 @@
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
 title: Channels and session types
-layout: default
+layout: freest-tutorial
 nav_order: 4
 parent: Tutorial
 ---
@@ -110,52 +110,37 @@ writeFive''' : !Int ; Close -> ()
 writeFive''' = sendAndClose 5
 ```
  
- At this point it is worth studying what the type system of FreeST gives us. Channel endpoints such as the above are **linear**. They cannot be copied or discarded. This is central to the goal of ensuring that communication follows smoothly. Suppose we try to reuse channel `c`{: .language-freest } after having used it in the `send`{: .language-freest } function:
-```freest
-writeFive : !Int ; Close -> ()
-writeFive c =
-  let c' = send 5 c in close c
-```
-The FreeST type checker flags the slip as follows:
-```bash
-SendClose.fst:5:30–9:31: error:
-Variable out of scope: `c`
-  | 
-5 |   let c' = send 5 c in close c
-  |                              ^
-```
+ At this point it is worth studying what the type system of FreeST gives us. Channel endpoints such as the above are **linear**. They cannot be copied or discarded. This is central to the goal of ensuring that communication follows smoothly. Suppose we try to reuse channel `c`{: .language-freest } after having used it in the `send`{: .language-freest } function, the FreeST type checker flags the slip as follows:
+ 
+<div class="panels_button" markdown="0">
+  <div class = "panels">
+    <div class = "textEditor">writeFive : !Int ; Close -> ()&#10;writeFive c =&#10; let c' = send 5 c in close c</div>
+    <p class = "output"></p>
+  </div>
+  <button class = "buttonRUN" type = "button">▶</button>
+</div>
+ 
 Suppose now that we forget closing the channel:
-```freest
-writeFive : !Int ; Close -> ()
-writeFive c =
-  let c' = send 5 c in ()
-```
-The type checker complains that the scope of variable `c'`{: .language-freest } ended and the variable was not consumed.
-```bash
-SendClose.fst:5:7–5:9: error:
-Linear variable `c'` of type `Close` is not consumed
-  | 
-5 |   let c' = send 5 c in ()
-  |       ^^
-  hint: consume it with `close`
-```
+
+<div class="panels_button" markdown="0">
+  <div class = "panels">
+    <div class = "textEditor">writeFive : !Int ; Close -> ()&#10;writeFive c =&#10; let c' = send 5 c in ()</div>
+    <p class = "output"></p>
+  </div>
+  <button class = "buttonRUN" type = "button">▶</button>
+</div>
 
 Now suppose we try to write two values on the channel, one after the other:
-```freest
-writeFive' : !Int ; Close -> ()
-writeFive' c =
-  let c' = send 5 c
-      c'' = send 7 c'
-  in close c''
-```
+
+<div class="panels_button" markdown="0">
+  <div class = "panels">
+    <div class = "textEditor">writeFive : !Int ; Close -> ()&#10;writeFive c =&#10; let c' = send 5 c&#10;&#32; &#32; &#32;c'' = send 7 c'&#10; in close c''</div>
+    <p class = "output"></p>
+  </div>
+  <button class = "buttonRUN" type = "button">▶</button>
+</div>
+
 The type checker complains that the code does not follow the protocol, in particular that, in order to write an integer value in a channel, its type must be of type `!Int`{: .language-freest }, not `Close`{: .language-freest }.
-```bash
-SendClose.fst:5:20–10:22: error:
-Couldn't match expected type `!Int; ạ` with actual type `Close`
-  | 
-5 |       c'' = send 7 c'
-  |                    ^^
-```
 
 Let us now look at the other end of the channel and write a consumer for type `?Int; Wait`{: .language-freest }. This time we use primitive functions `receive`{: .language-freest } and `wait`{: .language-freest }. The former returns a pair composed of the value dequeued from the channel endpoint and the continuation endpoint, the latter returns `()`{: .language-freest }.
 ```freest

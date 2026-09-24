@@ -3,7 +3,7 @@
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
 title: Linearity
-layout: default
+layout: freest-tutorial
 nav_order: 3
 parent: Tutorial
 ---
@@ -39,24 +39,17 @@ linBinApply : (Int -1-> Int -1-> Int) -*-> Int -1-> Int -1-> Int
 ```
 
 Suppose that we insist that `linBinApply h`{: .language-freest } is of an unrestricted type:
- ```freest
- linBinApply : (Int -1-> Int -1-> Int) -*-> Int -*-> Int -1-> Int
-```
+
+<div class="panels_button" markdown="0">
+  <div class = "panels">
+    <div class = "textEditor">linBinApply : (Int -1-> Int -1-> Int) -*-> Int -*-> Int -1-> Int&#10;linBinApply f x y = f x y</div>
+    <p class = "output"></p>
+  </div>
+  <button class = "buttonRUN" type = "button">▶</button>
+</div>
+
 Then the compiler complains as follows.
-```bash
-MultipleArgs.fst:4:13–4:14: error:
-Linear variable `f` of type `Int -1-> Int -1-> Int`, bound at
-  MultipleArgs.fst:4:13–4:14
-  | 
-4 | linBinApply f x y = f x y
-  |             ^
- is consumed in body of an unrestricted function
-  MultipleArgs.fst:4:15–4:26
-  | 
-4 | linBinApply f x y = f x y
-  |               ^^^^^^^^^^^
-(This would allow duplicating or discarding the value. Consider using a linear function instead.)
-```
+
 The highlighted region `x y = f x y`{: .language-freest } is the partial application `linBinApply h`{: .language-freest }, that is, the function `\x y -> f x y`{: .language-freest }. Its type, `Int -*-> Int -1-> Int`{: .language-freest }, is unrestricted (the leading `-*->`{: .language-freest }), yet its body captures the linear value `h`{: .language-freest }. Making this function unrestricted would allow duplicating or discarding `h`{: .language-freest }, hence the error.
 
 However, note that the linearity of functions, and their partial applications, derives not from types, but rather is dictated by how linear resources are captured and used inside the function.
@@ -183,40 +176,26 @@ double x = x + x
 ```
 
 Linear values are of a different nature: they must be used exactly once in any run of the program. This means they cannot be copied or discarded. Using a linear value invalidates any further use of the same value. Functions are probably the first linear-value construct programmers are faced with. If we use `-*->`{: .language-freest } for an unrestricted function, we use `-1->`{: .language-freest } for a linear function. The program below attempts to use function `linDouble`{: .language-freest } twice.
-```freest
-linDouble : Int -1-> Int
-linDouble x = x + x
 
-copy : ()
-copy = 
-  print (linDouble 5 + linDouble 5)
-```
 The compiler complains at the attempt to use the function for the second time:
-```bash
-CopyLinearFun.fst:6:26–8:32: error:
-Variable out of scope: `linDouble`
-  | 
-6 |     print (linDouble 5 + linDouble 5)
-  |                          ^^^^^^^^^
-```
 
-Similarly, not using a function declared as linear is a capital offense:
-```freest
-linDouble : Int -1-> Int
-linDouble x = x + x
+<div class="panels_button" markdown="0">
+  <div class = "panels">
+    <div class = "textEditor">linDouble : Int -1-> Int&#10;linDouble x = x + x&#10; &#10;copy : ()&#10;copy = &#10;    print (linDouble 5 + linDouble 5)</div>
+    <p class = "output"></p>
+  </div>
+  <button class = "buttonRUN" type = "button">▶</button>
+</div>
 
-discard : ()
-discard = 
-  print 20
-```
-greeted by the compiler with an error stating that the value is not used:
-```bash
-DiscardLinearFun.fst:1:1–3:7: error:
-Linear variable `linDouble` is not consumed
-  | 
-1 | linDouble : Int -1-> Int
-  | ^^^^^^^^^
-```
+Similarly, not using a function declared as linear is a capital offense, greeted by the compiler with an error stating that the value is not used:
+
+<div class="panels_button" markdown="0">
+  <div class = "panels">
+    <div class = "textEditor">linDouble : Int -1-> Int&#10;linDouble x = x + x&#10; &#10;discard : ()&#10;discard = &#10;     print 20</div>
+    <p class = "output"></p>
+  </div>
+  <button class = "buttonRUN" type = "button">▶</button>
+</div>
 
 <!-- TODO: unrestricted can replace linear -->
 
@@ -268,18 +247,14 @@ copy x = let y = extract x in (y, y)
 ```
 
 Works not:
-```freest
-copy : LinInt -> (LinInt, LinInt)
-copy x = (x, x)
-```
-Complaint:
-```bash
-LinIntType.fst:7:14–7:15: error:
-Variable out of scope: `x`
-  | 
-7 | copy x = (x, x)
-  |              ^
-```
+
+<div class="panels_button" markdown="0">
+  <div class = "panels">
+    <div class = "textEditor">type LinInt : 1T&#10;type LinInt = Int&#10;&#10;extract : LinInt -> Int&#10;extract x = x&#10;&#10;copy : LinInt -> (LinInt, LinInt)&#10;copy x = (x, x)</div>
+    <p class = "output"></p>
+  </div>
+  <button class = "buttonRUN" type = "button">▶</button>
+</div>
 
 2. Wrap an unrestricted type inside a linear datatype.
 
@@ -292,37 +267,26 @@ copy : LinInt -> (LinInt, LinInt)
 copy (MkLinInt x) = (MkLinInt x, MkLinInt x)
 ```
 Works not:
-```freest
-copy : LinInt -> (LinInt, LinInt)
-copy x = (x, x)
-```
-Complaint:
-```bash
-LinIntData.fst:7:14–7:15: error:
-Variable out of scope: `x`
-  | 
-7 | copy x = (x, x)
-  |              ^
-```
 
-3. Define a linear datatype 
-```freest
-type LinBool : 1T
-data LinBool = LTrue | LFalse
-```
+<div class="panels_button" markdown="0">
+  <div class = "panels">
+    <div class = "textEditor">type LinInt : 1T&#10;data LinInt = MkLinInt Int&#10;&#10;copy : LinInt -> (LinInt, LinInt)&#10;copy x = (x, x)</div>
+    <p class = "output"></p>
+  </div>
+  <button class = "buttonRUN" type = "button">▶</button>
+</div>
+
+3. Define a linear datatype.
+
+<div class="panels_button" markdown="0">
+  <div class = "panels">
+    <div class = "textEditor">type LinBool : 1T&#10;data LinBool = LTrue | LFalse&#10;&#10;doubleTrue : (LinBool, LinBool)&#10;doubleTrue = (LTrue, LTrue)</div>
+    <p class = "output"></p>
+  </div>
+  <button class = "buttonRUN" type = "button">▶</button>
+</div>
+
 This is sort of useless. The constructors can only be used once.
-```freest
-doubleTrue : (LinBool, LinBool)
-doubleTrue = (LTrue, LTrue)
-```
-Complaint:
-```bash
-LinBoolData.fst:7:22–7:27: error:
-Constructor out of scope: `LTrue`
-  | 
-7 | doubleTrue = (LTrue, LTrue)
-  |                      ^^^^^
-```
 
 <!-- TODO -->
 <!-- maybe talk about a generator function `() -> (T 1-> U)` that might be useful in some cases -->
