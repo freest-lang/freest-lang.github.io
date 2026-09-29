@@ -32,7 +32,7 @@ The base kind distinguishes the nature of the type. Is it a type that can be use
 * **Session**, `S`{: .language-freest }, for all session types, including channel types, and
 * **Top**, `T`{: .language-freest }, for an arbitrary type, including session types.
 
-Channels should be closed whenever possible. This gives the runtime the opportunity to reclaim memory, for example. Intuitively, a session type is a channel if every one of its finite branches ends in a `Close`{: .language-freest } or `Wait`{: .language-freest }. So `Stream a`{: .language-freest } is a channel type:
+Channels should be closed whenever possible. This gives the runtime the opportunity to reclaim memory, for example. Intuitively, a session type is of base kind channel if every one of its finite branches ends in a `Close`{: .language-freest } or `Wait`{: .language-freest }. So `Stream a`{: .language-freest } is a channel type:
 ```freest
 type Stream a = +{Done: Close, More: !a ; Stream a}
 ```
@@ -132,7 +132,12 @@ Here `App`{: .language-freest } is in fact a type abstraction within a type abst
 But FreeST also provides for explicit type abstractions as in:
 ```freest
 type App' : (1T -> *T) -> 1T -> *T
-type App' = \(a : 1T -> *T) -> \(b : 1T) -> a b 
+type App' = \a -> \b -> a b 
+```
+or, for a fully annotated solution
+```freest
+type App'' : (1T -> *T) -> 1T -> *T
+type App'' = \(a : 1T -> *T) -> \(b : 1T) -> a b 
 ```
 Here the kind signature is required.
 
