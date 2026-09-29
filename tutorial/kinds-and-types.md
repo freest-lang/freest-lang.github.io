@@ -94,7 +94,7 @@ That is, subkinding is *contravariant* in the domain and *covariant* in the codo
 FreeST comes equipped with a rich collection of types. Conventional functional types:
 * `Int`{: .language-freest }, `Float`{: .language-freest }, `Char`{: .language-freest }, `Bool`{: .language-freest }, all of kind `*T`{: .language-freest },
 * Arrow types, `(-m->)`{: .language-freest }, of kind `1T -> 1T -> mT`{: .language-freest }, where `m`{: .language-freest } is a multiplicity (`*`{: .language-freest }, `1`{: .language-freest } or a variable); `(-*->)`{: .language-freest } can be abbreviated to `(->)`{: .language-freest },
-* Tuple types, `(U1, ..., Un)`{: .language-freest }; the base kind of such a type is `T`{: .language-freest } and its multiplicity is the least upper bound of the multiplicities of `U1`{: .language-freest } to `Un`{: .language-freest }, which must be proper types. For example, `(Int, Int) : *T`{: .language-freest } and `(!Int, Int) : 1T`{: .language-freest }.
+* Tuple types, `(U1, ..., Un)`{: .language-freest }; the base kind of such a type is `T`{: .language-freest } and its multiplicity is the least upper bound of the multiplicities of `U1`{: .language-freest } to `Un`{: .language-freest }, which must be proper types. For example, `(Int, Bool) : *T`{: .language-freest } and `(!Int, Bool) : 1T`{: .language-freest }.
 
 Session and channel types include:
 * `Close`{: .language-freest } and `Wait`{: .language-freest } of kind `1C`{: .language-freest },
