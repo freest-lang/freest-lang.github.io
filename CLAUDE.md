@@ -109,10 +109,7 @@ that is what a broken re-indent produces.
 
 ## Scope note
 
-`tutorial/` follows these rules. `libraries/` and `freest3/` also contain
-`freest` blocks and have not been normalised; match the surrounding style when
-editing those, or normalise the whole file.
-
-`libraries/` snippets are still required to pass `freest -t`, same as
-`tutorial/` — only the indentation normalisation is pending there, not
-correctness checking.
+`tutorial/` and `libraries/` both follow every rule on this page — indentation,
+notation, and the `freest -t` correctness check. `freest3/` is the only
+exception: it targets a previous FreeST dialect and has not been normalised;
+match its surrounding style when editing it, or normalise the whole file.

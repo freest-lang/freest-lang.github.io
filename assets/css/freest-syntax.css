@@ -22,13 +22,13 @@
   color: #7048e8;               /* violet -- Int, Skip, Close, Wait, ... */
 }
 
-.language-freest .token.class-name {
-  color: #0b7285;               /* teal -- constructors & type names */
+.language-freest .token.primitive {
+  color: #d9480f;               /* rust -- send, receive, select, sendType, ... */
+  font-weight: 600;
 }
 
-.language-freest .token.function {
-  color: #d9480f;               /* rust -- name at a definition's head */
-  font-weight: 600;
+.language-freest .token.class-name {
+  color: #0b7285;               /* teal -- constructors & type names */
 }
 
 .language-freest .token.string,

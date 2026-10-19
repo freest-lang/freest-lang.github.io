@@ -12,29 +12,32 @@ nav_order: 5
 
 # Publications
 
+- [**Simple grammar bisimilarity, with an application to session type equivalence**](https://arxiv.org/abs/2407.04063)  
+  **Poças, D., Silva, G. and Vasconcelos, V.T.**  
+  LMCS 2026 (to appear)  
+  [Paper](https://arxiv.org/abs/2407.04063) @ arXiv  
+  [Talk]({% link resources/publications/2026.FCUL.SimpleGrammarBisimilarity.pdf %}) @ Seminário de Lógica Matemática, 2026
+{: .mb-5 }
+
+
 - [**The types of dyadic interaction, a tribute to Kohei Honda**]({% link resources/publications/talk_ifip2.8_mar26.pdf %})  
-  **Costa, D., Mordido, A., Poças, D. and Vasconcelos, V. T.**  @ [IFIP WG 2.8 2026](https://www.cs.cornell.edu/ifip28-2026/)
+  **Costa, D., Mordido, A., Poças, D. and Vasconcelos, V. T.**  
+  Talk @ [IFIP WG 2.8 2026](https://www.cs.cornell.edu/ifip28-2026/)
 {: .mb-5 }
 
 - [**Session types R context free**]( {% link resources/publications/Dagstuhl Feb 2026.pdf %} )  
   **Vasconcelos, V.T.**  
-  Talk @ Dagstuhl Seminar, Behavioral Types for Resilience. February 2026.
+  Talk @ [Dagstuhl Seminar, Behavioral Types for Resilience](https://www.dagstuhl.de/seminars/seminar-calendar/seminar-details/26071), 2026
 {: .mb-5 }
 
 - [**Types as grammars**]({% link resources/publications/TypesAsGrammarsAbstract.pdf %})  
   **Silva, G., Almeida, B., Costa, D., Mordido, A., Poças, D. and Vasconcelos, V. T.**  
-  [Talk]({% link resources/publications/TypesAsGrammars.pdf %}) @ [WITS 2026](https://popl26.sigplan.org/details/wits-2026-papers/1/Types-as-grammars)
+  Talk @ [WITS 2026](https://popl26.sigplan.org/details/wits-2026-papers/1/Types-as-grammars)
 {: .mb-5 }
 
 - [**Kind inference for the FreeST programming language**](https://www.sciencedirect.com/science/article/abs/pii/S2352220825000495)  
   **Almeida, B., Mordido, A. and Vasconcelos, V.T.**  
   [ J. Log. Algebraic Methods Program.](https://www.sciencedirect.com/journal/journal-of-logical-and-algebraic-methods-in-programming) 148:101083, 2026
- {: .mb-5 }
-
-- [**Simple grammar bisimilarity, with an application to session type equivalence**](https://arxiv.org/abs/2407.04063)  
-  **Poças, D., Silva, G., and Vasconcelos, V.T.**  
-  [arXiv](https://arxiv.org/abs/2407.04063), 2025  
-  [Talk]({% link resources/publications/2026.FCUL.SimpleGrammarBisimilarity.pdf %}) @ Seminário de Lógica Matemática, 2026
  {: .mb-5 }
 
 - [**Polymorphic higher-order context-free session types**](https://www.sciencedirect.com/science/article/pii/S030439752400197X)  
@@ -44,7 +47,7 @@ nav_order: 5
 
 - [**Programming with T ; U**]({% link resources/publications/PLatLXJun2024.pdf %})  
   **Almeida, B. and others**  
-  Talk @ PL@LX. 2024.
+  Talk @ PL@LX. 2024
 {: .mb-5 }
 
 - [**Improving Parallel and Concurrent Programming in FreeST**]({% link resources/publications/GuilhermeLopesMSc.pdf %})  
@@ -69,7 +72,7 @@ nav_order: 5
 - [**System $$F^\mu_\omega$$ with Context-free Session Types**](https://link.springer.com/chapter/10.1007/978-3-031-30044-8_15)  
   **Poças, D., Costa, D., Mordido, A. and Vasconcelos, V.T.**  
   [Programming Languages and Systems, ESOP 2023](https://link.springer.com/book/10.1007/978-3-031-30044-8)  
-  [arXiv (long version)](https://arxiv.org/abs/2301.08659)
+  [Long version](https://arxiv.org/abs/2301.08659) @ arXiv
 {: .mb-5 }
 
 - [**Kind Inference for the FreeST Programming Language**](https://arxiv.org/abs/2304.06396v1)  
@@ -109,7 +112,7 @@ nav_order: 5
 
 - [**Polymorphic Context-free Session Types**]( {% link resources/publications/Dagstuhl Sep 2021.pdf %} )  
   **Vasconcelos, V.T.**  
-  Talk @ Dagstuhl Seminar, Behavioural Types: Bridging Theory and Practice. September 2021.
+  Talk @ [Dagstuhl Seminar, Behavioural Types: Bridging Theory and Practice](https://www.dagstuhl.de/en/seminars/seminar-calendar/seminar-details/21372), 2021
 {: .mb-5 }
 
 - [**Deciding the bisimilarity of context-free session types**](http://www.di.fc.ul.pt/~vv/papers/almeida.mordido_bisimilarity-context-free-session-types.pdf)  
