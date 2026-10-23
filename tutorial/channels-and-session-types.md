@@ -77,7 +77,7 @@ Duality distributes over sequential composition, and `Skip`{: .language-freest }
 
 ## Exchanging values and closing channels
 
-Let us start with a very basic protocol: send an integer and then close the channel. This is written as `!Int ; Close`{: .language-freest }. Let us now write a consumer for this type, that is, a function that receives a channel of type `!Int ; Close`{: .language-freest } and exhausts the channel (that is, sends a value and closes the channel). Primitive functions `send`{: .language-freest } and `close`{: .language-freest } send a value to a given channel and close a given channel, respectively. The former returns a pair composed of a value and a channel endpoint (on which to continue the interaction), the latter returns `()`{: .language-freest }, the unit type.
+Let us start with a very basic protocol: send an integer and then close the channel. This is written as `!Int ; Close`{: .language-freest }. Let us now write a consumer for this type, that is, a function that receives a channel of type `!Int ; Close`{: .language-freest } and exhausts the channel (that is, sends a value and closes the channel). Primitive functions `send`{: .language-freest } and `close`{: .language-freest } send a value to a given channel and close a given channel, respectively. The former returns a channel endpoint (on which to continue the interaction), the latter returns `()`{: .language-freest }, the unit type.
 
 ```freest
 writeFive : !Int ; Close -> ()
@@ -99,7 +99,7 @@ writeFive'' = close . send 5
 Do not forget that we first do `send`{: .language-freest } and only then `close`{: .language-freest }. If one is looking for a forward reading then we may use the *reverse function application* operator `|>`{: .language-freest } to get:
 ```freest
 writeFive''' : !Int ; Close -> ()
-writeFive''; c =
+writeFive''' c =
   c |> send 5 |> close
 ```
 This is our preferred style. The `|>`{: .language-freest } operator is included in the Prelude and defined as `(|>) x f = f x`{: .language-freest }; it is *reverse* function application: ordinary application is `\f -> \x -> f x`{: .language-freest }, whereas here we have `\x -> \f -> f x`{: .language-freest }. We defer the study of its type to section "Multiplicity polymorphism".
@@ -378,7 +378,7 @@ In the case of receive type, we see that the result of a call to `receiveType`{:
 
 (\*) Some of the types in the above two tables are illustrative only; they must be understood as *type schemes* rather than FreeST types.
 
-* `sendType`{: .language-freest } is not an expression. It must be used with a type, as in, e.g., `sendType @Int`{: .language-freest }. It has all types of the form `!type a. W -> W[Int/a]`{: .language-freest }. Notation `W[Int/a]`{: .language-freest } denotes the result of replacing (free) occurrences of type variable `a`{: .language-freest } by type `Int`{: .language-freest } in type `W`{: .language-freest }. For example, `(!a ; Close)[a/Int]`{: .language-freest } = `!Int ; Close`{: .language-freest }.
+* `sendType`{: .language-freest } is not an expression. It must be used with a type, as in, e.g., `sendType @Int`{: .language-freest }. It has all types of the form `!type a. W -> W[Int/a]`{: .language-freest }. Notation `W[Int/a]`{: .language-freest } denotes the result of replacing (free) occurrences of type variable `a`{: .language-freest } by type `Int`{: .language-freest } in type `W`{: .language-freest }. For example, `(!a ; Close)[Int/a]`{: .language-freest } = `!Int ; Close`{: .language-freest }.
 * `select`{: .language-freest } is not an expression. It must be used with a label (an upper-case id), as in, e.g., `select Done`{: .language-freest }. Then, `select Done`{: .language-freest } has all types of the form `+{Done: U, ...} -> U`{: .language-freest }.
 * `receiveType`{: .language-freest } is an expression. It has all the types of the form `(?type (a : k). U) -> (exists (a : k), U)`{: .language-freest }.
 

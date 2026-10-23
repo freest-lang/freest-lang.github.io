@@ -216,7 +216,7 @@ incTwice : Dual CounterProvider -> ()
 incTwice c =
   let (@a, c) = receiveType c
       (v,   c) = c |> select New  |> receive
-      (inc, c) = c |> select Inc  |> receive @(a -> a) @(Dual (Provide a))
+      (inc, c) = c |> select Inc  |> receive
       v        = inc (inc v)
       (get, c) = c |> select Get  |> receive
       n        = get v
@@ -228,7 +228,7 @@ If you are wondering why one has to bind a type variable when unpacking an exist
 ```freest
 receive : forall (a : 1T) (b : 1S) -> ?a; b -> (a, b)
 ```
-None of the various occurrences of `receive`{: .language-freest } is annotated. Let us try annotating the first:
+None of the various occurrences of `receive`{: .language-freest } is annotated. Let us try annotating the second:
 ```freest
       (inc, c) = c |> select Inc  |> receive @(a -> a) @(Dual (Provide a))
 ```

@@ -25,117 +25,6 @@ parent: Tutorial
 </details>
 
 
-## Functions with multiple parameters
-
-Consider a function `f`{: .language-freest } with one parameter that does not refer to linear values in its body. Further suppose that the parameter is of type `L`{: .language-freest }, a linear type. Then, in each call site, a different linear argument must be provided. But the function itself can be used as often as needed: it may be of type `L -*-> T`{: .language-freest }, with `T`{: .language-freest } the type of the result. If the programmer knows that the function is meant to be used once only, then they may assign `f`{: .language-freest } the type `L -1-> T`{: .language-freest } instead.
-
-Now consider the case of a function `g`{: .language-freest } that accepts more arguments, say three, the two extra arguments being of types `U1`{: .language-freest } and `U2`{: .language-freest } (unrestricted). What are the possible signatures for `g`{: .language-freest }? Is `L -*-> U1 -> U2 -> T`{: .language-freest } a possible type for `g`{: .language-freest }? What about `L -> U1 -> U2 -1-> T`{: .language-freest }? Let us make the case concrete. Consider the function:
-```freest
-linBinApply f x y = f x y
-```
-The reasoning for the first parameter is the one we have followed for function `f`{: .language-freest }, above. So `linBinApply`{: .language-freest } is of type `L -> U1 ...`{: .language-freest } (or `L -1-> U1 ...`{: .language-freest }), with `L`{: .language-freest } the type `Int -1-> Int -1-> Int`{: .language-freest }. If `h`{: .language-freest } is a value of type `L`{: .language-freest }, then `linBinApply h`{: .language-freest } captures in its body a linear value and hence cannot be duplicated or discarded. This means that function `linBinApply h`{: .language-freest } must be linear. Then, one possible type for the function is:
-```freest
-linBinApply : (Int -1-> Int -1-> Int) -*-> Int -1-> Int -1-> Int
-```
-
-Suppose that we insist that `linBinApply h`{: .language-freest } is of an unrestricted type. The last pair of parenthesis is not absolutely necessary; it highlight the type of expression `linBinApply h`{: .language-freest }.
- ```freest
- linBinApply : (Int -1-> Int -1-> Int) -*-> (Int -*-> Int -1-> Int)
-```
-Then the compiler complains as follows.
-```bash
-MultipleArgs.fst:4:13–4:14: error:
-Linear variable `f` of type `Int -1-> Int -1-> Int`, bound at
-  MultipleArgs.fst:4:13–4:14
-  | 
-4 | linBinApply f x y = f x y
-  |             ^
- is consumed in body of an unrestricted function
-  MultipleArgs.fst:4:15–4:26
-  | 
-4 | linBinApply f x y = f x y
-  |               ^^^^^^^^^^^
-(This would allow duplicating or discarding the value. Consider using a linear function instead.)
-```
-The highlighted region `x y = f x y`{: .language-freest } is the partial application `linBinApply h`{: .language-freest }, that is, the function `\x y -> f x y`{: .language-freest }. Its type, `Int -*-> Int -1-> Int`{: .language-freest }, is unrestricted (the leading `-*->`{: .language-freest }), yet its body captures the linear value `h`{: .language-freest }. Making this function unrestricted would allow duplicating or discarding `h`{: .language-freest }, hence the error.
-
-However, note that the linearity of functions, and their partial applications, derives not from types, but rather is dictated by how linear resources are captured and used inside the function.
-
-Consider function `foo1`{: .language-freest }, which is quite similar to the example above:
-```freest
-foo1 : (Int -1-> Int) -> Int -1-> Int
-foo1 f x = (f 1) + x
-```
-As we've seen, the partial application of `foo1`{: .language-freest } must be considered linear, since it captures a linear variable.
-We can however make some changes to the function's definition, so that the type of the partial application is unrestricted instead:
-```freest
-foo2 : (Int -1-> Int) -> Int -> Int
-foo2 f = let y = f 1 in (\x -> y + x)
-```
-By allowing the partial application to evaluate and consume the linear resource, it no longer captures the linear resource, and thus, the partial application can then be discarded or duplicated.
-```freest
-_ = 
-  let x = foo2 idL in (x, x)
-  where
-    idL : Int -1-> Int
-    idL x = x
-```
-
-
-## Linear functions, as opposed to functions with linear parameters
-
-Defining functions as either unrestricted or linear is then mostly a matter of conforming to safety constraints.
-Unrestricted functions can be discarded or used more than once because they do not capture linear resources, such as the function `id`{: .language-freest }.
-
-```freest
-id : Int -*-> Int
-id x = x
-```
-
-On the other hand, if a function does capture a linear resource, it must be defined as linear.
-By not being permitted to be discarded or duplicated, one is ensured that the linear resource it captures is also not discarded or duplicated.
-
-```freest
-linFunc : Int -1-> Int
-linFunc x = let _ = extract linVar in x
-```
-
-If we take `linVar`{: .language-freest } to be a linear resource and `extract`{: .language-freest } a function that somehow consumes this linear resource, then `linFunc`{: .language-freest } must be defined as linear, since otherwise, `linVar`{: .language-freest } could be discarded or duplicated.
-We refer to this flavour of linearity, which is present in FreeST, as Walker's style (cf. Advanced Topics in Types and Programming Languages, chapter 1, David Walker).
-
-However, we find it important for the reader to appreciate the difference between defining functions as either unrestricted or linear, *à la Walker* as we've just discussed, and defining functions that take unrestricted or linear parameters, as inspired by linear logic and present instead in systems such as *Linear Haskell*.
-
-In these systems, the constraint is not on the function value itself, but on how its bound variable may be used within the body.
-This is expressed in the literature by a different kind of arrow, which we call the linear arrow, which states that the argument is used exactly once in the body of the function.
-The linear arrow is commonly written in the literature using the *lollipop* symbol, i.e., `T1 ⊸ T2`{: .language-freest }, but also with explicit annotations, i.e., `T1 %1 -> T2`, where `%1` indicates the linearity of the arrow, in the case of Linear Haskell.
-
-```haskell
-dup :: Int %1 -> (Int, Int)
-dup x = (x, x)
-```
-
-Obviously, the `dup` function is rejected, because the use of the bound variable `x`{: .language-freest } breaks the constraint imposed by the linear arrow, i.e., it is used twice instead of exactly once.
-Note that the multiplicity (i.e., unrestricted or linear) of the argument is of no consequence here: we may define a function that takes an unrestricted argument and uses it only once.
-In order to "fix" this function, and thus make it well-typed, the linear arrow `%1 ->` should be swapped with a "normal" arrow `->`{: .language-freest }.
-
-The difference between the two styles becomes more apparent once we realise these aim to control orthogonal aspects: Walker's style imposes restrictions on the use of the function itself, whereas systems inspired by linear logic impose restrictions on the use of bound variables inside the body of the function.
-
-```haskell
-id1 :: Int %1 -> Int
-id1 x = x
-```
-
-```freest
-id2 : Int -1-> Int
-id2 x = x
-
-someFunc : someType
-someFunc = ... id2 (used exactly once) ...
-```
-
-Both `id1` and `id2`{: .language-freest } are well-typed: `id1` ensures the argument is used only once inside the body, whereas `id2`{: .language-freest } is ensured to be used exactly once in the program, even though in this case, `id2 : Int -*-> Int`{: .language-freest } would also be sound.
-
-
 ## Linear and unrestricted values
 
 Most programming languages can use and reuse values at will. FreeST treats values differently according to their **multiplicity**. The multiplicity of a value (and hence of its type) governs the number of times the value must be used in any run of the program. Currently FreeST distinguishes two multiplicities: **linear** and **unrestricted**, written `1`{: .language-freest } and `*`{: .language-freest }. The former describes a value that must be used exactly once, the latter a value that may be used any number of times, zero included.
@@ -326,3 +215,114 @@ Constructor out of scope: `LTrue`
 
 <!-- TODO -->
 <!-- maybe talk about a generator function `() -> (T 1-> U)` that might be useful in some cases -->
+
+
+## Functions with multiple parameters
+
+Consider a function `f`{: .language-freest } with one parameter that does not refer to linear values in its body. Further suppose that the parameter is of type `L`{: .language-freest }, a linear type. Then, in each call site, a different linear argument must be provided. But the function itself can be used as often as needed: it may be of type `L -*-> T`{: .language-freest }, with `T`{: .language-freest } the type of the result. If the programmer knows that the function is meant to be used once only, then they may assign `f`{: .language-freest } the type `L -1-> T`{: .language-freest } instead.
+
+Now consider the case of a function `g`{: .language-freest } that accepts more arguments, say three, the two extra arguments being of types `U1`{: .language-freest } and `U2`{: .language-freest } (unrestricted). What are the possible signatures for `g`{: .language-freest }? Is `L -*-> U1 -> U2 -> T`{: .language-freest } a possible type for `g`{: .language-freest }? What about `L -> U1 -> U2 -1-> T`{: .language-freest }? Let us make the case concrete. Consider the function:
+```freest
+linBinApply f x y = f x y
+```
+The reasoning for the first parameter is the one we have followed for function `f`{: .language-freest }, above. So `linBinApply`{: .language-freest } is of type `L -> U1 ...`{: .language-freest } (or `L -1-> U1 ...`{: .language-freest }), with `L`{: .language-freest } the type `Int -1-> Int -1-> Int`{: .language-freest }. If `h`{: .language-freest } is a value of type `L`{: .language-freest }, then `linBinApply h`{: .language-freest } captures in its body a linear value and hence cannot be duplicated or discarded. This means that function `linBinApply h`{: .language-freest } must be linear. Then, one possible type for the function is:
+```freest
+linBinApply : (Int -1-> Int -1-> Int) -*-> Int -1-> Int -1-> Int
+```
+
+Suppose that we insist that `linBinApply h`{: .language-freest } is of an unrestricted type. The last pair of parenthesis is not absolutely necessary; it highlights the type of expression `linBinApply h`{: .language-freest }.
+ ```freest
+ linBinApply : (Int -1-> Int -1-> Int) -*-> (Int -*-> Int -1-> Int)
+```
+Then the compiler complains as follows.
+```bash
+MultipleArgs.fst:4:13–4:14: error:
+Linear variable `f` of type `Int -1-> Int -1-> Int`, bound at
+  MultipleArgs.fst:4:13–4:14
+  | 
+4 | linBinApply f x y = f x y
+  |             ^
+ is consumed in body of an unrestricted function
+  MultipleArgs.fst:4:15–4:26
+  | 
+4 | linBinApply f x y = f x y
+  |               ^^^^^^^^^^^
+(This would allow duplicating or discarding the value. Consider using a linear function instead.)
+```
+The highlighted region `x y = f x y`{: .language-freest } is the partial application `linBinApply h`{: .language-freest }, that is, the function `\x y -> f x y`{: .language-freest }. Its type, `Int -*-> Int -1-> Int`{: .language-freest }, is unrestricted (the leading `-*->`{: .language-freest }), yet its body captures the linear value `h`{: .language-freest }. Making this function unrestricted would allow duplicating or discarding `h`{: .language-freest }, hence the error.
+
+However, note that the linearity of functions, and their partial applications, derives not from types, but rather is dictated by how linear resources are captured and used inside the function.
+
+Consider function `foo1`{: .language-freest }, which is quite similar to the example above:
+```freest
+foo1 : (Int -1-> Int) -> Int -1-> Int
+foo1 f x = (f 1) + x
+```
+As we've seen, the partial application of `foo1`{: .language-freest } must be considered linear, since it captures a linear variable.
+We can however make some changes to the function's definition, so that the type of the partial application is unrestricted instead:
+```freest
+foo2 : (Int -1-> Int) -> Int -> Int
+foo2 f = let y = f 1 in (\x -> y + x)
+```
+By allowing the partial application to evaluate and consume the linear resource, it no longer captures the linear resource, and thus, the partial application can then be discarded or duplicated.
+```freest
+_ = 
+  let x = foo2 idL in (x, x)
+  where
+    idL : Int -1-> Int
+    idL x = x
+```
+
+
+## Linear functions, as opposed to functions with linear parameters
+
+Defining functions as either unrestricted or linear is then mostly a matter of conforming to safety constraints.
+Unrestricted functions can be discarded or used more than once because they do not capture linear resources, such as the function `id`{: .language-freest }.
+
+```freest
+id : Int -*-> Int
+id x = x
+```
+
+On the other hand, if a function does capture a linear resource, it must be defined as linear.
+By not being permitted to be discarded or duplicated, one is ensured that the linear resource it captures is also not discarded or duplicated.
+
+```freest
+linFunc : Int -1-> Int
+linFunc x = let _ = extract linVar in x
+```
+
+If we take `linVar`{: .language-freest } to be a linear resource and `extract`{: .language-freest } a function that somehow consumes this linear resource, then `linFunc`{: .language-freest } must be defined as linear, since otherwise, `linVar`{: .language-freest } could be discarded or duplicated.
+We refer to this flavour of linearity, which is present in FreeST, as Walker's style (cf. Advanced Topics in Types and Programming Languages, chapter 1, David Walker).
+
+However, we find it important for the reader to appreciate the difference between defining functions as either unrestricted or linear, *à la Walker* as we've just discussed, and defining functions that take unrestricted or linear parameters, as inspired by linear logic and present instead in systems such as *Linear Haskell*.
+
+In these systems, the constraint is not on the function value itself, but on how its bound variable may be used within the body.
+This is expressed in the literature by a different kind of arrow, which we call the linear arrow, which states that the argument is used exactly once in the body of the function.
+The linear arrow is commonly written in the literature using the *lollipop* symbol, i.e., `T1 ⊸ T2`{: .language-freest }, but also with explicit annotations, i.e., `T1 %1 -> T2`, where `%1` indicates the linearity of the arrow, in the case of Linear Haskell.
+
+```haskell
+dup :: Int %1 -> (Int, Int)
+dup x = (x, x)
+```
+
+Obviously, the `dup` function is rejected, because the use of the bound variable `x`{: .language-freest } breaks the constraint imposed by the linear arrow, i.e., it is used twice instead of exactly once.
+Note that the multiplicity (i.e., unrestricted or linear) of the argument is of no consequence here: we may define a function that takes an unrestricted argument and uses it only once.
+In order to "fix" this function, and thus make it well-typed, the linear arrow `%1 ->` should be swapped with a "normal" arrow `->`{: .language-freest }.
+
+The difference between the two styles becomes more apparent once we realise these aim to control orthogonal aspects: Walker's style imposes restrictions on the use of the function itself, whereas systems inspired by linear logic impose restrictions on the use of bound variables inside the body of the function.
+
+```haskell
+id1 :: Int %1 -> Int
+id1 x = x
+```
+
+```freest
+id2 : Int -1-> Int
+id2 x = x
+
+someFunc : someType
+someFunc = ... id2 (used exactly once) ...
+```
+
+Both `id1` and `id2`{: .language-freest } are well-typed: `id1` ensures the argument is used only once inside the body, whereas `id2`{: .language-freest } is ensured to be used exactly once in the program, even though in this case, `id2 : Int -*-> Int`{: .language-freest } would also be sound.
