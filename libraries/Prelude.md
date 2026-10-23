@@ -625,13 +625,35 @@ Receives a value from an unrestricted channel. Unrestricted version of
 `receive`. The channel need not be returned: it can be reused as often as
 needed.
 
+### `request`
+{: .no_toc}
+```freest
+request : forall (a : 1C) -> *!a -> Dual a
+```
+Session initiation, client side. Requests a new linear session on a shared
+channel and returns the client's end of the session. The server obtains the
+other end with `accept`. The client holds the `*!` end of the shared channel;
+the type `a` is the server's view of the session. The request does not block:
+the new session is created on demand and handed to the server through the
+shared channel.
+
+```freest
+type Counter = +{Inc: Close, Get: ?Int ; Close}
+type CounterService = *!(Dual Counter)
+
+get : CounterService -> Int
+get s = s |> request |> select Get |> receiveAndClose
+```
+
 ### `accept`
 {: .no_toc}
 ```freest
-accept : forall (a : 1C) -> *!a -> Dual a
+accept : forall (a : 1C) -> *?a -> a
 ```
-Session initiation. Accepts a request for a linear session on a shared
-channel. The requester uses a `receive_` operation to obtain the channel end.
+Session initiation, server side. Accepts a request for a linear session on a
+shared channel and returns the server's end of the session. Clients use
+`request` to initiate the session. Blocks until some client requests a
+session. It is `receive_`, restricted to channel types.
 
 ### `forkWith`
 {: .no_toc}
@@ -653,7 +675,7 @@ _ =
 ### `runServer`
 {: .no_toc}
 ```freest
-runServer : forall (a : *T) (b : 1C) -> (a -> Dual b -> a) -> a -> *!b -> Void @*T
+runServer : forall (a : *T) (b : 1C) -> (a -> Dual b -> a) -> a -> *?(Dual b) -> Void @*T
 ```
 Runs an infinite shared server, given a function to handle one client session,
 an initial state, and the server's shared channel endpoint. It behaves as an
@@ -662,9 +684,10 @@ sessions, threading the state through each call. Since it never returns, its
 result type is `Void @*T`.
 
 Note: this only works with session types that use session initiation.
+Clients obtain a session with `request`.
 
 ```freest
-type SharedCounter = *?Counter
+type SharedCounter = *!(Dual Counter)
 type Counter = +{ Inc: Close
                 , Dec: Close
                 , Get: ?Int ; Close
@@ -819,29 +842,29 @@ Closes an `InStream` channel endpoint. Behaves as `|> select Stop |> wait`.
 ### `hGenericGet_`
 {: .no_toc}
 ```freest
-hGenericGet_ : forall (a : *T) -> (InStream -> (a, InStream)) -> *?InStream -> a
+hGenericGet_ : forall (a : *T) -> (InStream -> (a, InStream)) -> *!(Dual InStream) -> a
 ```
-The unrestricted version of an `InStream` getter: receives the `InStream`
-channel endpoint (via session initiation), runs the getter, closes the
+The unrestricted version of an `InStream` getter: obtains the `InStream`
+channel endpoint (via session initiation, `request`), runs the getter, closes the
 endpoint with `hCloseIn`, and returns the value. This is how `hGetChar_` and
 `hGetLine_` are themselves defined, e.g. `hGetChar_ = hGenericGet_ hGetChar`.
 
 ### `hGetChar_`
 {: .no_toc}
 ```freest
-hGetChar_ : *?InStream -> Char
+hGetChar_ : *!(Dual InStream) -> Char
 ```
-Unrestricted version of `hGetChar`. Behaves the same, except it first receives
-an `InStream` channel endpoint (via session initiation), executes an
+Unrestricted version of `hGetChar`. Behaves the same, except it first obtains
+an `InStream` channel endpoint (via session initiation, `request`), executes an
 `hGetChar` and then closes the endpoint with `hCloseIn`.
 
 ### `hGetLine_`
 {: .no_toc}
 ```freest
-hGetLine_ : *?InStream -> String
+hGetLine_ : *!(Dual InStream) -> String
 ```
-Unrestricted version of `hGetLine`. Behaves the same, except it first receives
-an `InStream` channel endpoint (via session initiation), executes an
+Unrestricted version of `hGetLine`. Behaves the same, except it first obtains
+an `InStream` channel endpoint (via session initiation, `request`), executes an
 `hGetLine` and then closes the endpoint with `hCloseIn`.
 
 **Output stream**
@@ -914,10 +937,10 @@ Closes an `OutStream` channel endpoint. Behaves as `|> select Stop |> wait`.
 ### `hGenericPut_`
 {: .no_toc}
 ```freest
-hGenericPut_ : forall (a : *T) -> (a -> OutStream -> OutStream) -> a -> *?OutStream -> ()
+hGenericPut_ : forall (a : *T) -> (a -> OutStream -> OutStream) -> a -> *!(Dual OutStream) -> ()
 ```
-The unrestricted version of an `OutStream` putter: receives the `OutStream`
-channel endpoint (via session initiation), runs the putter, and closes the
+The unrestricted version of an `OutStream` putter: obtains the `OutStream`
+channel endpoint (via session initiation, `request`), runs the putter, and closes the
 endpoint with `hCloseOut`. This is how `hPutChar_`, `hPutStr_`, `hPutStrLn_`
 and `hPrint_` are themselves defined, e.g. `hPutChar_ = hGenericPut_
 hPutChar`.
@@ -925,37 +948,37 @@ hPutChar`.
 ### `hPutChar_`
 {: .no_toc}
 ```freest
-hPutChar_ : Char -> *?OutStream -> ()
+hPutChar_ : Char -> *!(Dual OutStream) -> ()
 ```
 Unrestricted version of `hPutChar`. Behaves the same, except it first
-receives an `OutStream` channel endpoint (via session initiation), executes
+obtains an `OutStream` channel endpoint (via session initiation, `request`), executes
 an `hPutChar` and then closes the endpoint with `hCloseOut`.
 
 ### `hPutStr_`
 {: .no_toc}
 ```freest
-hPutStr_ : String -> *?OutStream -> ()
+hPutStr_ : String -> *!(Dual OutStream) -> ()
 ```
 Unrestricted version of `hPutStr`. Behaves similarly, except that it first
-receives an `OutStream` channel endpoint (via session initiation), executes
+obtains an `OutStream` channel endpoint (via session initiation, `request`), executes
 an `hPutStr` and then closes the endpoint with `hCloseOut`.
 
 ### `hPutStrLn_`
 {: .no_toc}
 ```freest
-hPutStrLn_ : String -> *?OutStream -> ()
+hPutStrLn_ : String -> *!(Dual OutStream) -> ()
 ```
 Unrestricted version of `hPutStrLn`. Behaves similarly, except that it first
-receives an `OutStream` channel endpoint (via session initiation), executes
+obtains an `OutStream` channel endpoint (via session initiation, `request`), executes
 an `hPutStrLn` and then closes the endpoint with `hCloseOut`.
 
 ### `hPrint_`
 {: .no_toc}
 ```freest
-hPrint_ : forall (a : *T) -> a -> *?OutStream -> ()
+hPrint_ : forall (a : *T) -> a -> *!(Dual OutStream) -> ()
 ```
 Unrestricted version of `hPrint`. Behaves similarly, except that it first
-receives an `OutStream` channel endpoint (via session initiation), executes
+obtains an `OutStream` channel endpoint (via session initiation, `request`), executes
 an `hPrint` and then closes the endpoint with `hCloseOut`.
 
 ### Standard I/O
@@ -965,7 +988,7 @@ an `hPrint` and then closes the endpoint with `hCloseOut`.
 {: .lib-table}
 | Function | Type | Description |
 |:---------|:-----|:------------|
-| `stdin` | `*?InStream`{: .language-freest } | Standard input stream. Reads from the console. |
+| `stdin` | `*!(Dual InStream)`{: .language-freest } | Standard input stream. Reads from the console. |
 | `getChar` | `() -> Char`{: .language-freest } | Reads a single character from `stdin`. |
 | `getLine` | `() -> String`{: .language-freest } | Reads a single line from `stdin`. |
 
@@ -974,8 +997,8 @@ an `hPrint` and then closes the endpoint with `hCloseOut`.
 {: .lib-table}
 | Function | Type | Description |
 |:---------|:-----|:------------|
-| `stdout` | `*?OutStream`{: .language-freest } | Standard output stream. Prints to the console, via the `h*_` functions (e.g. `hPutStrLn_ s stdout`) or the `put*` wrappers below. |
-| `stderr` | `*?OutStream`{: .language-freest } | Standard error stream. Prints to the console, via the `h*_` functions (e.g. `hPutStrLn_ s stderr`); unlike `stdout`, it has no dedicated `put*` wrappers. |
+| `stdout` | `*!(Dual OutStream)`{: .language-freest } | Standard output stream. Prints to the console, via the `h*_` functions (e.g. `hPutStrLn_ s stdout`) or the `put*` wrappers below. |
+| `stderr` | `*!(Dual OutStream)`{: .language-freest } | Standard error stream. Prints to the console, via the `h*_` functions (e.g. `hPutStrLn_ s stderr`); unlike `stdout`, it has no dedicated `put*` wrappers. |
 | `putChar` | `Char -> ()`{: .language-freest } | Prints a character to `stdout`. Behaves the same as `hPutChar_ c stdout`, where `c` is the character to be printed. |
 | `putStr` | `String -> ()`{: .language-freest } | Prints a string to `stdout`. Behaves the same as `hPutStr_ s stdout`, where `s` is the string to be printed. |
 | `putStrLn` | `String -> ()`{: .language-freest } | Prints a string to `stdout`, followed by the newline character `\n`. Behaves as `hPutStrLn_ s stdout`, where `s` is the string to be printed. |

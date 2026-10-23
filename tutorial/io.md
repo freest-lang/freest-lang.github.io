@@ -81,9 +81,9 @@ The number of interleavings is smaller because `a`{: .language-freest } will alw
 Still an output of the form `acbd`{: .language-freest } is highly probable. What if we'd like to make sure that `a`{: .language-freest } and `b`{: .language-freest } come together, and similarly for `c`{: .language-freest } and `d`{: .language-freest }? Well, a simple solution is to use `putStr "ab"`{: .language-freest }, rather than two separate `putChar`{: .language-freest } operations. But that may not be a solution for all situations. Imagine a scenario where the output is very large and cannot fit into a string.
 
 What we need here is a means for a thread to "grab" the `stdout`{: .language-freest }, use it in mutual exclusion, and let it go when no longer needed.
-Because the `stdout`{: .language-freest } channel is shared, we use [*session initiation*](shared-channels.md#session-initiation). So `stdout`{: .language-freest } is a shared channel on which one may obtain a session. The session is an output stream.
+Because the `stdout`{: .language-freest } channel is shared, we use [*session initiation*](shared-channels.md#session-initiation). So `stdout`{: .language-freest } is a shared channel on which one may `request`{: .language-freest } a session. The session is an output stream, of type `OutStream`{: .language-freest }. On the shared channel itself travels the other end of the session, the one used by the console, hence the type of `stdout`{: .language-freest }:
 ```freest
-stdout : *?OutStream
+stdout : *!(Dual OutStream)
 ```
 
 An output stream, in turn, is described by the type `OutStream`{: .language-freest }. It offers a choice between writing a string, writing a line, and closing:
@@ -113,10 +113,10 @@ hPutStr : String -> OutStream -> OutStream
 hPutStr x outStream = outStream |> select PutStr |> send x
 ```
 
-We can solve our problem by manipulating `stdout`{: .language-freest } directly. First use `receive_ stdout`{: .language-freest } to get hold of a channel of type `OutStream`{: .language-freest }. Then consume the channel to the end. Using the predefined combinators, a function that prints two characters in mutual exclusion can be written as follows.
+We can solve our problem by manipulating `stdout`{: .language-freest } directly. First use `request stdout`{: .language-freest } to get hold of a channel of type `OutStream`{: .language-freest }. Then consume the channel to the end. Using the predefined combinators, a function that prints two characters in mutual exclusion can be written as follows.
 ```freest
 put2Chars : Char -> Char -> ()
-put2Chars a b = receive_ stdout |> hPutChar a |> hPutChar b |> hCloseOut
+put2Chars a b = request stdout |> hPutChar a |> hPutChar b |> hCloseOut
 ```
 
 The below code produces `abcd`{: .language-freest } or `cdab`{: .language-freest }, but no other interleaving of four letters.
@@ -131,10 +131,10 @@ _ =
 What about the put and the print operations described in the table in the [*input and output*](io.md#input-and-output) section? Each of these operations grabs a session, puts its operand and stops. For example, `putStr`{: .language-freest } can be defined as follows:
 ```freest
 putStr : String -> ()
-putStr x = stdout |> receive_ |> hPutStr x |> hCloseOut
+putStr x = stdout |> request |> hPutStr x |> hCloseOut
 ```
 
-The endpoint obtained by `stdout |> receive_`{: .language-freest } is linear (of type `OutStream : 1C`{: .language-freest }): forgetting the final `hCloseOut`{: .language-freest }, or using the channel twice, is a type error.
+The endpoint obtained by `stdout |> request`{: .language-freest } is linear (of type `OutStream : 1C`{: .language-freest }): forgetting the final `hCloseOut`{: .language-freest }, or using the channel twice, is a type error.
 
 Since `putStr`{: .language-freest } grabs the `stdout`{: .language-freest } (and similarly for `putChar`{: .language-freest }, `putStrLn`{: .language-freest } and `print`{: .language-freest }), a call to this function cannot interrupt a session on another channel. For example, for the program below:
 ```freest
@@ -146,7 +146,7 @@ _ =
 ```
 expect outputs `xab`{: .language-freest } or `abx`{: .language-freest }, but never `axb`{: .language-freest }.
 
-**A word on cooperative threading.** The guarantee we just described is one of *safety*: every thread that obtains the `stdout`{: .language-freest } session follows the `OutStream`{: .language-freest } protocol faithfully, so the characters written by one `put2Chars`{: .language-freest } can never be interleaved with those of another. What the type system does *not* guarantee is *liveness* — that a thread which grabs the stream will eventually give it back. The shared server behind `stdout`{: .language-freest } hands out one `OutStream`{: .language-freest } session at a time, and only accepts the next request once the current holder selects `Stop`{: .language-freest }; meanwhile every other thread sits blocked inside its own `receive_ stdout`{: .language-freest }. Programs must therefore use `stdout`{: .language-freest } in a *cooperative* manner. Nothing preempts a running thread and since writing to a stream uses only non-blocking operations, a thread that acquires `stdout`{: .language-freest } and then loops forever, or simply never reaches `hCloseOut`{: .language-freest }, holds the stream hostage and starves everyone else. Releasing the stream promptly, by consuming the session all the way to `Stop`{: .language-freest }, is the programmer's responsibility, not the type checker's.
+**A word on cooperative threading.** The guarantee we just described is one of *safety*: every thread that obtains the `stdout`{: .language-freest } session follows the `OutStream`{: .language-freest } protocol faithfully, so the characters written by one `put2Chars`{: .language-freest } can never be interleaved with those of another. What the type system does *not* guarantee is *liveness* — that a thread which grabs the stream will eventually give it back. The shared server behind `stdout`{: .language-freest } serves one `OutStream`{: .language-freest } session at a time, and only accepts the next request once the current holder selects `Stop`{: .language-freest }; meanwhile the requests of every other thread wait in line, and each of these threads eventually blocks in its own `hCloseOut`{: .language-freest }, waiting for its turn. Programs must therefore use `stdout`{: .language-freest } in a *cooperative* manner. Nothing preempts a running thread and since writing to a stream uses only non-blocking operations, a thread that acquires `stdout`{: .language-freest } and then loops forever, or simply never reaches `hCloseOut`{: .language-freest }, holds the stream hostage and starves everyone else. Releasing the stream promptly, by consuming the session all the way to `Stop`{: .language-freest }, is the programmer's responsibility, not the type checker's.
 
 
 ## stdin is just another channel
@@ -169,15 +169,15 @@ and the Prelude provides the matching combinators, each returning the value read
 | `hIsEOF`{: .language-freest } | `InStream -> (Bool, InStream)`{: .language-freest } | Test whether the end of input has been reached |
 | `hCloseIn`{: .language-freest } | `InStream -> ()`{: .language-freest } | Select `Stop`{: .language-freest } and wait for the stream to close |
 
-As with output, the console's standard input is a *provider*,
+As with output, the console's standard input is a *provider*, on which one may `request`{: .language-freest } an `InStream`{: .language-freest },
 ```freest
-stdin : *?InStream
+stdin : *!(Dual InStream)
 ```
 and the familiar `getLine ()`{: .language-freest } is just "acquire an endpoint, read one line, close it":
 ```freest
 getLine :  () -> String
 getLine _ = 
-  let (x, c) = stdin |> receive_ |> select GetLine |> receive in
+  let (x, c) = stdin |> request |> select GetLine |> receive in
   hCloseIn c; 
   x
 ```
@@ -192,7 +192,7 @@ echoLines n inp | otherwise =
     echoLines (n - 1) inp
 
 main =
-  receive_ stdin |> echoLines 3 |> hCloseIn
+  request stdin |> echoLines 3 |> hCloseIn
 ```
 Notice how `inp`{: .language-freest } is threaded through the loop: each read consumes the endpoint and hands back a fresh continuation, which we rebind under the same name, until the count reaches zero and the endpoint is handed back to `main`{: .language-freest } to close with `hCloseIn`{: .language-freest }.
 
@@ -209,7 +209,7 @@ countLines n inp =
 
 main : ()
 main =
-  let (n, inp) = stdin |> receive_ |> countLines 0 in
+  let (n, inp) = stdin |> request |> countLines 0 in
   hCloseIn inp;
   putStrLn $ "Number of lines: " ++ show n
 ```

@@ -190,45 +190,45 @@ The shared protocol of the ["Cake or Disappointment?"](#cake-or-disappointment) 
 
 Rather than an online store, we discuss a simple, yet useful abstraction, that of a *reference cell*. Reference cells should answer on shared channels. Clients seek read or write operations. These operations are of different natures. We could try a solution similar to the cake store, featuring two operations, `Read`{: .language-freest } and `Write`{: .language-freest }. The problem is that the former should be followed by a receive (`?`{: .language-freest }) operation and the latter by a send (`!`{: .language-freest }) operation, something that shared channels do not allow.
 
-The uniform, stateless, nature of shared channels points into another direction: we split each interaction into two phases. First, *session initiation* runs on the shared channel and hands out a fresh linear channel; then the *cell operation* itself runs on that linear channel. In other words, clients read from the shared channel a linear channel on which they can perform the desired operation, read or write.
+The uniform, stateless, nature of shared channels points into another direction: we split each interaction into two phases. First, *session initiation* runs on the shared channel and establishes a fresh linear channel between a client and the cell; then the *cell operation* itself runs on that linear channel. Session initiation is driven by the client: when it needs a session, the client creates a new linear channel, keeps one endpoint for itself and sends the other endpoint to the cell on the shared channel.
 
-The type of reference cell of values of type `a`{: .language-freest } is a shared channel from which channels for conducting cell operations (`CellOp a`{: .language-freest }) can be read.
-```freest
-type CellRef : *T -> *C
-type CellRef a = *?(CellOp a)
-```
-
-Cell operations are `Read`{: .language-freest } or `Write`{: .language-freest }, followed by the appropriate read or write operation (`?a`{: .language-freest } or `!a`{: .language-freest }). In any case, the channel must be closed.
+Cell operations are `Read`{: .language-freest } or `Write`{: .language-freest }, followed by the appropriate read or write operation (`?a`{: .language-freest } or `!a`{: .language-freest }). In any case, the channel must be closed. This is the type of the linear channel, as seen from the side of the client.
 ```freest
 type CellOp : *T -> 1C
 type CellOp a = +{Read: ?a, Write: !a} ; Close
 ```
+
+The type of a reference cell of values of type `a`{: .language-freest } is a shared channel on which clients send the cell's endpoint of a cell operation channel, that is, a `Dual (CellOp a)`{: .language-freest }.
+```freest
+type CellRef : *T -> *C
+type CellRef a = *!(Dual (CellOp a))
+```
 Notice that both `CellRef`{: .language-freest } and `CellOp`{: .language-freest } are type operators that expect unrestricted values (`*`{: .language-freest }). That is because the values are to be read and written an arbitrary number of times. Notice further that they are of base kind `C`{: .language-freest }; that allows creating channels of both types.
 
-*Session initiation* requires the collaboration of the two parties: the reference cell and its clients. We start with the latter. In fact, all clients need to do is to read from the cell reference a cell operation channel. To read from a shared channel we use function `receive_`{: .language-freest }:
+*Session initiation* requires the collaboration of the two parties: the reference cell and its clients. We start with the latter. All a client needs to do is to *request* a cell operation channel on the cell reference. Function `request`{: .language-freest } in the Prelude does exactly that: it creates a channel, sends one endpoint on the given shared channel and returns the other endpoint:
 ```freest
-receive_ : forall (a : 1T) -> *?a -> a
+request : forall (a : 1C) -> *!a -> Dual a
 ```
-Unlike its linear counterpart, `receive`{: .language-freest }, this function returns only the value read from the channel. The channel itself need not be returned by the function: it can be reused as often as needed.
+Requesting does not block: the client can start using its endpoint right away, even before the cell picks up the other endpoint. The shared channel itself is not returned by the function: it can be reused as often as needed.
 
-Given `CellRef`{: .language-freest }, to write a value `x`{: .language-freest } to the cell, one first `receive_`{: .language-freest } a `CellOp`{: .language-freest } on which one selects `Write`{: .language-freest }, sends `x`{: .language-freest } and closes the channel:
+Given a `CellRef a`{: .language-freest }, function `request`{: .language-freest } returns a `CellOp a`{: .language-freest }. To write a value `x`{: .language-freest } to the cell, one first `request`{: .language-freest } a `CellOp`{: .language-freest } on which one selects `Write`{: .language-freest }, sends `x`{: .language-freest } and closes the channel:
 ```freest
 write : forall (a : *T) -> a -> CellRef a -> ()
-write x s = s |> receive_ |> select Write |> sendAndClose x
+write x s = s |> request |> select Write |> sendAndClose x
 ```
 
 The read operation is similar:
 ```freest
 read : forall (a : *T) -> CellRef a -> a
-read s = s |> receive_ |> select Read |> receiveAndClose
+read s = s |> request |> select Read |> receiveAndClose
 ```
 
-We now address the server side of session initiation. The server *accepts* a request for a `CellOp`{: .language-freest } on a `CellRef`{: .language-freest } channel. Function `accept`{: .language-freest } creates a `CellOp`{: .language-freest } channel, sends one endpoint on the (dual) `CellRef`{: .language-freest } channel and returns the other endpoint:
+We now address the server side of session initiation. The server *accepts* a request on the dual of the `CellRef`{: .language-freest } channel, of type `*?(Dual (CellOp a))`{: .language-freest }. Function `accept`{: .language-freest } receives the endpoint sent by some client and returns it; it blocks until some client issues a request:
 ```freest
-accept : forall (a : 1C) -> *!a -> Dual a
+accept : forall (a : 1C) -> *?a -> a
 ```
 
-The cell server accepts a connection from some client, and dispatches on the client operation: `Write`{: .language-freest } or `Read`{: .language-freest }. Using `receiveAndWait`{: .language-freest } and `sendAndWait`{: .language-freest } we can easily consume a `Dual (CellRef a)`{: .language-freest } channel.
+The cell server accepts a connection from some client, and dispatches on the client operation: `Write`{: .language-freest } or `Read`{: .language-freest }. Using `receiveAndWait`{: .language-freest } and `sendAndWait`{: .language-freest } we can easily consume a `Dual (CellOp a)`{: .language-freest } channel.
 
 ```freest
 cell : forall (a : *T) -> a -> Dual (CellRef a) -> ()
@@ -252,30 +252,35 @@ _ =
   await 5 a
 ```
 
-Session initiation requires `receive_`{: .language-freest } on one channel endpoint and `accept c`{: .language-freest } on the other. The below table summarises the types and operators involved.
+Session initiation requires `request c`{: .language-freest } on one channel endpoint and `accept c`{: .language-freest } on the other. The below table summarises the types and operators involved.
 
-| Negative | Positive | |
+| Client | Server | |
 | --- | --- | --- |
-| `receive_ c`{: .language-freest } | `accept c`{: .language-freest } | Operator |
-| `*?U`{: .language-freest } | `*!U`{: .language-freest } | Parameter type |
-| `U`{: .language-freest } | `Dual U`{: .language-freest } | Return type |
+| `request c`{: .language-freest } | `accept c`{: .language-freest } | Operator |
+| `*!U`{: .language-freest } | `*?U`{: .language-freest } | Parameter type |
+| `Dual U`{: .language-freest } | `U`{: .language-freest } | Return type |
 
-The `accept`{: .language-freest } function is part of the Prelude, but is not difficult to write. It creates a channel, sends one endpoint on the given channel and returns the other endpoint.
+Both functions are part of the Prelude, but are not difficult to write. Function `request`{: .language-freest } creates a channel, sends one endpoint on the given channel and returns the other endpoint. Function `accept`{: .language-freest } is just `receive_`{: .language-freest } on a shared channel that conveys channel endpoints.
 ```freest
-accept : forall (a : 1C) -> *!a -> Dual a
-accept @a c =
+request : forall (a : 1C) -> *!a -> Dual a
+request @a c =
   let (x, y) = channel @a in
   send_ x c;
   y
+
+accept : forall (a : 1C) -> *?a -> a
+accept @a c = receive_ @a c
 ```
+
+Why should the client, rather than the server, create the new channel? Because the client is the party that knows when a session is needed. Each session is created on demand, exactly when some client asks for it, and the server picks it up when it is ready to serve. A server never creates sessions in advance that nobody may ever use.
 
 ## Running servers
 
 The Prelude contains a handy abbreviation for writing servers that serve clients *sequentially*, one at a time. The function we have in mind is:
 ```freest
-runServer : forall (a : *T) (b : 1C) -> (a -> Dual b -> a) -> a -> *!b -> Void @*T
+runServer : forall (a : *T) (b : 1C) -> (a -> Dual b -> a) -> a -> *?(Dual b) -> Void @*T
 ```
-where `a`{: .language-freest } represents the state of the server, `b`{: .language-freest } the linear channel on which to serve one particular client. The function accepts a function to handle a particular client, the initial value of the state, and the shared channel. Since it never returns, its result type is `Void @*T`{: .language-freest }.
+where `a`{: .language-freest } represents the state of the server, `b`{: .language-freest } the linear channel on which to serve one particular client (as seen from the side of the client). The function accepts a function to handle a particular client, the initial value of the state, and the server's end of the shared channel. Since it never returns, its result type is `Void @*T`{: .language-freest }.
 
 Using `runServer`{: .language-freest }, `receiveAndWait`{: .language-freest } and `sendAndWait`{: .language-freest } we can consume a `CellOp`{: .language-freest } channel.
 ```freest
@@ -291,19 +296,19 @@ cell @a =
 ***Note:*** This is an example where the type checker needs a hand. Omitting the type annotation currently yields the below error. We decided to fix it by binding the signature's type variables with `@a`{: .language-freest } patterns on the left-hand side, as the error message suggests.
 ```bash
 Type mismatch:
-   | 
-30 |   runServer serveOne
-   |   ^^^^^^^^^^^^^^^^^^
-Couldn't match expected type `forall (a : *T) -*-> a -*-> Dual (CellRef a) -*-> Void @*T`, taken from:
-   MemoryCell.fst:28:8–28:60
-   | 
-28 | cell : forall (a : *T) -> a -> Dual (CellRef a) -> Void @*T
-   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-with actual type `_ -*-> *!_ -*-> Void @*T`, taken from:
-    StandardLib/Prelude.fst:445:63–445:83
+  | 
+9 |   runServer serveOne
+  |   ^^^^^^^^^^^^^^^^^^
+Couldn't match expected type `forall (a : *T) -> a -> Dual (CellRef a) -> Void @*T`, taken from:
+  MemoryCell.fst:7:8–7:60
+  | 
+7 | cell : forall (a : *T) -> a -> Dual (CellRef a) -> Void @*T
+  |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+with actual type `_ -> *?Dual _ -> Void @*T`, taken from:
+    StandardLib/Prelude.fst:456:63–456:90
     | 
-445 | runServer : forall (a : *T) (b : 1C) -> (a -> Dual b -> a) -> a -> *!b -> Void @*T
-    |                                                               ^^^^^^^^^^^^^^^^^^^^
+456 | runServer : forall (a : *T) (b : 1C) -> (a -> Dual b -> a) -> a -> *?(Dual b) -> Void @*T
+    |                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Type inference could not determine a type argument here (shown as `_`).
 Consider annotating the application with an explicit type argument (e.g. `f @a`),
 binding the signature's type variables with `@a` patterns on the left-hand side.
@@ -319,15 +324,15 @@ type PredEvalSession : 1C
 type PredEvalSession = !Int ; ?Bool ; Close
 
 type PredEvalService : *C
-type PredEvalService = *?PredEvalSession
+type PredEvalService = *!(Dual PredEvalSession)
 ```
 As before these are two types of base kind `C`{: .language-freest } (meaning that channels can be created from the types). Session is linear, `1`{: .language-freest }, and service is shared, `*`{: .language-freest }.
 
-Clients interact on `PredEvalService`{: .language-freest }. They `receive_`{: .language-freest } a session on which they provide an integer and wait for the result, before closing the channel:
+Clients interact on `PredEvalService`{: .language-freest }. They `request`{: .language-freest } a session on which they provide an integer and wait for the result, before closing the channel:
 ```freest
 client : Int -> PredEvalService -> Bool
 client n s =
-  receive_ s |> send n |> receiveAndClose
+  request s |> send n |> receiveAndClose
 ```
 
 The `gz`{: .language-freest } function performs session initiation via a call to `accept`{: .language-freest }. It then receives an integer and returns the corresponding boolean, before waiting for the channel to be closed.
@@ -350,4 +355,4 @@ _ =
   fork (\_ -> c |> client 0    |> print ; join j) ;
   await 6 a
 ```
-The console should read `True`{: .language-freest }, `False`{: .language-freest }, `False`{: .language-freest }, in any order. The code above is brittle. Because each `gz`{: .language-freest } server serves one client only, one must have the same number of clients and servers. Any deviation from this pattern would leave a thread blocked indefinitely while waiting to read from a channel endpoint, `s`{: .language-freest } or `c`{: .language-freest }.
+The console should read `True`{: .language-freest }, `False`{: .language-freest }, `False`{: .language-freest }, in any order. The code above is brittle. Because each `gz`{: .language-freest } server serves one client only, one must have the same number of clients and servers. Any deviation from this pattern would leave a thread blocked indefinitely: an extra server waits forever in `accept`{: .language-freest } for a client that never comes, and an extra client waits forever for an answer on a session that no server picks up.
