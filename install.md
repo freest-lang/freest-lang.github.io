@@ -20,28 +20,45 @@ nav_order: 2
 {:toc}
 </details>
 
-## Pre-requisites
-
-Before installing FreeST you need two things: Haskell and Stack. Check how to install them at [Haskell's official website](https://www.haskell.org/download/) (GHCup recomended).
-
 
 ## Download and install FreeST
 
-Download FreeST by cloning the repository:
+Pre-requisites:
+- Haskell and Stack. Check how to install them at [Haskell's official website](https://www.haskell.org/download/) (GHCup recomended).
+
+Clone the repository and install:
 ```bash
-$ git clone --branch fopss26 --depth 1 https://github.com/freest-lang/freest.git
-$ cd freest
-$ stack install
+git clone --branch dev --depth 1 https://github.com/freest-lang/freest.git
+cd freest
+stack install
 ```
 
 To type check and run a script use `freest`:
 ```bash
-$ freest hello.fst
+freest hello.fst
 ```
 
 To run the interactive interpreter use `freest -i`:
 ```bash
-$ freest -i
+freest -i
 ```
 
 Be sure that the Stack's install folder is part of your system's path, or else you will not be able to run `freest`.
+
+## Download and install the Visual Studio Code extension
+
+Pre-requisites:
+* [Visual Studio Code](https://code.visualstudio.com/) 1.93 or later
+* FreeST, installed as above
+* [Node.js](https://nodejs.org/en/download) 22 or later (for building, while it is not available in the extension marketplace)
+
+Clone the repository and build:
+```bash
+git clone --branch dev --depth 1 https://github.com/freest-lang/vscode-freest.git
+cd vscode-freest
+npm install
+npx vsce package
+```
+Then install the `.vsix` file: in the Extensions view, open the `…` menu and choose *Install from VSIX…*, or run `code --install-extension freest-0.0.0.vsix`.
+
+If `freest` is not on your `PATH`, set **`freest.path`** in the extension settings to the full path of the `freest` executable.
