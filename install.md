@@ -54,7 +54,7 @@ Pre-requisites:
 
 Clone the repository and build:
 ```bash
-git clone --branch dev --depth 1 https://github.com/freest-lang/vscode-freest.git
+git clone --branch main --depth 1 https://github.com/freest-lang/vscode-freest.git
 cd vscode-freest
 npm install
 npx vsce package
