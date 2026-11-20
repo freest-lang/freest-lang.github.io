@@ -24,7 +24,7 @@ nav_order: 2
 ## Download and install FreeST
 
 Pre-requisites:
-- * [Git](https://git-scm.com/downloads)
+- [Git](https://git-scm.com/downloads)
 - Haskell and Stack. Check how to install them at [Haskell's official website](https://www.haskell.org/download/) (GHCup recomended).
 
 Clone the repository and install:
