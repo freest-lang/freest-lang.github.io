@@ -49,10 +49,9 @@ Be sure that the Stack's install folder is part of your system's path, or else y
 ## Download and install the Visual Studio Code extension
 
 Pre-requisites:
-* [Git](https://git-scm.com/downloads)
-* [Visual Studio Code](https://code.visualstudio.com/) 1.93 or later
 * FreeST, installed as above
-* [Node.js](https://nodejs.org/en/download) 22 or later (for building, while it is not available in the extension marketplace)
+* [Visual Studio Code](https://code.visualstudio.com/) 1.93 or later
+* [Git](https://git-scm.com/downloads) and [Node.js](https://nodejs.org/en/download) 22 or later (for building, while it is not available in the extension marketplace)
 
 Clone the repository and build:
 ```bash
