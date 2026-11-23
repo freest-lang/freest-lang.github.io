@@ -97,6 +97,26 @@ maybe : forall (a : *T) (b : *T) -> b -> (a -> b) -> Maybe a -> b
 Consumes a `Maybe`: returns the given default on `Nothing`, or applies the
 function to the contents on `Just`.
 
+### `Maybe'`
+{: .no_toc}
+```freest
+type Maybe' : 1T -> 1T
+data Maybe' a = Nothing' | Just' a
+```
+The linear variant of `Maybe`, following the convention of `[]'` and
+`foldr'`: an optional value that must be consumed, and that may hold a linear
+value such as a stream. The file-opening operations return it.
+
+### `maybe'`
+{: .no_toc}
+```freest
+maybe' : forall (a : 1T) (b : *T) -> b -> (a -> b) -> Maybe' a -> b
+```
+Consumes a `Maybe'`: returns the given default on `Nothing'`, or applies the
+function to the contents on `Just'`. The result is unrestricted, since either
+the default or the function is discarded. For a linear result, match on
+`Nothing'` and `Just'` directly.
+
 ### `Either`
 {: .no_toc}
 ```freest
@@ -1007,10 +1027,23 @@ an `hPrint` and then closes the endpoint with `hCloseOut`.
 ### Files
 
 FreeST models files as streams: reading opens an `InStream`, writing or
-appending opens an `OutStream`. Opening currently raises an error on failure
-rather than returning a `Maybe`, since a total variant would need a *linear*
-`Maybe` (`Maybe` is `*T -> *T`, but the streams are `1C`) — that is not yet
-available.
+appending opens an `OutStream`. Opening returns the stream wrapped in a linear
+`Maybe'`: `Just'` with the stream, or `Nothing'` when the file cannot
+be opened. A program must match on the result, and must close the stream when
+there is one:
+
+```freest
+main : ()
+main = case openReadFile "notes.txt" of
+  Just' inp ->
+    let (line, inp) = hGetLine inp in
+    hCloseIn inp;
+    putStrLn line
+  Nothing'  -> putStrLn "cannot open notes.txt"
+```
+
+`readFile`, `writeFile` and `appendFile` do the opening and closing
+themselves, and raise an error when the file cannot be opened.
 
 ### `FilePath`
 {: .no_toc}
@@ -1022,23 +1055,26 @@ type FilePath = String
 ### `openReadFile`
 {: .no_toc}
 ```freest
-openReadFile : FilePath -> InStream
+openReadFile : FilePath -> Maybe' InStream
 ```
-Opens a file for reading. The file is closed when the stream is.
+Opens a file for reading, or returns `Nothing'` if it cannot be opened. The
+file is closed when the stream is.
 
 ### `openWriteFile`
 {: .no_toc}
 ```freest
-openWriteFile : FilePath -> OutStream
+openWriteFile : FilePath -> Maybe' OutStream
 ```
-Opens a file for writing, discarding its current content.
+Opens a file for writing, discarding its current content, or returns
+`Nothing'` if it cannot be opened.
 
 ### `openAppendFile`
 {: .no_toc}
 ```freest
-openAppendFile : FilePath -> OutStream
+openAppendFile : FilePath -> Maybe' OutStream
 ```
-Opens a file for writing, after its current content.
+Opens a file for writing, after its current content, or returns `Nothing'` if
+it cannot be opened.
 
 ### `readFile`
 {: .no_toc}
@@ -1046,21 +1082,24 @@ Opens a file for writing, after its current content.
 readFile : FilePath -> String
 ```
 The entire content of a file, separating lines with `\n`. Behaves as
-`openReadFile` followed by `hGetContent` and `hCloseIn`.
+`openReadFile` followed, on `Just'`, by `hGetContent` and `hCloseIn`. Raises
+an error if the file cannot be opened.
 
 ### `writeFile`
 {: .no_toc}
 ```freest
 writeFile : FilePath -> String -> ()
 ```
-Writes a string to a file, discarding its current content.
+Writes a string to a file, discarding its current content. Raises an error if
+the file cannot be opened.
 
 ### `appendFile`
 {: .no_toc}
 ```freest
 appendFile : FilePath -> String -> ()
 ```
-Writes a string to a file, after its current content.
+Writes a string to a file, after its current content. Raises an error if the
+file cannot be opened.
 
 ### Command line
 
